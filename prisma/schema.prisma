@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum WorkFieldEnum {
+  ENVIROMENTAL // Bidang Lingkungan
+  URBAN_PLANNING // Bidang Tata Ruang
+  FLAG_BORROWING // Bidang Pinjam Bendera
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  roleId    Int      @map("role_id") @db.UnsignedInt
+  email     String   @unique @db.VarChar(128)
+  phone     String   @unique @db.VarChar(16)
+  password  String
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  role      Role     @relation(fields: [roleId], references: [id])
+
+  @@map("users")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  User      User[]
+
+  @@map("roles")
+}
+
+model Project {
+  id        Int           @id @default(autoincrement())
+  name      String
+  code      String        @db.VarChar(16)
+  year      Int           @db.Year
+  workField WorkFieldEnum
+  createdAt DateTime      @map("created_at")
+  updatedAt DateTime      @map("updated_at")
+
+  @@map("projects")
+}
