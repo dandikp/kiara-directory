@@ -19,37 +19,108 @@ enum WorkFieldEnum {
   FLAG_BORROWING // Bidang Pinjam Bendera
 }
 
+enum TeamRoleEnum {
+  MEMBER // Anggota
+  LEADER // Kepala / Ketua Tim
+  CO_LEADER // Waka/ket Tim
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  roleId    Int      @map("role_id") @db.UnsignedInt
-  email     String   @unique @db.VarChar(128)
-  phone     String   @unique @db.VarChar(16)
-  password  String
-  createdAt DateTime @map("created_at")
-  updatedAt DateTime @map("updated_at")
-  role      Role     @relation(fields: [roleId], references: [id])
+  id            Int             @id @default(autoincrement())
+  roleId        Int             @map("role_id") @db.UnsignedInt
+  email         String          @unique @db.VarChar(128)
+  phone         String          @unique @db.VarChar(16)
+  password      String
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @default(now()) @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at")
+  role          Role            @relation(fields: [roleId], references: [id])
+  userTeams     UserTeams[]
+  UserDivisions UserDivisions[]
 
   @@map("users")
 }
 
 model Role {
   id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @map("created_at")
-  updatedAt DateTime @map("updated_at")
+  name      String   @db.VarChar(128)
+  level     Int      @db.UnsignedTinyInt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
   User      User[]
 
   @@map("roles")
 }
 
+model Company {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(128)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  Project   Project[]
+
+  @@map("companies")
+}
+
 model Project {
   id        Int           @id @default(autoincrement())
+  companyId Int           @map("company_id") @db.UnsignedInt
+  company   Company       @relation(fields: [companyId], references: [id])
   name      String
   code      String        @db.VarChar(16)
   year      Int           @db.Year
   workField WorkFieldEnum
-  createdAt DateTime      @map("created_at")
-  updatedAt DateTime      @map("updated_at")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @default(now()) @map("updated_at")
 
   @@map("projects")
+}
+
+model Team {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(128)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @map("updated_at")
+  userTeams UserTeams[]
+
+  @@map("teams")
+}
+
+model UserTeams {
+  id        Int          @id @default(autoincrement())
+  userId    Int          @map("user_id") @db.UnsignedInt
+  user      User         @relation(fields: [userId], references: [id])
+  teamId    Int          @map("team_id") @db.UnsignedInt
+  team      Team         @relation(fields: [teamId], references: [id])
+  role      TeamRoleEnum
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @map("updated_at")
+  deletedAt DateTime?    @map("deleted_at")
+
+  @@map("team_users")
+}
+
+model Division {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(128)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @default(now()) @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at")
+  UserDivisions UserDivisions[]
+
+  @@map("divisions")
+}
+
+model UserDivisions {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @map("user_id") @db.UnsignedInt
+  division   Division  @relation(fields: [divisionId], references: [id])
+  divisionId Int       @map("division_id") @db.UnsignedInt
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @default(now()) @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@map("user_divisions")
 }
