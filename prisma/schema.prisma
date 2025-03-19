@@ -35,7 +35,7 @@ model User {
   name          String          @db.VarChar(128)
   avatar        String
   bio           String?         @db.Text
-  dob           DateTime        @db.Date
+  dob           DateTime?       @db.Date
   userTeams     UserTeams[]
   userDivisions UserDivisions[]
   createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
