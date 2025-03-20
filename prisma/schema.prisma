@@ -39,7 +39,7 @@ model User {
   userTeams     UserTeams[]
   userDivisions UserDivisions[]
   createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt     DateTime?       @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt     DateTime?       @map("updated_at") @db.Timestamp(3)
   deletedAt     DateTime?       @map("deleted_at") @db.Timestamp(3)
 
   @@map("users")
@@ -50,7 +50,7 @@ model Role {
   name      String    @db.VarChar(128)
   level     Int       @db.UnsignedTinyInt
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime? @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
   users     User[]
 
   @@map("roles")
@@ -60,7 +60,7 @@ model Company {
   id        Int       @id @default(autoincrement()) @db.UnsignedInt
   name      String    @db.VarChar(128)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime? @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   projects  Project[]
 
@@ -76,7 +76,7 @@ model Project {
   year      Int           @db.Year
   workField WorkFieldEnum
   createdAt DateTime      @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?     @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt DateTime?     @map("updated_at") @db.Timestamp(3)
 
   @@map("projects")
 }
@@ -85,7 +85,8 @@ model Team {
   id        Int         @id @default(autoincrement()) @db.UnsignedInt
   name      String      @db.VarChar(128)
   createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?   @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @db.Timestamp(3)
+  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
   userTeams UserTeams[]
 
   @@map("teams")
@@ -99,7 +100,7 @@ model UserTeams {
   team      Team         @relation(fields: [teamId], references: [id])
   role      TeamRoleEnum
   createdAt DateTime     @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?    @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt DateTime?    @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime?    @map("deleted_at") @db.Timestamp(3)
 
   @@map("team_users")
@@ -109,7 +110,7 @@ model Division {
   id            Int             @id @default(autoincrement()) @db.UnsignedInt
   name          String          @db.VarChar(128)
   createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt     DateTime?       @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt     DateTime?       @map("updated_at") @db.Timestamp(3)
   deletedAt     DateTime?       @map("deleted_at") @db.Timestamp(3)
   userDivisions UserDivisions[]
 
@@ -123,7 +124,7 @@ model UserDivisions {
   division   Division  @relation(fields: [divisionId], references: [id])
   divisionId Int       @map("division_id") @db.UnsignedInt
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt  DateTime? @default(dbgenerated("NULL ON UPDATE CURRENT_TIMESTAMP(3)")) @map("updated_at") @db.Timestamp(3)
+  updatedAt  DateTime? @map("updated_at") @db.Timestamp(3)
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
 
   @@map("user_divisions")
