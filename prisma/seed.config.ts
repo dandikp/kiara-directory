@@ -81,13 +81,24 @@ export const USERS = [
 
 export const DIVISIONS = [
   {
+    id: 1,
     name: "Keuangan & Akuntansi",
     code: "FINANCE",
   },
   {
+    id: 2,
     name: "Divisi Contoh 2",
     code: "EX_2",
   },
 ];
 
-export const COMPANIES = [];
+export const COMPANIES = [
+  {
+    id: 1,
+    name: "PT Kinarya Alam Raya",
+  },
+  {
+    id: 2,
+    name: "CV Digdaya Mahardika",
+  },
+];
