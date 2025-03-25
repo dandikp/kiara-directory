@@ -1,0 +1,6 @@
+.bg-image {
+  background-image: url("/images/backgrounds/bg-blue-construction.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100dvh;
+}

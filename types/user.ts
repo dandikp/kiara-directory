@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const UserBaseSchema = z.object({
+const UserSchema = z.object({
   email: z.string().email(),
   phone: z.string(),
   name: z.string().min(3, { message: "" }),
@@ -9,4 +9,4 @@ const UserBaseSchema = z.object({
   dob: z.string().date().optional().nullable(),
 });
 
-export { UserBaseSchema };
+export { UserSchema };
