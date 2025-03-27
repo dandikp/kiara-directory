@@ -37,6 +37,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --destructive-foreground: hsl(0 0% 100%);
 }
 
 @theme inline {
@@ -95,6 +96,7 @@
   --color-neutral-900: oklch(37.26% 0.0328 258.99);
   --color-neutral-950: oklch(21.31% 0.0279 262.4);
   --color-neutral: oklch(71.52% 0.0233 256.76);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -136,6 +138,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --destructive-foreground: hsl(0 0% 100%);
 }
 
 @layer base {
