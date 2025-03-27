@@ -11,8 +11,8 @@ export default function AuthLayout({
   return (
     <div className="w-full min-h-dvh bg-image relative flex flex-col">
       <AuthHeader className="hidden md:flex" />
-      <Card className="w-full mx-auto rounded-none md:rounded-lg h-full backdrop-blur-xs bg-white/55 md:bg-white/35 shadow-[0_4px_30px_rgba(0,0,0,0.1)] md:border md:border-white">
-        <CardContent className="w-full h-full flex flex-col gap-4">
+      <Card className="w-full h-full md:w-lg md:h-fit mx-auto rounded-none md:rounded-xl md:mt-48 backdrop-blur-xs bg-white/85 md:bg-white/80 shadow-[0_4px_30px_rgba(0,0,0,0.1)] md:border md:border-white lg:py-8">
+        <CardContent className="w-full h-full flex flex-col gap-4 lg:px-6">
           <div className="w-full flex justify-center md:hidden select-none relative">
             <Image
               className="h-10 w-auto"
@@ -22,7 +22,7 @@ export default function AuthLayout({
               height={100}
             />
           </div>
-          <div className="w-full mt-12">{children}</div>
+          <div className="w-full mt-16 md:mt-0">{children}</div>
         </CardContent>
       </Card>
     </div>
