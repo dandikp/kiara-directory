@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SignInSchema } from "../schemas/auth.schema";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] =
@@ -36,6 +37,20 @@ const SignInForm = () => {
           ...values,
           redirect: false,
         });
+
+        toast.loading("Menghubungkan ke akun Anda...");
+
+        promise
+          .then((response) => {
+            toast.dismiss();
+
+            console.log({ response });
+          })
+          .catch((error) => {
+            toast.dismiss();
+            toast.error(error?.message);
+            console.error("Error while signing in: ", error);
+          });
       });
     },
     [],
@@ -117,7 +132,7 @@ const SignInForm = () => {
             size="lg"
             className="cursor-pointer disabled:cursor-none"
           >
-            {isPending ? "..." : "Masuk"}
+            {isPending ? ".." : "Masuk"}
           </Button>
         </form>
       </Form>
