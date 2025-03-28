@@ -21,12 +21,12 @@ export const metadata: Metadata = {
   applicationName: "eFin PT Kinarya Alam Raya",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = getServerSession({});
+  const session = await getServerSession();
 
   return (
     <html lang="en">
@@ -34,7 +34,6 @@ export default function RootLayout({
         className={`${inter.variable} ${jetBrainsMono.variable} antialiased`}
       >
         <SessionHookProvider session={session}>{children}</SessionHookProvider>
-
         <Toaster />
       </body>
     </html>
