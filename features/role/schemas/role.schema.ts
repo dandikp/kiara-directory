@@ -13,7 +13,7 @@ export const RoleSchema = z.object({
     .lte(7, {
       message: "Level maksimal 7 (terendah)",
     }),
-  createdAt: z.string().time({ precision: 3 }),
+  createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
 });
 

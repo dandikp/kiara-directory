@@ -111,6 +111,7 @@ const SignInForm = () => {
                       variant="ghost"
                       className="absolute right-0 top-1/2 -translate-y-1/2 text-neutral-600 text-xl"
                       onClick={toggleVisibility}
+                      type="button"
                     >
                       {isPasswordVisible ? <EyeSlash /> : <Eye />}
                     </Button>

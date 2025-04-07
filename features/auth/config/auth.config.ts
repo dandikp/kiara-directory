@@ -1,3 +1,4 @@
+import { RoleType } from "@/features/role/types/role.types";
 import { getUserByEmail } from "@/features/user/service/user.service";
 import bcrypt from "bcryptjs";
 import { AuthOptions } from "next-auth";
@@ -50,11 +51,23 @@ export const AUTH_OPTIONS: AuthOptions = {
         token.name = user.name;
         token.role = user.role;
         token.phone = user.phone;
+        token.avatar = avatar || "";
       }
+
+      if (trigger === "update" && session) token = { ...token, ...session };
 
       return token;
     },
-    async session({ session, token }) {},
+    async session({ session, token }) {
+      session.user.avatar = token.avatar as string;
+      session.user.id = token.id as number;
+      session.user.name = token.name as string;
+      session.user.email = token.email as string;
+      session.user.phone = token.phone as string;
+      session.user.role = token.role as RoleType;
+
+      return session;
+    },
   },
   pages: {
     signIn: "/auth/signin",
