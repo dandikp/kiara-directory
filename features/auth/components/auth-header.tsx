@@ -12,7 +12,7 @@ const AuthHeader = ({ className }: { className?: string }) => {
         <Link href="/" title="Homepage" className="inline-block">
           <Image
             className="h-10 w-auto"
-            src="/images/placeholders/logoipsum/logoipsum-288.svg"
+            src="/assets/images/placeholders/logoipsum/logoipsum-288.svg"
             alt="Logo"
             width={100}
             height={100}

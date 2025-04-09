@@ -1,11 +1,24 @@
 import withAuth, { NextRequestWithAuth } from "next-auth/middleware";
-import { GUEST_PATHS } from "./features/auth/config/routes.config";
+import {
+  GUEST_PATHS,
+  PUBLIC_PATHS,
+} from "./features/auth/config/routes.config";
 import { NextResponse } from "next/server";
 
 function authMiddleware(req: NextRequestWithAuth) {
   const token = req.nextauth.token;
   const pathname = req.nextUrl.pathname;
+  const isPublic = PUBLIC_PATHS.includes(pathname);
   const isGuest = GUEST_PATHS.routes?.includes(pathname);
+  const isStatic =
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/assets") ||
+    pathname.includes(".");
+
+  console.log({ pathname });
+
+  if (isPublic || isStatic) return NextResponse.next();
 
   if (!token)
     return isGuest
@@ -14,10 +27,6 @@ function authMiddleware(req: NextRequestWithAuth) {
 
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: [],
-};
 
 export default withAuth(authMiddleware, {
   callbacks: {
@@ -29,3 +38,7 @@ export default withAuth(authMiddleware, {
     },
   },
 });
+
+export const config = {
+  matcher: ["/", "/auth/:path*"],
+};

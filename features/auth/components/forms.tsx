@@ -13,18 +13,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Envelope, Eye, EyeSlash, Lock } from "@phosphor-icons/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { SignInSchema } from "../schemas/auth.schema";
-import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { GUEST_PATHS } from "../config/routes.config";
+import { SignInSchema } from "../schemas/auth.schema";
 
 const SignInForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] =
     React.useState<boolean>(false);
   const [isPending, startTransition] = React.useTransition();
+  const router = useRouter();
 
   const toggleVisibility = React.useCallback(() => {
     setIsPasswordVisible((visible) => !visible);
@@ -44,12 +47,20 @@ const SignInForm = () => {
           .then((response) => {
             toast.dismiss();
 
-            console.log({ response });
+            if (response?.ok) {
+              router.push(GUEST_PATHS.signIn);
+              toast.success("Berhasil masuk! Sedang mengalihkan...");
+            } else {
+              throw new Error(
+                response?.error ||
+                  "Terjadi kesalah, mohon coba beberapa saat lagi!",
+              );
+            }
           })
           .catch((error) => {
             toast.dismiss();
             toast.error(error?.message);
-            console.error("Error while signing in: ", error);
+            console.error("Error during signing in: ", error);
           });
       });
     },
