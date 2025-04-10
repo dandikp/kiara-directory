@@ -152,4 +152,8 @@ const SignInForm = () => {
   );
 };
 
+const ForgotPasswordForm = () => {};
+
+const ResetPasswordForm = () => {};
+
 export { SignInForm };

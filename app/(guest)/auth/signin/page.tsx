@@ -2,9 +2,9 @@ import { SignInForm } from "@/features/auth/components/forms";
 import { SignIn } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata = {
-  title: "Masuk - eFin PT Kinarya Alam Raya",
+  title: "Masuk - Kiara Directory",
   description:
-    "Masuk ke dashboard e-Fin PT Kinarya Alam Raya untuk mengelola dan memantau informasi keuangan perusahaan secara efisien dan aman.",
+    "Masuk ke dashboard Kiara Directory untuk mengelola dan memantau informasi keuangan perusahaan secara efisien dan aman.",
 };
 
 export default function SignInPage() {
@@ -18,8 +18,8 @@ export default function SignInPage() {
           Masuk pakai email
         </h1>
         <p className="text-center text-sm leading-5 text-neutral-800">
-          Masuk ke dashboard eFin Kinarya Alam Raya untuk mengelola rancangan
-          anggaran, pengajuan dana, dll.
+          Masuk ke dashboard Kiara Directory untuk mengelola rancangan anggaran,
+          pengajuan dana, dll.
         </p>
       </div>
       <SignInForm />
