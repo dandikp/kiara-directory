@@ -4,26 +4,29 @@ import {
   PUBLIC_PATHS,
 } from "./features/auth/config/routes.config";
 import { NextResponse } from "next/server";
+import { env } from "./lib/env";
 
 function authMiddleware(req: NextRequestWithAuth) {
   const token = req.nextauth.token;
   const pathname = req.nextUrl.pathname;
-  const isPublic = PUBLIC_PATHS.includes(pathname);
-  const isGuest = GUEST_PATHS.routes?.includes(pathname);
-  const isStatic =
+  const isPublicPath = PUBLIC_PATHS.includes(pathname);
+  const isGuestPath = GUEST_PATHS.routes?.includes(pathname);
+  const isStaticPath =
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/assets") ||
     pathname.includes(".");
 
-  console.log({ pathname });
+  console.log({ pathname, token });
 
-  if (isPublic || isStatic) return NextResponse.next();
+  if (isPublicPath || isStaticPath) return NextResponse.next();
 
   if (!token)
-    return isGuest
+    return isGuestPath
       ? NextResponse.next()
       : NextResponse.redirect(new URL(GUEST_PATHS.signIn));
+
+  if (token && isGuestPath) return NextResponse.redirect(env.baseUrl);
 
   return NextResponse.next();
 }
