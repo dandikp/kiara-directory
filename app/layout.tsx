@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionHookProvider } from "@/lib/hooks/use-session";
+import { SessionHookProvider } from "@/lib/session";
 
 const inter = Inter({
   variable: "--font-inter",
