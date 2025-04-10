@@ -34,7 +34,7 @@ export default async function RootLayout({
         className={`${inter.variable} ${jetBrainsMono.variable} antialiased`}
       >
         <SessionHookProvider session={session}>{children}</SessionHookProvider>
-        <Toaster />
+        <Toaster richColors />
       </body>
     </html>
   );
