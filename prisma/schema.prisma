@@ -26,22 +26,23 @@ enum TeamRoleEnum {
 }
 
 model User {
-  id            Int             @id @default(autoincrement()) @db.UnsignedInt
-  roleId        Int             @map("role_id") @db.UnsignedInt
-  role          Role            @relation(fields: [roleId], references: [id])
-  email         String          @unique @db.VarChar(128)
-  phone         String          @unique @db.VarChar(16)
-  password      String
-  name          String          @db.VarChar(128)
-  avatar        String?
-  bio           String?         @db.Text
-  dob           DateTime?       @db.Date
-  userTeams     UserTeams[]
-  userDivisions UserDivisions[]
-  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt     DateTime?       @map("updated_at") @db.Timestamp(3)
-  deletedAt     DateTime?       @map("deleted_at") @db.Timestamp(3)
-  ResetPassword ResetPassword[]
+  id             Int              @id @default(autoincrement()) @db.UnsignedInt
+  roleId         Int              @map("role_id") @db.UnsignedInt
+  role           Role             @relation(fields: [roleId], references: [id])
+  email          String           @unique @db.VarChar(128)
+  phone          String           @unique @db.VarChar(16)
+  password       String
+  name           String           @db.VarChar(128)
+  avatar         String?
+  bio            String?          @db.Text
+  dob            DateTime?        @db.Date
+  userTeam       UserTeam[]
+  userDivision   UserDivision[]
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
+  ResetPassword  ResetPassword[]
+  UserDepartment UserDepartment[]
 
   @@map("users")
 }
@@ -83,17 +84,17 @@ model Project {
 }
 
 model Team {
-  id        Int         @id @default(autoincrement()) @db.UnsignedInt
-  name      String      @db.VarChar(128)
-  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
-  userTeams UserTeams[]
+  id        Int        @id @default(autoincrement()) @db.UnsignedInt
+  name      String     @db.VarChar(128)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?  @map("deleted_at") @db.Timestamp(3)
+  userTeam  UserTeam[]
 
   @@map("teams")
 }
 
-model UserTeams {
+model UserTeam {
   id        Int          @id @default(autoincrement()) @db.UnsignedInt
   userId    Int          @map("user_id") @db.UnsignedInt
   user      User         @relation(fields: [userId], references: [id])
@@ -104,23 +105,25 @@ model UserTeams {
   updatedAt DateTime?    @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime?    @map("deleted_at") @db.Timestamp(3)
 
-  @@map("team_users")
+  @@map("user_teams")
 }
 
 model Division {
-  id            Int             @id @default(autoincrement()) @db.UnsignedInt
-  name          String          @db.VarChar(128)
-  code          String          @unique @db.VarChar(32)
-  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt     DateTime?       @map("updated_at") @db.Timestamp(3)
-  deletedAt     DateTime?       @map("deleted_at") @db.Timestamp(3)
-  userDivisions UserDivisions[]
+  id           Int            @id @default(autoincrement()) @db.UnsignedInt
+  department   Department     @relation(fields: [departmentId], references: [id])
+  departmentId Int            @map("department_id") @db.UnsignedInt
+  name         String         @db.VarChar(128)
+  code         String         @unique @db.VarChar(32)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime?      @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamp(3)
+  userDivision UserDivision[]
 
   @@index([code])
   @@map("divisions")
 }
 
-model UserDivisions {
+model UserDivision {
   id         Int       @id @default(autoincrement()) @db.UnsignedInt
   user       User      @relation(fields: [userId], references: [id])
   userId     Int       @map("user_id") @db.UnsignedInt
@@ -143,4 +146,30 @@ model ResetPassword {
   usedAt    DateTime @map("used_at") @db.Timestamp(3)
 
   @@map("reset_passwords")
+}
+
+model Department {
+  id             Int              @id @default(autoincrement()) @db.UnsignedInt
+  name           String           @db.VarChar(128)
+  code           String           @unique @db.VarChar(32)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
+  Division       Division[]
+  UserDepartment UserDepartment[]
+
+  @@map("departments")
+}
+
+model UserDepartment {
+  id           Int        @id @default(autoincrement()) @db.UnsignedInt
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int        @map("user_id") @db.UnsignedInt
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int        @map("department_id") @db.UnsignedInt
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime?  @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?  @map("deleted_at") @db.Timestamp(3)
+
+  @@map("user_departments")
 }
