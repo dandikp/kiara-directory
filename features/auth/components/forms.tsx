@@ -199,37 +199,6 @@ const ForgotPasswordForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <div className="w-full relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-600 text-base">
-                      <Lock weight="bold" />
-                    </span>
-                    <Input
-                      className="bg-neutral-100 text-sm md:text-base placeholder:text-neutral-600 text-neutral-700 pl-8 pr-10 focus-visible:ring-0 focus-visible:ring-neutral-300"
-                      placeholder="Kata sandi"
-                      type={isPasswordVisible ? "text" : "password"}
-                      {...field}
-                    />
-                    <Button
-                      variant="ghost"
-                      className="absolute right-0 top-1/2 -translate-y-1/2 text-neutral-600 text-xl"
-                      onClick={toggleVisibility}
-                      type="button"
-                    >
-                      {isPasswordVisible ? <EyeSlash /> : <Eye />}
-                    </Button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Link
             href="/auth/forgot-password"
             className="text-neutral-700 text-sm -mt-2.5 ml-auto"
