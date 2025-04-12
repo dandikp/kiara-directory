@@ -12,7 +12,7 @@ ALTER TABLE `team_users` DROP FOREIGN KEY `team_users_team_id_fkey`;
 ALTER TABLE `team_users` DROP FOREIGN KEY `team_users_user_id_fkey`;
 
 -- AlterTable
-ALTER TABLE `divisions` ADD COLUMN `department_id` INTEGER UNSIGNED NOT NULL;
+ALTER TABLE `divisions` ADD COLUMN `department_id` INTEGER UNSIGNED NOT NULL AFTER `id`;
 
 -- DropTable
 DROP TABLE `team_users`;
