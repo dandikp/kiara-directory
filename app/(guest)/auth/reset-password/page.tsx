@@ -10,7 +10,6 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Metadata } from "next";
 import Link from "next/link";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "Reset Password",
@@ -53,7 +52,7 @@ const ResetPasswordPage = async ({ searchParams }: PageProps) => {
 
   const response = await getResetPasswordToken(token);
 
-  if (response.status !== "success")
+  if (response.status !== "success" && !response.data)
     return (
       <div className="w-full flex flex-col items-center gap-4">
         <div className="w-full flex flex-col items-center gap-2">
@@ -81,6 +80,10 @@ const ResetPasswordPage = async ({ searchParams }: PageProps) => {
       </div>
     );
 
+  const userId = !Array.isArray(response.data)
+    ? response.data?.userId
+    : undefined;
+
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div className="w-full flex flex-col items-center gap-2">
@@ -96,7 +99,7 @@ const ResetPasswordPage = async ({ searchParams }: PageProps) => {
         </p>
       </div>
 
-      <ResetPasswordForm token={token />
+      <ResetPasswordForm token={token} userId={userId} />
     </div>
   );
 };

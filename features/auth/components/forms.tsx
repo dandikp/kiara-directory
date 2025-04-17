@@ -79,7 +79,6 @@ const SignInForm = () => {
           .catch((error) => {
             toast.dismiss();
             toast.error(error?.message);
-            console.error("Error during signing in: ", error);
           });
       });
     },
@@ -266,7 +265,13 @@ interface FormVisibility {
   passwordConfirmation: boolean;
 }
 
-const ResetPasswordForm = (token: string, userId: number) => {
+const ResetPasswordForm = ({
+  token,
+  userId,
+}: {
+  token: string;
+  userId: number | undefined;
+}) => {
   const [formVisibility, setFormVisibility] = React.useState<FormVisibility>({
     password: false,
     passwordConfirmation: false,
@@ -285,16 +290,17 @@ const ResetPasswordForm = (token: string, userId: number) => {
   };
 
   const onSubmit = React.useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (values: z.infer<typeof ResetPasswordSchema>) => {
       startTransition(async () => {
+        if (!userId) return;
         const loaderId = toast.loading("Mengatur ulang password...");
-        const promise = await setNewPasswordByToken(token, userId, values);
 
         try {
+          const promise = await setNewPasswordByToken(token, userId, values);
           if (promise.code === 200 && promise.status === "success") {
-            toast.success(promise.message);
-            form.setValue("email", "");
+            toast.success(promise.message, { duration: 6000 });
+            form.setValue("password", "");
+            form.setValue("passwordConfirmation", "");
           } else {
             throw new Error(promise.message);
           }

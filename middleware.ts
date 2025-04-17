@@ -17,8 +17,6 @@ function authMiddleware(req: NextRequestWithAuth) {
     pathname.startsWith("/assets") ||
     pathname.includes(".");
 
-  console.log({ pathname, token });
-
   if (isPublicPath || isStaticPath) return NextResponse.next();
 
   if (!token)

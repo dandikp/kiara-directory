@@ -42,3 +42,5 @@ class AppResponse<T = any> {
 }
 
 export default AppResponse;
+
+export type AppResponseJSON = ReturnType<typeof AppResponse.prototype.toJSON>;
