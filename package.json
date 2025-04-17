@@ -13,6 +13,7 @@
     "migrate": "prisma migrate dev",
     "migrate:create": "prisma migrate dev --create-only",
     "migrate:deploy": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed"
   },
@@ -54,6 +55,7 @@
     "eslint-config-next": "15.2.2",
     "prisma": "^6.5.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "tw-animate-css": "^1.2.4",
     "typescript": "^5"
