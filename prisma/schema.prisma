@@ -140,13 +140,13 @@ model UserDivision {
 }
 
 model ResetPassword {
-  id        Int      @id @default(autoincrement()) @db.UnsignedInt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @map("user_id") @db.UnsignedInt
-  token     String   @db.VarChar(32)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(3)
-  expiredAt DateTime @map("expired_at") @db.Timestamp(3)
-  usedAt    DateTime @map("used_at") @db.Timestamp(3)
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id") @db.UnsignedInt
+  token     String    @db.VarChar(32)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  expiredAt DateTime  @map("expired_at") @db.Timestamp(3)
+  usedAt    DateTime? @map("used_at") @db.Timestamp(3)
 
   @@map("reset_passwords")
 }
