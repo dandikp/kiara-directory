@@ -35,6 +35,19 @@ export const ForgotPasswordSchema = z.object({
     }),
 });
 
+export const ResetTokenSchema = z.object({
+  token: z
+    .string({
+      message: "Token harus berupa string",
+    })
+    .min(32, {
+      message: "Token harus berupa string dengan panjang 32 karakter ",
+    })
+    .max(32, {
+      message: "Token harus berupa string dengan panjang 32 karakter ",
+    }),
+});
+
 export const ResetPasswordSchema = z
   .object({
     password: z
