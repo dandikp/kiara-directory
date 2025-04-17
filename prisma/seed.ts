@@ -1,6 +1,13 @@
 import { PrismaClient } from "@prisma/client";
-import { COMPANIES, DIVISIONS, ROLES, USERS } from "./seed.config";
 import bcrypt from "bcryptjs";
+import {
+  COMPANIES,
+  DEPARTMENTS,
+  DIVISIONS,
+  FIELDS,
+  ROLES,
+  USERS,
+} from "./seed.config";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +20,14 @@ async function main() {
     skipDuplicates: true,
   });
   await prisma.user.createMany({ data, skipDuplicates: true });
+  await prisma.department.createMany({
+    data: DEPARTMENTS,
+    skipDuplicates: true,
+  });
+  await prisma.field.createMany({
+    data: FIELDS,
+    skipDuplicates: true,
+  });
   await prisma.division.createMany({
     data: DIVISIONS,
     skipDuplicates: true,

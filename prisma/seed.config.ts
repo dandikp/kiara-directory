@@ -21,18 +21,23 @@ export const ROLES = [
   },
   {
     id: 5,
-    name: "Asisten Manager",
+    name: "Koordinator Bidang",
     level: 5,
   },
   {
     id: 6,
-    name: "Supervisor",
-    level: 6,
+    name: "Bendahara",
+    level: 5,
   },
   {
     id: 7,
-    name: "Staff",
+    name: "Kepala Divisi",
     level: 7,
+  },
+  {
+    id: 8,
+    name: "Staff",
+    level: 8,
   },
 ];
 
@@ -40,7 +45,7 @@ export const USERS = [
   {
     id: 1,
     roleId: 1,
-    email: "admin@kinarya.com",
+    email: "admin@kiaradirectory.com",
     phone: "085123456789",
     password: "123456",
     name: "Admin",
@@ -48,7 +53,7 @@ export const USERS = [
   {
     id: 2,
     roleId: 2,
-    email: "ceo@kinarya.com",
+    email: "achmadzabir@kiaradirectory.com",
     phone: "085987654321",
     password: "123456",
     name: "CEO",
@@ -56,39 +61,132 @@ export const USERS = [
   {
     id: 3,
     roleId: 4,
-    email: "manager@kinarya.com",
+    email: "manager@kiaradirectory.com",
     phone: "085987321654",
     password: "123456",
     name: "Manager 1",
   },
   {
     id: 4,
-    roleId: 6,
-    email: "koordinator@kinarya.com",
+    roleId: 5,
+    email: "koordinator@kiaradirectory.com",
     phone: "085654987321",
     password: "123456",
-    name: "Koordinator 1",
+    name: "Koordinator Bidang 1 1",
   },
   {
     id: 5,
-    roleId: 7,
-    email: "staff@kinarya.com",
+    roleId: 8,
+    email: "staff@kiaradirectory.com",
     phone: "085654321987",
     password: "123456",
     name: "Staff 1",
   },
 ];
 
-export const DIVISIONS = [
+export const DEPARTMENTS = [
   {
     id: 1,
-    name: "Keuangan & Akuntansi",
+    name: "Keuangan",
     code: "FINANCE",
   },
   {
     id: 2,
-    name: "Divisi Contoh 2",
-    code: "EX_2",
+    name: "Kantor",
+    code: "OFFICE",
+  },
+  {
+    id: 3,
+    name: "Teknik",
+    code: "ENGINEERING",
+  },
+];
+
+export const FIELDS = [
+  {
+    name: "Bidang Lingkungan",
+    code: "ENVIRONMENTAL",
+    departmentId: 3,
+  },
+  {
+    name: "Bidang Tata Ruang",
+    code: "SPATIAL_PLANNING",
+    departmentId: 3,
+  },
+];
+
+export const DIVISIONS = [
+  {
+    name: "Umum",
+    departmentId: 2,
+    fieldId: null,
+    code: "GENERAL",
+  },
+  {
+    name: "Lelang",
+    departmentId: 2,
+    fieldId: null,
+    code: "AUCTION",
+  },
+  {
+    name: "Informasi & Teknologi",
+    departmentId: 2,
+    fieldId: null,
+    code: "IT",
+  },
+  {
+    name: "Transportasi",
+    departmentId: 2,
+    fieldId: null,
+    code: "TRANSPORTATION",
+  },
+  {
+    name: "Legal Officer & Monitoring Progress",
+    departmentId: 2,
+    fieldId: null,
+    code: "LOMP",
+  },
+  {
+    name: "Perencanaan Wilayah & Kota",
+    departmentId: 2,
+    fieldId: 1,
+    code: "PWK",
+  },
+  {
+    name: "Studi",
+    departmentId: 2,
+    fieldId: 1,
+    code: "STUDY",
+  },
+  {
+    name: "Perumahan & Kawasan Permukiman",
+    departmentId: 2,
+    fieldId: 1,
+    code: "PERKIM",
+  },
+  {
+    name: "Lingkungan",
+    departmentId: 2,
+    fieldId: 2,
+    code: "ENVIRONMENTAL",
+  },
+  {
+    name: "Konstruksi",
+    departmentId: 2,
+    fieldId: 2,
+    code: "CONSTUCTION",
+  },
+  {
+    name: "Analisis Mengenai Dampak Lingkungan",
+    departmentId: 2,
+    fieldId: 2,
+    code: "AMDAL",
+  },
+  {
+    name: "Survey & Drafter",
+    departmentId: 2,
+    fieldId: null,
+    code: "SURVEY_DRAFTER",
   },
 ];
 
