@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum WorkFieldEnum {
+  ENVIROMENTAL // Bidang Lingkungan
+  URBAN_PLANNING // Bidang Tata Ruang
+  FLAG_BORROWING // Bidang Pinjam Bendera
+}
+
+enum TeamRoleEnum {
+  MEMBER // Anggota
+  LEADER // Kepala / Ketua Tim
+  CO_LEADER // Waka/ket Tim
+}
+
+model User {
+  id             Int              @id @default(autoincrement()) @db.UnsignedInt
+  roleId         Int              @map("role_id") @db.UnsignedInt
+  role           Role             @relation(fields: [roleId], references: [id])
+  email          String           @unique @db.VarChar(128)
+  phone          String           @unique @db.VarChar(16)
+  password       String
+  name           String           @db.VarChar(128)
+  avatar         String?
+  bio            String?          @db.Text
+  dob            DateTime?        @db.Date
+  userTeam       UserTeam[]
+  userDivision   UserDivision[]
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
+  ResetPassword  ResetPassword[]
+  UserDepartment UserDepartment[]
+  UserField      UserField[]
+
+  @@map("users")
+}
+
+model Role {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  name      String    @db.VarChar(128)
+  level     Int       @db.UnsignedTinyInt
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  users     User[]
+
+  @@map("roles")
+}
+
+model Company {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  name      String    @db.VarChar(128)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
+  projects  Project[]
+
+  @@map("companies")
+}
+
+model Project {
+  id        Int           @id @default(autoincrement()) @db.UnsignedInt
+  companyId Int           @map("company_id") @db.UnsignedInt
+  company   Company       @relation(fields: [companyId], references: [id])
+  name      String
+  code      String        @db.VarChar(16)
+  year      Int           @db.Year
+  workField WorkFieldEnum @map("work_field")
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?     @map("updated_at") @db.Timestamp(3)
+
+  @@map("projects")
+}
+
+model Team {
+  id        Int        @id @default(autoincrement()) @db.UnsignedInt
+  name      String     @db.VarChar(128)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?  @map("deleted_at") @db.Timestamp(3)
+  userTeam  UserTeam[]
+
+  @@map("teams")
+}
+
+model UserTeam {
+  id        Int          @id @default(autoincrement()) @db.UnsignedInt
+  userId    Int          @map("user_id") @db.UnsignedInt
+  user      User         @relation(fields: [userId], references: [id])
+  teamId    Int          @map("team_id") @db.UnsignedInt
+  team      Team         @relation(fields: [teamId], references: [id])
+  role      TeamRoleEnum
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?    @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?    @map("deleted_at") @db.Timestamp(3)
+
+  @@map("user_teams")
+}
+
+model Division {
+  id           Int            @id @default(autoincrement()) @db.UnsignedInt
+  department   Department     @relation(fields: [departmentId], references: [id])
+  departmentId Int            @map("department_id") @db.UnsignedInt
+  field        Field?         @relation(fields: [fieldId], references: [id])
+  fieldId      Int?           @map("field_id") @db.UnsignedInt
+  name         String         @db.VarChar(128)
+  code         String         @unique @db.VarChar(32)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime?      @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?      @map("deleted_at") @db.Timestamp(3)
+  userDivision UserDivision[]
+
+  @@index([code])
+  @@map("divisions")
+}
+
+model UserDivision {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int       @map("user_id") @db.UnsignedInt
+  division   Division  @relation(fields: [divisionId], references: [id])
+  divisionId Int       @map("division_id") @db.UnsignedInt
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt  DateTime? @map("updated_at") @db.Timestamp(3)
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  @@map("user_divisions")
+}
+
+model ResetPassword {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id") @db.UnsignedInt
+  token     String    @db.VarChar(32)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  expiredAt DateTime  @map("expired_at") @db.Timestamp(3)
+  usedAt    DateTime? @map("used_at") @db.Timestamp(3)
+
+  @@map("reset_passwords")
+}
+
+model Field {
+  id           Int         @id @default(autoincrement()) @db.UnsignedInt
+  department   Department  @relation(fields: [departmentId], references: [id])
+  departmentId Int         @map("department_id") @db.UnsignedInt
+  name         String      @db.VarChar(128)
+  code         String      @unique @db.VarChar(32)
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?   @map("deleted_at") @db.Timestamp(3)
+  Division     Division[]
+  UserField    UserField[]
+
+  @@index([code])
+  @@map("fields")
+}
+
+model UserField {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id") @db.UnsignedInt
+  field     Field     @relation(fields: [fieldId], references: [id])
+  fieldId   Int       @map("field_id") @db.UnsignedInt
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  @@map("user_fields")
+}
+
+model Department {
+  id             Int              @id @default(autoincrement()) @db.UnsignedInt
+  name           String           @db.VarChar(128)
+  code           String           @unique @db.VarChar(32)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
+  Division       Division[]
+  UserDepartment UserDepartment[]
+  Field          Field[]
+
+  @@index([code])
+  @@map("departments")
+}
+
+model UserDepartment {
+  id           Int        @id @default(autoincrement()) @db.UnsignedInt
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int        @map("user_id") @db.UnsignedInt
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int        @map("department_id") @db.UnsignedInt
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime?  @map("updated_at") @db.Timestamp(3)
+  deletedAt    DateTime?  @map("deleted_at") @db.Timestamp(3)
+
+  @@map("user_departments")
+}
