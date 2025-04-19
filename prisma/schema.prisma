@@ -14,7 +14,7 @@ datasource db {
 }
 
 enum WorkFieldEnum {
-  ENVIROMENTAL // Bidang Lingkungan
+  ENVIRONMENTAL // Bidang Lingkungan
   URBAN_PLANNING // Bidang Tata Ruang
   FLAG_BORROWING // Bidang Pinjam Bendera
 }
@@ -26,35 +26,34 @@ enum TeamRoleEnum {
 }
 
 model User {
-  id             Int              @id @default(autoincrement()) @db.UnsignedInt
-  roleId         Int              @map("role_id") @db.UnsignedInt
-  role           Role             @relation(fields: [roleId], references: [id])
-  email          String           @unique @db.VarChar(128)
-  phone          String           @unique @db.VarChar(16)
-  password       String
-  name           String           @db.VarChar(128)
-  avatar         String?
-  bio            String?          @db.Text
-  dob            DateTime?        @db.Date
-  userTeam       UserTeam[]
-  userDivision   UserDivision[]
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
-  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
-  ResetPassword  ResetPassword[]
-  UserDepartment UserDepartment[]
-  UserField      UserField[]
+  id            Int             @id @default(autoincrement()) @db.UnsignedInt
+  email         String          @unique @db.VarChar(128)
+  phone         String          @unique @db.VarChar(16)
+  password      String
+  name          String          @db.VarChar(128)
+  avatar        String?
+  bio           String?         @db.Text
+  dob           DateTime?       @db.Date
+  userTeam      UserTeam[]
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt     DateTime?       @map("updated_at") @db.Timestamp(3)
+  deletedAt     DateTime?       @map("deleted_at") @db.Timestamp(3)
+  ResetPassword ResetPassword[]
+  Role          Role?           @relation(fields: [roleId], references: [id])
+  roleId        Int?            @db.UnsignedInt
+  UserRole      UserRole[]
 
   @@map("users")
 }
 
 model Role {
-  id        Int       @id @default(autoincrement()) @db.UnsignedInt
-  name      String    @db.VarChar(128)
-  level     Int       @db.UnsignedTinyInt
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  id        Int        @id @default(autoincrement()) @db.UnsignedInt
+  name      String     @db.VarChar(128)
+  level     Int        @db.UnsignedTinyInt
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
   users     User[]
+  UserRole  UserRole[]
 
   @@map("roles")
 }
@@ -78,15 +77,17 @@ model Project {
   code      String        @db.VarChar(16)
   year      Int           @db.Year
   workField WorkFieldEnum @map("work_field")
-  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?     @map("updated_at") @db.Timestamp(3)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
 
   @@map("projects")
 }
 
 model Team {
-  id        Int        @id @default(autoincrement()) @db.UnsignedInt
-  name      String     @db.VarChar(128)
+  id   Int    @id @default(autoincrement()) @db.UnsignedInt
+  name String @db.VarChar(128)
+
   createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime?  @map("deleted_at") @db.Timestamp(3)
@@ -96,54 +97,44 @@ model Team {
 }
 
 model UserTeam {
-  id        Int          @id @default(autoincrement()) @db.UnsignedInt
-  userId    Int          @map("user_id") @db.UnsignedInt
-  user      User         @relation(fields: [userId], references: [id])
-  teamId    Int          @map("team_id") @db.UnsignedInt
-  team      Team         @relation(fields: [teamId], references: [id])
-  role      TeamRoleEnum
-  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?    @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime?    @map("deleted_at") @db.Timestamp(3)
+  id     Int          @id @default(autoincrement()) @db.UnsignedInt
+  userId Int          @map("user_id") @db.UnsignedInt
+  user   User         @relation(fields: [userId], references: [id])
+  teamId Int          @map("team_id") @db.UnsignedInt
+  team   Team         @relation(fields: [teamId], references: [id])
+  role   TeamRoleEnum
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
 
   @@map("user_teams")
 }
 
 model Division {
-  id           Int            @id @default(autoincrement()) @db.UnsignedInt
-  department   Department     @relation(fields: [departmentId], references: [id])
-  departmentId Int            @map("department_id") @db.UnsignedInt
-  field        Field?         @relation(fields: [fieldId], references: [id])
-  fieldId      Int?           @map("field_id") @db.UnsignedInt
-  name         String         @db.VarChar(128)
-  code         String         @unique @db.VarChar(32)
-  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt    DateTime?      @map("updated_at") @db.Timestamp(3)
-  deletedAt    DateTime?      @map("deleted_at") @db.Timestamp(3)
-  userDivision UserDivision[]
+  id           Int        @id @default(autoincrement()) @db.UnsignedInt
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int        @map("department_id") @db.UnsignedInt
+  field        Field?     @relation(fields: [fieldId], references: [id])
+  fieldId      Int?       @map("field_id") @db.UnsignedInt
+  name         String     @db.VarChar(128)
+  code         String     @unique @db.VarChar(32)
+
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
+  RoleScope RoleScope[]
 
   @@index([code])
   @@map("divisions")
 }
 
-model UserDivision {
-  id         Int       @id @default(autoincrement()) @db.UnsignedInt
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int       @map("user_id") @db.UnsignedInt
-  division   Division  @relation(fields: [divisionId], references: [id])
-  divisionId Int       @map("division_id") @db.UnsignedInt
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt  DateTime? @map("updated_at") @db.Timestamp(3)
-  deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
-
-  @@map("user_divisions")
-}
-
 model ResetPassword {
-  id        Int       @id @default(autoincrement()) @db.UnsignedInt
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int       @map("user_id") @db.UnsignedInt
-  token     String    @db.VarChar(32)
+  id     Int    @id @default(autoincrement()) @db.UnsignedInt
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @map("user_id") @db.UnsignedInt
+  token  String @db.VarChar(32)
+
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   expiredAt DateTime  @map("expired_at") @db.Timestamp(3)
   usedAt    DateTime? @map("used_at") @db.Timestamp(3)
@@ -152,58 +143,80 @@ model ResetPassword {
 }
 
 model Field {
-  id           Int         @id @default(autoincrement()) @db.UnsignedInt
-  department   Department  @relation(fields: [departmentId], references: [id])
-  departmentId Int         @map("department_id") @db.UnsignedInt
-  name         String      @db.VarChar(128)
-  code         String      @unique @db.VarChar(32)
-  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt    DateTime?   @map("updated_at") @db.Timestamp(3)
-  deletedAt    DateTime?   @map("deleted_at") @db.Timestamp(3)
-  Division     Division[]
-  UserField    UserField[]
+  id           Int        @id @default(autoincrement()) @db.UnsignedInt
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int        @map("department_id") @db.UnsignedInt
+  name         String     @db.VarChar(128)
+  code         String     @unique @db.VarChar(32)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  Division  Division[]
+  RoleScope RoleScope[]
 
   @@index([code])
   @@map("fields")
 }
 
-model UserField {
-  id        Int       @id @default(autoincrement()) @db.UnsignedInt
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int       @map("user_id") @db.UnsignedInt
-  field     Field     @relation(fields: [fieldId], references: [id])
-  fieldId   Int       @map("field_id") @db.UnsignedInt
+model Department {
+  id   Int    @id @default(autoincrement()) @db.UnsignedInt
+  name String @db.VarChar(128)
+  code String @unique @db.VarChar(32)
+
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
 
-  @@map("user_fields")
-}
-
-model Department {
-  id             Int              @id @default(autoincrement()) @db.UnsignedInt
-  name           String           @db.VarChar(128)
-  code           String           @unique @db.VarChar(32)
-  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt      DateTime?        @map("updated_at") @db.Timestamp(3)
-  deletedAt      DateTime?        @map("deleted_at") @db.Timestamp(3)
-  Division       Division[]
-  UserDepartment UserDepartment[]
-  Field          Field[]
+  Division  Division[]
+  Field     Field[]
+  RoleScope RoleScope[]
 
   @@index([code])
   @@map("departments")
 }
 
-model UserDepartment {
-  id           Int        @id @default(autoincrement()) @db.UnsignedInt
-  user         User       @relation(fields: [userId], references: [id])
-  userId       Int        @map("user_id") @db.UnsignedInt
-  department   Department @relation(fields: [departmentId], references: [id])
-  departmentId Int        @map("department_id") @db.UnsignedInt
-  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt    DateTime?  @map("updated_at") @db.Timestamp(3)
-  deletedAt    DateTime?  @map("deleted_at") @db.Timestamp(3)
+model UserRole {
+  id     Int     @id @default(autoincrement()) @db.UnsignedInt
+  user   User    @relation(fields: [userId], references: [id])
+  role   Role    @relation(fields: [roleId], references: [id])
+  userId Int     @map("user_id") @db.UnsignedInt
+  roleId Int     @map("role_id") @db.UnsignedInt
+  isMain Boolean @map("is_main")
 
-  @@map("user_departments")
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
+  RoleScope RoleScope[]
+
+  @@map("user_roles")
+}
+
+enum ScopeType {
+  DEPARTMENT
+  FIELD
+  DIVISION
+}
+
+model RoleScope {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  userRoleId Int      @map("user_role_id") @db.UnsignedInt
+  userRole   UserRole @relation(fields: [userRoleId], references: [id])
+
+  scopeType ScopeType
+
+  departmentId Int?        @map("department_id") @db.UnsignedInt
+  department   Department? @relation(fields: [departmentId], references: [id])
+
+  fieldId Int?   @map("field_id") @db.UnsignedInt
+  field   Field? @relation(fields: [fieldId], references: [id])
+
+  divisionId Int?      @map("division_id") @db.UnsignedInt
+  division   Division? @relation(fields: [divisionId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
+
+  @@map("role_scopes")
 }
