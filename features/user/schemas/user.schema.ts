@@ -1,4 +1,4 @@
-import { SafeRoleSchema } from "@/features/role/schemas/role.schema";
+import { SafeUserRoleSchema } from "@/features/role/schemas/role.schema";
 import { z } from "zod";
 
 export const UserSchema = z.object({
@@ -6,7 +6,7 @@ export const UserSchema = z.object({
   roleId: z.number().positive({
     message: "Role ID harus lebih dari 0",
   }),
-  role: SafeRoleSchema,
+  userRoles: z.array(SafeUserRoleSchema),
   email: z.string().email(),
   phone: z.string().regex(/^(?:\+62|62|0)[8-9][0-9]{7,11}$/, {
     message: "Nomor telepon tidak valid",

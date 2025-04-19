@@ -30,8 +30,12 @@ export const AUTH_OPTIONS: AuthOptions = {
           if (!user || user.deletedAt) throw new Error("Akun tidak ditemukan!");
 
           const match = await bcrypt.compare(password, user.password);
+          const currentRole = user.userRoles.find((ur) => ur.isMain)?.role;
 
-          if (match) return { ...user, password: undefined };
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { password: pword, ...safeUser } = user;
+
+          if (match) return { ...safeUser, currentRole: currentRole! };
 
           throw new Error("Password tidak sesuai. Coba lagi");
         } catch (error) {
@@ -49,7 +53,8 @@ export const AUTH_OPTIONS: AuthOptions = {
         token.sub = parseInt(user.id.toString(), 10);
         token.email = user.email;
         token.name = user.name;
-        token.role = user.role;
+        token.currentRole = user.currentRole;
+        token.userRoles = user.userRoles;
         token.phone = user.phone;
         token.avatar = avatar || "";
       }
@@ -64,7 +69,7 @@ export const AUTH_OPTIONS: AuthOptions = {
       session.user.name = token.name as string;
       session.user.email = token.email as string;
       session.user.phone = token.phone as string;
-      session.user.role = token.role as RoleType;
+      session.user.currentRole = token.currentRole as RoleType;
 
       return session;
     },

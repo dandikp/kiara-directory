@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/base/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const UserBaseLayout = ({
   children,
@@ -8,9 +8,11 @@ const UserBaseLayout = ({
 }>) => {
   return (
     <SidebarProvider>
-      <AppSidebar items={[]} />
-      <main className="relative flex-1 space-y-6 h-full max-h-dvh overflow-y-auto"></main>
-      {children}
+      <AppSidebar />
+      <main className="relative flex-1 space-y-6 h-full max-h-dvh overflow-y-auto">
+        <SidebarTrigger />
+        {children}
+      </main>
     </SidebarProvider>
   );
 };

@@ -1,4 +1,7 @@
-import { SafeRoleType } from "@/features/role/types/role.types";
+import {
+  SafeRoleType,
+  SafeUserRoleType,
+} from "@/features/role/types/role.types";
 import type { SafeUserType } from "@/features/user/types/user.types";
 
 export type ExtendedUser = DefaultSession["user"] & SafeUserType;
@@ -10,10 +13,10 @@ declare module "next-auth" {
 
   interface User {
     id: number;
-    roleId: number;
-    role: SafeRoleType;
+    userRoles: SafeUserRoleType[];
+    currentRole: SafeRoleType;
     phone: string;
-    dob: string;
+    dob: Date | null;
     avatar?: string | null | undefined;
     bio?: string | null | undefined;
   }

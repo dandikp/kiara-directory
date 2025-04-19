@@ -6,11 +6,19 @@ export const getUserByEmail = async (email: string) =>
   prisma.user.findFirst({
     where: { email },
     include: {
-      role: {
+      userRoles: {
         select: {
           id: true,
-          name: true,
-          level: true,
+          userId: true,
+          roleId: true,
+          isMain: true,
+          role: {
+            select: {
+              id: true,
+              name: true,
+              level: true,
+            },
+          },
         },
       },
     },

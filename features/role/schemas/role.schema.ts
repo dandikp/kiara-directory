@@ -21,3 +21,19 @@ export const SafeRoleSchema = RoleSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export const UserRoleSchema = z.object({
+  id: z.number().positive(),
+  userId: z.number().positive(),
+  roleId: z.number().positive(),
+  role: SafeRoleSchema,
+  isMain: z.boolean(),
+  createdAt: z.string().time({ precision: 3 }).nullable().optional(),
+  updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
+  deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
+});
+
+export const SafeUserRoleSchema = UserRoleSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+});
