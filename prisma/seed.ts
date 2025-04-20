@@ -6,6 +6,7 @@ import {
   DIVISIONS,
   FIELDS,
   ROLES,
+  USER_ROLES,
   USERS,
 } from "./seed.config";
 
@@ -34,6 +35,10 @@ async function main() {
   });
   await prisma.company.createMany({
     data: COMPANIES,
+    skipDuplicates: true,
+  });
+  await prisma.userRole.createMany({
+    data: USER_ROLES,
     skipDuplicates: true,
   });
 }

@@ -44,7 +44,6 @@ export const ROLES = [
 export const USERS = [
   {
     id: 1,
-    roleId: 1,
     email: "admin@kiaradirectory.com",
     phone: "085123456789",
     password: "123456",
@@ -52,15 +51,13 @@ export const USERS = [
   },
   {
     id: 2,
-    roleId: 2,
-    email: "achmadzabir@kiaradirectory.com",
+    email: "dirut@kiaradirectory.com",
     phone: "085987654321",
     password: "123456",
     name: "CEO",
   },
   {
     id: 3,
-    roleId: 4,
     email: "manager@kiaradirectory.com",
     phone: "085987321654",
     password: "123456",
@@ -68,7 +65,6 @@ export const USERS = [
   },
   {
     id: 4,
-    roleId: 5,
     email: "koordinator@kiaradirectory.com",
     phone: "085654987321",
     password: "123456",
@@ -76,11 +72,38 @@ export const USERS = [
   },
   {
     id: 5,
-    roleId: 8,
     email: "staff@kiaradirectory.com",
     phone: "085654321987",
     password: "123456",
     name: "Staff 1",
+  },
+];
+
+export const USER_ROLES = [
+  {
+    userId: 1,
+    roleId: 1,
+    isMain: true,
+  },
+  {
+    userId: 2,
+    roleId: 2,
+    isMain: true,
+  },
+  {
+    userId: 3,
+    roleId: 4,
+    isMain: true,
+  },
+  {
+    userId: 4,
+    roleId: 5,
+    isMain: true,
+  },
+  {
+    userId: 5,
+    roleId: 8,
+    isMain: true,
   },
 ];
 
