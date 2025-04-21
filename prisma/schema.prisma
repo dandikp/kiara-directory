@@ -53,7 +53,7 @@ model Role {
   createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
   users     User[]
-  UserRole  UserRole[]
+  userRoles UserRole[]
 
   @@map("roles")
 }
@@ -91,7 +91,7 @@ model Team {
   createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime?  @map("deleted_at") @db.Timestamp(3)
-  userTeam  UserTeam[]
+  userTeams UserTeam[]
 
   @@map("teams")
 }
@@ -120,10 +120,10 @@ model Division {
   name         String     @db.VarChar(128)
   code         String     @unique @db.VarChar(32)
 
-  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
-  RoleScope RoleScope[]
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt  DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt  DateTime?   @map("deleted_at") @db.Timestamp(3)
+  roleScopes RoleScope[]
 
   @@index([code])
   @@map("divisions")
@@ -153,8 +153,8 @@ model Field {
   updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
 
-  Division  Division[]
-  RoleScope RoleScope[]
+  divisions  Division[]
+  roleScopes RoleScope[]
 
   @@index([code])
   @@map("fields")
@@ -169,9 +169,9 @@ model Department {
   updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
 
-  Division  Division[]
-  Field     Field[]
-  RoleScope RoleScope[]
+  divisions  Division[]
+  fields     Field[]
+  roleScopes RoleScope[]
 
   @@index([code])
   @@map("departments")
@@ -185,10 +185,10 @@ model UserRole {
   roleId Int     @map("role_id") @db.UnsignedInt
   isMain Boolean @map("is_main")
 
-  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime?   @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime?   @map("deleted_at") @db.Timestamp(3)
-  RoleScope RoleScope[]
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt  DateTime?   @map("updated_at") @db.Timestamp(3)
+  deletedAt  DateTime?   @map("deleted_at") @db.Timestamp(3)
+  roleScopes RoleScope[]
 
   @@map("user_roles")
 }
@@ -204,7 +204,7 @@ model RoleScope {
   userRoleId Int      @map("user_role_id") @db.UnsignedInt
   userRole   UserRole @relation(fields: [userRoleId], references: [id])
 
-  scopeType ScopeType
+  scopeType ScopeType @map("scope_type")
 
   departmentId Int?        @map("department_id") @db.UnsignedInt
   department   Department? @relation(fields: [departmentId], references: [id])

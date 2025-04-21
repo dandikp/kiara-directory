@@ -1,3 +1,5 @@
+import { ScopeType } from "@prisma/client";
+
 export const ROLES = [
   {
     id: 1,
@@ -81,26 +83,31 @@ export const USERS = [
 
 export const USER_ROLES = [
   {
+    id: 1,
     userId: 1,
     roleId: 1,
     isMain: true,
   },
   {
+    id: 2,
     userId: 2,
     roleId: 2,
     isMain: true,
   },
   {
+    id: 3,
     userId: 3,
     roleId: 4,
     isMain: true,
   },
   {
+    id: 4,
     userId: 4,
     roleId: 5,
     isMain: true,
   },
   {
+    id: 6,
     userId: 5,
     roleId: 8,
     isMain: true,
@@ -221,5 +228,26 @@ export const COMPANIES = [
   {
     id: 2,
     name: "CV Digdaya Mahardika",
+  },
+];
+
+export const ROLE_SCOPES = [
+  {
+    id: 1,
+    userRoleId: 3,
+    scopeType: ScopeType.DEPARTMENT,
+    departmentId: 3,
+  },
+  {
+    id: 2,
+    userRoleId: 4,
+    scopeType: ScopeType.FIELD,
+    fieldId: 1,
+  },
+  {
+    id: 3,
+    userRoleId: 6,
+    scopeType: ScopeType.DIVISION,
+    divisionId: 8,
   },
 ];

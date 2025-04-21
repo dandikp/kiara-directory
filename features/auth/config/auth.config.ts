@@ -1,4 +1,4 @@
-import { RoleType } from "@/features/role/types/role.types";
+import { RoleType, SafeUserRoleType } from "@/features/role/types/role.types";
 import { getUserByEmail } from "@/features/user/service/user.service";
 import bcrypt from "bcryptjs";
 import { AuthOptions } from "next-auth";
@@ -70,6 +70,7 @@ export const AUTH_OPTIONS: AuthOptions = {
       session.user.email = token.email as string;
       session.user.phone = token.phone as string;
       session.user.currentRole = token.currentRole as RoleType;
+      session.user.userRoles = token.userRoles as SafeUserRoleType[];
 
       return session;
     },

@@ -22,6 +22,14 @@ export const SafeRoleSchema = RoleSchema.omit({
   updatedAt: true,
 });
 
+const ScopeTypeEnum = ["DEPARTMENT", "FIELD", "DIVISION"] as const;
+
+export const ExtendedSafeRoleSchema = SafeRoleSchema.extend({
+  roleName: z.string(),
+  scopeType: z.enum(ScopeTypeEnum),
+  scopeName: z.string(),
+});
+
 export const UserRoleSchema = z.object({
   id: z.number().positive(),
   userId: z.number().positive(),

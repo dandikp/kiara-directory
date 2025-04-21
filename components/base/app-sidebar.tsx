@@ -1,6 +1,10 @@
 "use client";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  AccountDropdown,
+  RoleDropdown,
+} from "@/features/account/component/navigation";
 import { isActivePath } from "@/lib/sidebar";
 import { removeTrailingSlash } from "@/lib/string";
 import {
@@ -9,10 +13,15 @@ import {
   Gear,
   House,
   MagnifyingGlass,
-  User,
   type Icon,
 } from "@phosphor-icons/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -27,23 +36,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import Link from "next/link";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { ChevronUp } from "lucide-react";
-import {
-  AccountDropdown,
-  RoleDropdown,
-} from "@/features/account/component/navigation";
 interface MenuItem {
   title: string;
   path: string;
@@ -83,8 +75,6 @@ const items = [
   },
 ];
 
-// { items }: Readonly<AppSidebarProps>
-
 export function AppSidebar() {
   const currentPath = usePathname();
   const checkActiveMenu = (item: MenuItem) => {
@@ -100,7 +90,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
+      <SidebarHeader className="group-data-[collapsible=icon]:px-1.5 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <RoleDropdown />
       </SidebarHeader>
       <SidebarContent>
@@ -137,7 +127,7 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="group-data-[collapsible=icon]:px-1.5 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <AccountDropdown />
       </SidebarFooter>
     </Sidebar>

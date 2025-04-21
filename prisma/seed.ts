@@ -5,6 +5,7 @@ import {
   DEPARTMENTS,
   DIVISIONS,
   FIELDS,
+  ROLE_SCOPES,
   ROLES,
   USER_ROLES,
   USERS,
@@ -39,6 +40,10 @@ async function main() {
   });
   await prisma.userRole.createMany({
     data: USER_ROLES,
+    skipDuplicates: true,
+  });
+  await prisma.roleScope.createMany({
+    data: ROLE_SCOPES,
     skipDuplicates: true,
   });
 }
