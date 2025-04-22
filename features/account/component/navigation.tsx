@@ -49,9 +49,11 @@ const AccountDropdown = () => {
               <DotsThreeOutlineVertical />
             </div>
             <div className="grid grid-rows-2 flex-1 px-2 items-center">
-              <span className="truncate font-semibold">{sessionUser.name}</span>
+              <span className="truncate font-semibold">
+                {sessionUser?.name}
+              </span>
               <span className="truncate text-xs leading-4 text-muted-foreground">
-                {sessionUser.email}
+                {sessionUser?.email}
               </span>
             </div>
             <DotsThreeOutlineVertical />
@@ -65,10 +67,10 @@ const AccountDropdown = () => {
           </div>
           <div className="grid grid-rows-2 flex-1 px-2 items-center">
             <span className="truncate text-xs font-semibold">
-              {sessionUser.name}
+              {sessionUser?.name}
             </span>
             <span className="truncate text-xs leading-4 text-muted-foreground">
-              {sessionUser.email}
+              {sessionUser?.email}
             </span>
           </div>
         </div>
@@ -135,7 +137,9 @@ const RoleDropdown = () => {
               <IdentificationBadge />
             </span>
             <div className="grid grid-rows-2 flex-1 px-2 items-center">
-              <span className="truncate font-semibold">{currentRole.name}</span>
+              <span className="truncate font-semibold">
+                {currentRole?.name}
+              </span>
               <span className="truncate text-xs leading-4 text-muted-foreground">
                 Keuangan
               </span>
