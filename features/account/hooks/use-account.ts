@@ -2,7 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import React from "react";
 
 const useAccount = () => {
-  const { data: session, status, update } = useSession();
+  const { data: session, status, update } = useSession({ required: true });
   const purgeSession = React.useCallback(async () => {
     await signOut({ callbackUrl: "/" });
   }, []);

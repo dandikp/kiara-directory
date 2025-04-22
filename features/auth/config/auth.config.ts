@@ -140,9 +140,7 @@ export const AUTH_OPTIONS: AuthOptions = {
       return session;
     },
   },
-  pages: {
-    signIn: "/auth/signin",
-  },
+  pages: { signIn: "/auth/signin" },
   session: { strategy: "jwt" as const },
   secret: process.env.NEXTAUTH_SECRET,
 };

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AccountDropdown,
   RoleDropdown,
@@ -17,6 +17,8 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React from "react";
+import { Button } from "../ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -35,7 +37,9 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  useSidebar,
 } from "../ui/sidebar";
+import { cn } from "@/lib/utils";
 interface MenuItem {
   title: string;
   path: string;
@@ -74,6 +78,35 @@ const items = [
     icon: Gear,
   },
 ];
+
+export const SidebarTrigger = ({
+  className,
+  onClick,
+  ...props
+}: React.ComponentProps<typeof Button>) => {
+  const { toggleSidebar, state, open } = useSidebar();
+
+  React.useEffect(() => {
+    console.log({ state, open });
+  }, [state, open]);
+
+  return (
+    <Button
+      data-sidebar="trigger"
+      data-slot="sidebar-trigger"
+      variant="ghost"
+      size="icon"
+      className={cn("size-7", className)}
+      onClick={(event) => {
+        onClick?.(event);
+        toggleSidebar();
+      }}
+      {...props}
+    >
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
+};
 
 export function AppSidebar() {
   const currentPath = usePathname();
