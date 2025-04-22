@@ -10,7 +10,7 @@ export const DivisionSchema = z.object({
     .string()
     .min(3, { message: "Kode divisi harus lebih dari 3 karakter" })
     .max(32, { message: "Kode divisi maksimal 32 karakter" }),
-  createdAt: z.string().time({ precision: 3 }),
+  createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
 });

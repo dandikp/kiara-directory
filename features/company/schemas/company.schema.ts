@@ -6,7 +6,7 @@ export const CompanySchema = z.object({
     .string()
     .min(3, { message: "Nama perusahaan harus lebih dari 3 karakter" })
     .max(128, { message: "Nama perusahaan maksimal 128 karakter" }),
-  createdAt: z.string().time({ precision: 3 }),
+  createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
 });

@@ -1,3 +1,6 @@
+import { DepartmentSchema } from "@/features/department/schemas/department.schema";
+import { DivisionSchema } from "@/features/division/schemas/division.schema";
+import { FieldSchema } from "@/features/field/schemas/field.schema";
 import { z } from "zod";
 
 export const RoleSchema = z.object({
@@ -26,7 +29,7 @@ const ScopeTypeEnum = ["DEPARTMENT", "FIELD", "DIVISION"] as const;
 
 export const ExtendedSafeRoleSchema = SafeRoleSchema.extend({
   roleName: z.string(),
-  scopeType: z.enum(ScopeTypeEnum),
+  scopeType: z.enum(ScopeTypeEnum).nullable(),
   scopeName: z.string(),
 });
 
@@ -44,4 +47,28 @@ export const UserRoleSchema = z.object({
 export const SafeUserRoleSchema = UserRoleSchema.omit({
   createdAt: true,
   updatedAt: true,
+});
+
+export const ExtendedSafeUserRoleSchema = SafeUserRoleSchema.extend({
+  role: ExtendedSafeRoleSchema,
+});
+
+export const RoleScopeSchema = z.object({
+  id: z.number().positive(),
+  userRoleId: z.number().positive(),
+  scopeType: z.enum(ScopeTypeEnum).nullable(),
+  departmentId: z.number().positive().nullable().optional(),
+  fieldId: z.number().positive().nullable().optional(),
+  divisionId: z.number().positive().nullable().optional(),
+  createdAt: z.string().time({ precision: 3 }).nullable().optional(),
+  updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
+});
+
+export const SafeRoleScopeSchema = RoleScopeSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  department: DepartmentSchema.pick({ name: true }).nullable().optional(),
+  field: FieldSchema.pick({ name: true }).nullable().optional(),
+  division: DivisionSchema.pick({ name: true }).nullable().optional(),
 });
