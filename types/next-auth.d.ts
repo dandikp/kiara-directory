@@ -1,6 +1,6 @@
 import {
-  SafeRoleType,
-  SafeUserRoleType,
+  ExtendedSafeRoleType,
+  ExtendedSafeUserRoleType,
 } from "@/features/role/types/role.types";
 import type { SafeUserType } from "@/features/user/types/user.types";
 
@@ -13,8 +13,8 @@ declare module "next-auth" {
 
   interface User {
     id: number;
-    userRoles: SafeUserRoleType[];
-    currentRole: SafeRoleType;
+    userRoles: ExtendedSafeUserRoleType[];
+    currentRole: ExtendedSafeRoleType;
     phone: string;
     dob: Date | null;
     avatar?: string | null | undefined;
@@ -25,7 +25,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     sub?: number;
-    userRoles: SafeUserRoleType[];
-    currentRole: SafeRoleType;
+    userRoles: ExtendedSafeUserRoleType[];
+    currentRole: ExtendedSafeRoleType;
   }
 }
