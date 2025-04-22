@@ -25,6 +25,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import useAccount from "../hooks/use-account";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AccountDropdown = () => {
   const { session, purgeSession } = useAccount();
@@ -139,8 +140,8 @@ const RoleDropdownItem = ({ data, currentRoleId }: RoleDropdownItemParams) => {
             className={data.isMain ? "text-amber-300" : ""}
           />
         </div>
-        {data.role.roleName}
-        {data.role.scopeName && (
+        {data?.role?.roleName}
+        {data?.role?.scopeName && (
           <span className="text-xs text-muted-foreground">
             {data.role.scopeName}
           </span>
@@ -160,11 +161,11 @@ const RoleDropdown = () => {
   const sessionUser = session?.user || { currentRole: {} };
   const userRoles = sessionUser?.userRoles;
   const currentRole = sessionUser?.currentRole;
-  let scopeName = currentRole.scopeName;
+  let scopeName = currentRole?.scopeName;
 
-  if (currentRole.level === 1) {
+  if (currentRole?.level === 1) {
     scopeName = "General Administrator";
-  } else if (currentRole.level === 2 || currentRole.level === 3) {
+  } else if ([2, 3].includes(currentRole?.level)) {
     scopeName = "Eksekutif";
   }
 
@@ -180,12 +181,21 @@ const RoleDropdown = () => {
               <IdentificationBadge />
             </span>
             <div className="grid grid-rows-2 flex-1 px-2 items-center">
-              <span className="truncate font-semibold">
-                {currentRole?.name}
-              </span>
-              <span className="truncate text-xs leading-4 text-muted-foreground">
-                {scopeName}
-              </span>
+              {currentRole?.name && scopeName ? (
+                <>
+                  <span className="truncate font-semibold">
+                    {currentRole?.name}
+                  </span>
+                  <span className="truncate text-xs leading-4 text-muted-foreground">
+                    {scopeName}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Skeleton className="w-full h-4 bg-slate-300 rounded-xs" />
+                  <Skeleton className="w-full h-3 mt-0.5 bg-slate-300 rounded-xs" />
+                </>
+              )}
             </div>
             <CaretUpDown />
           </div>
