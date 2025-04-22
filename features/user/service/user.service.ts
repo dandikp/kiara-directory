@@ -19,6 +19,22 @@ export const getUserByEmail = async (email: string) =>
               level: true,
             },
           },
+          roleScopes: {
+            select: {
+              id: true,
+              userRoleId: true,
+              scopeType: true,
+              department: {
+                select: { name: true },
+              },
+              field: {
+                select: { name: true },
+              },
+              division: {
+                select: { name: true },
+              },
+            },
+          },
         },
       },
     },
