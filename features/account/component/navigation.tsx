@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ExtendedSafeUserRoleType } from "@/features/role/types/role.types";
 import {
   Bell,
   CaretUpDown,
@@ -21,9 +22,9 @@ import {
   Star,
   User,
 } from "@phosphor-icons/react";
-import useAccount from "../hooks/use-account";
-import React from "react";
 import Link from "next/link";
+import React from "react";
+import useAccount from "../hooks/use-account";
 
 const AccountDropdown = () => {
   const { session, purgeSession } = useAccount();
@@ -109,7 +110,7 @@ const AccountDropdown = () => {
         <DropdownMenuItem>
           <div
             onClick={signOutHandler}
-            className="w-full flex flex-nowrap gap-2 items-center text-red-600 text-left p-0"
+            className="w-full flex flex-nowrap gap-2 items-center text-red-600 text-left p-0 cursor-pointer"
           >
             <SignOut className="text-red-600" />
             Keluar
@@ -120,10 +121,52 @@ const AccountDropdown = () => {
   );
 };
 
+type RoleDropdownItemParams = {
+  data: ExtendedSafeUserRoleType;
+  currentRoleId: number;
+};
+
+const RoleDropdownItem = ({ data, currentRoleId }: RoleDropdownItemParams) => {
+  const isActive = currentRoleId === data.roleId;
+  const Icon = data.isMain ? Star : Smiley;
+
+  return (
+    <DropdownMenuItem>
+      <div className="w-full flex flex-nowrap gap-2 items-center cursor-pointer">
+        <div className="flex size-6 items-center justify-center rounded-sm border ">
+          <Icon
+            weight={data.isMain ? "fill" : "regular"}
+            className={data.isMain ? "text-amber-300" : ""}
+          />
+        </div>
+        {data.role.roleName}
+        {data.role.scopeName && (
+          <span className="text-xs text-muted-foreground">
+            {data.role.scopeName}
+          </span>
+        )}
+        {isActive && (
+          <span className="ml-auto text-green-700">
+            <Check weight="bold" className="text-green-900" />
+          </span>
+        )}
+      </div>
+    </DropdownMenuItem>
+  );
+};
+
 const RoleDropdown = () => {
   const { session } = useAccount();
   const sessionUser = session?.user || { currentRole: {} };
+  const userRoles = sessionUser?.userRoles;
   const currentRole = sessionUser?.currentRole;
+  let scopeName = currentRole.scopeName;
+
+  if (currentRole.level === 1) {
+    scopeName = "General Administrator";
+  } else if (currentRole.level === 2 || currentRole.level === 3) {
+    scopeName = "Eksekutif";
+  }
 
   return (
     <DropdownMenu>
@@ -141,7 +184,7 @@ const RoleDropdown = () => {
                 {currentRole?.name}
               </span>
               <span className="truncate text-xs leading-4 text-muted-foreground">
-                Keuangan
+                {scopeName}
               </span>
             </div>
             <CaretUpDown />
@@ -152,26 +195,14 @@ const RoleDropdown = () => {
         <DropdownMenuLabel className="px-2 py-1.5 font-semibold text-xs text-muted-foreground">
           Peran / Jabatan
         </DropdownMenuLabel>
-        <DropdownMenuItem>
-          <div className="w-full flex flex-nowrap gap-2 items-center">
-            <div className="flex size-6 items-center justify-center rounded-sm border ">
-              <Star weight="fill" className="text-amber-300" />
-            </div>
-            Direktur Utama
-            <span className="ml-auto text-green-700">
-              <Check weight="bold" className="text-green-900" />
-            </span>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <div className="w-full flex flex-nowrap gap-2 items-center">
-            <div className="flex size-6 items-center justify-center rounded-sm border ">
-              <Smiley weight="regular" />
-            </div>
-            Manager
-            <span className="text-xs text-muted-foreground">Keuangan</span>
-          </div>
-        </DropdownMenuItem>
+        {userRoles &&
+          userRoles?.map((userRole: ExtendedSafeUserRoleType) => (
+            <RoleDropdownItem
+              key={userRole.id}
+              data={userRole}
+              currentRoleId={currentRole?.id}
+            />
+          ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
