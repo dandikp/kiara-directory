@@ -3,9 +3,6 @@ import { z } from "zod";
 
 export const UserSchema = z.object({
   id: z.number(),
-  roleId: z.number().positive({
-    message: "Role ID harus lebih dari 0",
-  }),
   userRoles: z.array(SafeUserRoleSchema),
   email: z.string().email(),
   phone: z.string().regex(/^(?:\+62|62|0)[8-9][0-9]{7,11}$/, {
@@ -38,7 +35,7 @@ export const UserSchema = z.object({
     .max(1024, { message: "Maksimal isi bio 1024 karakter" })
     .nullable()
     .optional(),
-  dob: z.string().date(),
+  dob: z.string().date().nullable(),
   createdAt: z.string().time({ precision: 3 }),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
@@ -49,6 +46,14 @@ export const SafeUserSchema = UserSchema.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
+});
+
+export const SimpleUserType = UserSchema.omit({
+  password: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  userRoles: true,
 });
 
 export const CreateUserSchema = UserSchema.omit({

@@ -3,7 +3,7 @@ import {
   SafeRoleScopeType,
   SafeUserRoleType,
 } from "@/features/role/types/role.types";
-import { getUserByEmail } from "@/features/user/service/user.service";
+import { getUserByEmail } from "@/features/user/services/user.service";
 import { ScopeType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AuthOptions } from "next-auth";
