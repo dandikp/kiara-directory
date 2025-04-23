@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
+import { IconName, Icons } from "@/types/menu.type";
 import type { IconProps } from "@phosphor-icons/react";
 import React from "react";
+import { Skeleton } from "./ui/skeleton";
 
 interface WrapperProps {
   icon: React.ElementType<IconProps>;
@@ -25,4 +27,24 @@ export const IconWrapper: React.FC<WrapperProps> = ({
       <Icon />
     </div>
   );
+};
+
+type DynamicIconProp = {
+  icon: IconName;
+};
+
+export const DynamicIcon = ({ icon }: DynamicIconProp) => {
+  const [IconComponent, setIconComponent] =
+    React.useState<React.FC<IconProps> | null>(null);
+
+  React.useEffect(() => {
+    function loadIcon() {
+      const component = Icons[icon] as React.FC<IconProps> | undefined;
+      if (component) setIconComponent(component);
+    }
+
+    loadIcon();
+  }, [icon]);
+
+  return IconComponent ? <IconComponent /> : <Skeleton className="size-4" />;
 };

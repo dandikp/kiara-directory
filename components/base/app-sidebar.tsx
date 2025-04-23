@@ -40,6 +40,8 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
+import { MenuGroup } from "../menu";
+import { ADMIN_MENU_GROUP } from "@/lib/config/config.menu";
 interface MenuItem {
   title: string;
   path: string;
@@ -127,38 +129,24 @@ export function AppSidebar() {
         <RoleDropdown />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <Collapsible className="group/collapsible" key={item.title}>
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton asChild>
-                        <Link href={item.url} title={item.title}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
+        {ADMIN_MENU_GROUP.map((item) => (
+          <MenuGroup key={item.id} name={item.name} items={item.menu} />
+        ))}
 
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubItem>
-                          <Link href={item.url} title={item.title}>
-                            a
-                          </Link>
-                        </SidebarMenuSubItem>
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup />
+        <SidebarMenu>
+          <Collapsible defaultOpen className="group/collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem />
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
+        </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="group-data-[collapsible=icon]:px-1.5 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <AccountDropdown />
