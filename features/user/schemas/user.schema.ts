@@ -4,8 +4,8 @@ import { z } from "zod";
 export const UserSchema = z.object({
   id: z.number(),
   userRoles: z.array(SafeUserRoleSchema),
-  email: z.string().email(),
-  phone: z.string().regex(/^(?:\+62|62|0)[8-9][0-9]{7,11}$/, {
+  email: z.string().email().trim().toLowerCase(),
+  phone: z.string().regex(/^(?:\+62|62|0)8[1235789][0-9]{7,10}$/, {
     message: "Nomor telepon tidak valid",
   }),
   password: z
