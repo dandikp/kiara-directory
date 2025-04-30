@@ -1,4 +1,4 @@
-export type DataTableFilterItem = {
+export type DatatableFilterItem = {
   key: string;
   placeholder?: string;
   label?: string;
@@ -8,10 +8,5 @@ export type DataTableFilterItem = {
 export type PaginationSearchParams = {
   page?: string;
   pageSize?: string;
-};
-
-export type ResponseDataTable<T> = {
-  data: T[];
-  totalData: number;
-  rowCount: number;
+  search?: string;
 };

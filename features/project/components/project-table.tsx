@@ -17,14 +17,14 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
-import { SimpleUserType } from "../types/user.types";
+import { SafeProjectType } from "../types/project.type";
 
-const UserTable = ({
+const ProjectTable = ({
   data,
   total,
-}: DatatableResponseReturn<SimpleUserType>) => {
+}: DatatableResponseReturn<SafeProjectType>) => {
   const { pagination } = useDataTablePagination();
-  const columns = useMemo<ColumnDef<SimpleUserType>[]>(
+  const columns = useMemo<ColumnDef<SafeProjectType>[]>(
     () => [
       {
         accessorKey: "id",
@@ -57,26 +57,16 @@ const UserTable = ({
         ),
       },
       {
-        accessorKey: "email",
+        accessorKey: "company.name",
         meta: {
-          displayColumnName: "email",
+          displayColumnName: "company.name",
         },
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Email" />
+          <DatatableColumnHeader column={column} title="Nama Perusahaan" />
         ),
         cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("email")}</DatatableBodyCell>
+          <DatatableBodyCell>{row.getValue("name")}</DatatableBodyCell>
         ),
-      },
-      {
-        accessorKey: "phone",
-        meta: {
-          displayColumnName: "phone",
-        },
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No. Telepon / HP" />
-        ),
-        cell: (info) => (info.getValue() as string) || "-",
       },
       {
         accessorKey: "actions",
@@ -128,7 +118,7 @@ const UserTable = ({
 
   return (
     <Datatable
-      title="Tabel Pengguna"
+      title="Tabel Perusahaan"
       table={table}
       showDensity
       showColumnVisibility
@@ -136,7 +126,7 @@ const UserTable = ({
       renderToolbarActions={() => (
         <Link href={`#`}>
           <Button size={"sm"} variant={"default"}>
-            <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
+            <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
           </Button>
         </Link>
       )}
@@ -145,13 +135,9 @@ const UserTable = ({
           key: "search",
           placeholder: "Pencarian...",
         },
-        {
-          key: "email",
-          placeholder: "Cari berdasar email",
-        },
       ]}
     />
   );
 };
 
-export default UserTable;
+export default ProjectTable;

@@ -37,7 +37,7 @@ const DatatablePagination = <TData,>({
           {selectedRowCount} of {totalFilteredCount} row(s) selected.
         </div>
       )}
-      <div className="self-end flex items-center space-x-6 lg:space-x-8">
+      <div className="self-end flex flex-wrap md:flex-nowrap items-center gap-x-6 gap-y-2">
         {showFilterPageSize && (
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
@@ -61,45 +61,47 @@ const DatatablePagination = <TData,>({
           </div>
         )}
 
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          {`Page ${
-            table.getState().pagination.pageIndex + 1
-          } of ${table.getPageCount()}`}
-        </div>
+        <div className="flex items-center gap-x-6 gap-y-2">
+          <div className="flex w-fit lg:w-[100px] items-center justify-center text-sm font-medium">
+            {`Page ${
+              table.getState().pagination.pageIndex + 1
+            } of ${table.getPageCount()}`}
+          </div>
 
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!canPreviousPage}
-          >
-            <ChevronsLeft />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
-            disabled={!canPreviousPage}
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
-            disabled={!canNextPage}
-          >
-            <ChevronRight />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!canNextPage}
-          >
-            <ChevronsRight />
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              className="hidden h-8 w-8 p-0 lg:flex"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!canPreviousPage}
+            >
+              <ChevronsLeft />
+            </Button>
+            <Button
+              variant="outline"
+              className="h-8 w-8 p-0"
+              onClick={() => table.previousPage()}
+              disabled={!canPreviousPage}
+            >
+              <ChevronLeft />
+            </Button>
+            <Button
+              variant="outline"
+              className="h-8 w-8 p-0"
+              onClick={() => table.nextPage()}
+              disabled={!canNextPage}
+            >
+              <ChevronRight />
+            </Button>
+            <Button
+              variant="outline"
+              className="hidden h-8 w-8 p-0 lg:flex"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!canNextPage}
+            >
+              <ChevronsRight />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

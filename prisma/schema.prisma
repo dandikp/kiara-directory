@@ -41,6 +41,7 @@ model User {
   ResetPassword ResetPassword[]
   userRoles     UserRole[]
 
+  @@fulltext([name])
   @@map("users")
 }
 
@@ -52,6 +53,7 @@ model Role {
   updatedAt DateTime?  @map("updated_at") @db.Timestamp(3)
   userRoles UserRole[]
 
+  @@fulltext([name])
   @@map("roles")
 }
 
@@ -63,6 +65,7 @@ model Company {
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   projects  Project[]
 
+  @@fulltext([name])
   @@map("companies")
 }
 
@@ -78,6 +81,7 @@ model Project {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @map("updated_at") @db.Timestamp(3)
 
+  @@fulltext([name])
   @@map("projects")
 }
 
@@ -90,6 +94,7 @@ model Team {
   deletedAt DateTime?  @map("deleted_at") @db.Timestamp(3)
   userTeams UserTeam[]
 
+  @@fulltext([name])
   @@map("teams")
 }
 
@@ -123,6 +128,7 @@ model Division {
   roleScopes RoleScope[]
 
   @@index([code])
+  @@fulltext([name])
   @@map("divisions")
 }
 
@@ -154,6 +160,7 @@ model Field {
   roleScopes RoleScope[]
 
   @@index([code])
+  @@fulltext([name])
   @@map("fields")
 }
 
@@ -171,6 +178,7 @@ model Department {
   roleScopes RoleScope[]
 
   @@index([code])
+  @@fulltext([name])
   @@map("departments")
 }
 

@@ -1,6 +1,6 @@
-import { DatePicker } from "@/components/date-picker";
-import { DatePickerWithRange } from "@/components/date-picker-with-range";
-import type { CustomSelectProps } from "@/types/custom-select";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { DatePicker, DatePickerWithRange } from "@/components/date-picker";
+import { CustomSelectProps } from "@/types/select.type";
 import type { SelectProps } from "@radix-ui/react-select";
 import React from "react";
 

@@ -17,20 +17,15 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
-import { SimpleUserType } from "../types/user.types";
+import { SafeRoleType } from "../types/role.types";
 
-const UserTable = ({
-  data,
-  total,
-}: DatatableResponseReturn<SimpleUserType>) => {
+const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
   const { pagination } = useDataTablePagination();
-  const columns = useMemo<ColumnDef<SimpleUserType>[]>(
+  const columns = useMemo<ColumnDef<SafeRoleType>[]>(
     () => [
       {
         accessorKey: "id",
-        meta: {
-          displayColumnName: "id",
-        },
+        meta: { displayColumnName: "id" },
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="id" />
         ),
@@ -38,7 +33,7 @@ const UserTable = ({
           <DatatableBodyCell className="w-fit max-w-10 truncate font-medium">
             {rowIndexInContext(
               pagination?.pageIndex,
-              pagination?.pageSize,
+              pagination.pageSize,
               row.index,
             )}
           </DatatableBodyCell>
@@ -46,9 +41,7 @@ const UserTable = ({
       },
       {
         accessorKey: "name",
-        meta: {
-          displayColumnName: "name",
-        },
+        meta: { displayColumnName: "name" },
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Nama" />
         ),
@@ -57,26 +50,19 @@ const UserTable = ({
         ),
       },
       {
-        accessorKey: "email",
+        accessorKey: "level",
         meta: {
-          displayColumnName: "email",
+          displayColumnName: "level",
         },
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Email" />
+          <DatatableColumnHeader
+            column={column}
+            title="Level Peran / Jabatan"
+          />
         ),
         cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("email")}</DatatableBodyCell>
+          <DatatableBodyCell>{row.getValue("level")}</DatatableBodyCell>
         ),
-      },
-      {
-        accessorKey: "phone",
-        meta: {
-          displayColumnName: "phone",
-        },
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No. Telepon / HP" />
-        ),
-        cell: (info) => (info.getValue() as string) || "-",
       },
       {
         accessorKey: "actions",
@@ -120,11 +106,11 @@ const UserTable = ({
   const { table } = useDataTable({
     data,
     columns,
-    states: {
-      pagination,
-    },
-    perPage: total,
+    states: { pagination },
+    perPage: count,
   });
+
+  console.log({ table });
 
   return (
     <Datatable
@@ -136,7 +122,7 @@ const UserTable = ({
       renderToolbarActions={() => (
         <Link href={`#`}>
           <Button size={"sm"} variant={"default"}>
-            <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
+            <IconWrapper size={12} icon={Plus} /> Add Record
           </Button>
         </Link>
       )}
@@ -154,4 +140,4 @@ const UserTable = ({
   );
 };
 
-export default UserTable;
+export default RoleTable;

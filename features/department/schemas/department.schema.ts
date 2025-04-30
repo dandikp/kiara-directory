@@ -14,3 +14,9 @@ export const DepartmentSchema = z.object({
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
 });
+
+export const SafeDepartmentSchema = DepartmentSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});

@@ -1,3 +1,4 @@
+import { SafeCompanySchema } from "@/features/company/schemas/company.schema";
 import { z } from "zod";
 
 export const ProjectSchema = z.object({
@@ -5,6 +6,7 @@ export const ProjectSchema = z.object({
   companyId: z.number().positive({
     message: "Company ID harus lebih dari 0",
   }),
+  company: SafeCompanySchema,
   name: z
     .string()
     .min(3, { message: "Nama divisi harus lebih dari 3 karakter" })
@@ -23,4 +25,10 @@ export const ProjectSchema = z.object({
   createdAt: z.string().time({ precision: 3 }),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
+});
+
+export const SafeProjectSchema = ProjectSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
 });

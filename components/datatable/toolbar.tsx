@@ -9,7 +9,7 @@ import { FunnelSimple, Notches } from "@phosphor-icons/react";
 import { Table } from "@tanstack/react-table";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { DataTableFilterItem } from "@/types/datatable.type";
+import { DatatableFilterItem } from "@/types/datatable.type";
 import useDataTableFilter from "@/hooks/use-datatable-filter";
 import { IconWrapper } from "../icon";
 import DatatableViewOptions from "./view-options";
@@ -19,7 +19,7 @@ interface Props<TData> {
   table: Table<TData, unknown>;
   showDensity?: boolean;
   showColumnVisibility?: boolean;
-  filters: DataTableFilterItem[];
+  filters: DatatableFilterItem[];
   renderToolbarActions?: () => React.ReactNode;
 }
 
@@ -94,7 +94,7 @@ const DatatableToolbar = <TData,>({
           )}
         </div>
 
-        <div className="self-start inline-flex gap-3 justify-end">
+        <div className="self-start flex md:inline-flex gap-3 justify-start md:  justify-end flex-wrap">
           {showDensity ? (
             <Button
               variant="outline"

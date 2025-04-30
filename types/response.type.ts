@@ -9,3 +9,12 @@ export type StandardResponse<T> = {
   };
   errors?: any;
 };
+
+export type DatatableResponseReturn<T> = {
+  data: T[];
+  count: number;
+  total: number;
+  totalPages: number;
+  page: number;
+  perPage: number;
+};

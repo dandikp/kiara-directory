@@ -17,7 +17,7 @@ export async function GET(req: Request) {
 
   const [users, total] = await Promise.all([
     getUsers({ page, limit }),
-    getUsersCount(),
+    getUsersCount({}),
   ]);
 
   const safeUsers = users.map((user) => ({

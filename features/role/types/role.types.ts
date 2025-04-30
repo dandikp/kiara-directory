@@ -1,3 +1,4 @@
+import { PaginationSearchParams } from "@/types/datatable.type";
 import { z } from "zod";
 import {
   ExtendedSafeRoleSchema,
@@ -18,3 +19,5 @@ export type ExtendedSafeUserRoleType = z.infer<
 export type ExtendedSafeRoleType = z.infer<typeof ExtendedSafeRoleSchema>;
 export type RoleScopeType = z.infer<typeof RoleScopeSchema>;
 export type SafeRoleScopeType = z.infer<typeof SafeRoleScopeSchema>;
+export type RolePageSearchParams = PaginationSearchParams &
+  Partial<SafeRoleType>;

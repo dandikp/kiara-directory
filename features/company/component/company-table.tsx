@@ -17,14 +17,14 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
-import { SimpleUserType } from "../types/user.types";
+import { SafeCompanyType } from "../types/company.type";
 
-const UserTable = ({
+const CompanyTable = ({
   data,
   total,
-}: DatatableResponseReturn<SimpleUserType>) => {
+}: DatatableResponseReturn<SafeCompanyType>) => {
   const { pagination } = useDataTablePagination();
-  const columns = useMemo<ColumnDef<SimpleUserType>[]>(
+  const columns = useMemo<ColumnDef<SafeCompanyType>[]>(
     () => [
       {
         accessorKey: "id",
@@ -55,28 +55,6 @@ const UserTable = ({
         cell: ({ row }) => (
           <DatatableBodyCell>{row.getValue("name")}</DatatableBodyCell>
         ),
-      },
-      {
-        accessorKey: "email",
-        meta: {
-          displayColumnName: "email",
-        },
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Email" />
-        ),
-        cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("email")}</DatatableBodyCell>
-        ),
-      },
-      {
-        accessorKey: "phone",
-        meta: {
-          displayColumnName: "phone",
-        },
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No. Telepon / HP" />
-        ),
-        cell: (info) => (info.getValue() as string) || "-",
       },
       {
         accessorKey: "actions",
@@ -128,7 +106,7 @@ const UserTable = ({
 
   return (
     <Datatable
-      title="Tabel Pengguna"
+      title="Tabel Perusahaan"
       table={table}
       showDensity
       showColumnVisibility
@@ -136,7 +114,7 @@ const UserTable = ({
       renderToolbarActions={() => (
         <Link href={`#`}>
           <Button size={"sm"} variant={"default"}>
-            <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
+            <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
           </Button>
         </Link>
       )}
@@ -145,13 +123,9 @@ const UserTable = ({
           key: "search",
           placeholder: "Pencarian...",
         },
-        {
-          key: "email",
-          placeholder: "Cari berdasar email",
-        },
       ]}
     />
   );
 };
 
-export default UserTable;
+export default CompanyTable;

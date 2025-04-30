@@ -10,3 +10,9 @@ export const CompanySchema = z.object({
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
 });
+
+export const SafeCompanySchema = CompanySchema.omit({
+  deletedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});

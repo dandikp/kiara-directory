@@ -7,13 +7,13 @@ import {
   parseQueryStringToDate,
   parseQueryStringToDateRange,
 } from "@/lib/date";
-import { DataTableFilterItem } from "@/types/datatable.type";
+import { DatatableFilterItem } from "@/types/datatable.type";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import useDebounce from "./use-debounce";
 
 const useDataTableFilter = (
-  filters: DataTableFilterItem[],
+  filters: DatatableFilterItem[],
   initialValues: { [key: string]: TInputFilterValue } = {},
   delay: number = 300,
 ) => {

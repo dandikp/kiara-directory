@@ -1,7 +1,7 @@
 "use client";
 
 import useDataTable from "@/hooks/use-datatable";
-import { DataTableFilterItem } from "@/types/datatable.type";
+import { type DatatableFilterItem } from "@/types/datatable.type";
 import DatatableToolbar from "./toolbar";
 import { Table } from "../ui/table";
 import DatatableHeader from "./header";
@@ -15,7 +15,7 @@ type Props<TData> = {
   showDensity?: boolean;
   showColumnVisibility?: boolean;
   showFilterPageSize?: boolean;
-  filters?: DataTableFilterItem[];
+  filters?: DatatableFilterItem[];
   onRowClick?: (row: TData) => void;
   renderToolbarActions?: () => React.ReactNode;
   renderLegend?: () => React.ReactNode;

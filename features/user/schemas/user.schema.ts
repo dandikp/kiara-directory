@@ -48,7 +48,7 @@ export const SafeUserSchema = UserSchema.omit({
   deletedAt: true,
 });
 
-export const SimpleUserType = UserSchema.omit({
+export const SimpleUserSchema = UserSchema.omit({
   password: true,
   createdAt: true,
   updatedAt: true,
