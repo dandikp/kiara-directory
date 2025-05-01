@@ -2,63 +2,23 @@
 
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SimpleUserType } from "../types/user.types";
+import { DepartmentType } from "../types/department.type";
 
-export const getUserByEmail = async (email: string) =>
-  prisma.user.findFirst({
-    where: { email },
-    include: {
-      userRoles: {
-        select: {
-          id: true,
-          userId: true,
-          roleId: true,
-          isMain: true,
-          role: {
-            select: {
-              id: true,
-              name: true,
-              level: true,
-            },
-          },
-          roleScopes: {
-            select: {
-              id: true,
-              userRoleId: true,
-              scopeType: true,
-              department: {
-                select: { name: true },
-              },
-              field: {
-                select: { name: true },
-              },
-              division: {
-                select: { name: true },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-
-type GetUserCountParams = {
+type GetDepartmentCountParams = {
   search?: string;
-  dob?: Date;
-  email?: string;
-  phone?: string;
+  code?: string;
 };
 
-type GetUsersParams = GetUserCountParams & {
+type GetDepartmentsParams = GetDepartmentCountParams & {
   page: number;
   limit?: number;
 };
 
-export const getUsers = async (params: GetUsersParams) => {
+export const getDepartments = async (params: GetDepartmentsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  return await prisma.user.findMany({
+  return await prisma.department.findMany({
     skip,
     take,
     where: {
@@ -72,15 +32,13 @@ export const getUsers = async (params: GetUsersParams) => {
             .join(" | "),
         },
       }),
-      ...(params.email !== undefined && { email: params.email }),
-      ...(params.phone !== undefined && { phone: params.phone }),
-      ...(params.dob !== undefined && { dob: params.dob }),
+      ...(params.code !== undefined && { code: params.code }),
     },
   });
 };
 
-export const getUsersCount = async (params: GetUserCountParams) => {
-  return await prisma.user.count({
+export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
+  return await prisma.department.count({
     where: {
       deletedAt: null,
       ...(params.search !== undefined && {
@@ -92,26 +50,26 @@ export const getUsersCount = async (params: GetUserCountParams) => {
             .join(" | "),
         },
       }),
-      ...(params.email !== undefined && { email: params.email }),
-      ...(params.phone !== undefined && { phone: params.phone }),
-      ...(params.dob !== undefined && { dob: params.dob }),
+      ...(params.code !== undefined && { code: params.code }),
     },
   });
 };
 
-export const getUsersTable = async (params: GetUsersParams) => {
+export const getDepartmentsTable = async (params: GetDepartmentsParams) => {
   const limit = params.limit ?? 10;
-  const [users, count] = await Promise.all([
-    getUsers({ ...params, limit }),
-    getUsersCount(params),
+  const [departments, count] = await Promise.all([
+    getDepartments({ ...params, limit }),
+    getDepartmentsCount(params),
   ]);
-  const safeUsers = users.map((user) => ({
-    ...user,
-    dob: user.dob ? user.dob.toISOString() : null,
+  const safeDepartments = departments.map((department) => ({
+    ...department,
+    createdAt: department.createdAt ? department.createdAt.toISOString() : null,
+    updatedAt: department.updatedAt ? department.updatedAt.toISOString() : null,
+    deletedAt: department.deletedAt ? department.deletedAt.toISOString() : null,
   }));
 
-  return DatatableResponse.response<SimpleUserType>(
-    safeUsers,
+  return DatatableResponse.response<DepartmentType>(
+    safeDepartments,
     params.page,
     limit,
     count,
