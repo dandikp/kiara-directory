@@ -8,7 +8,7 @@ interface PageProps {
   searchParams: DepartmentPageSearchParams;
 }
 
-const DepartementPage = async ({ searchParams }: PageProps) => {
+const DepartmentPage = async ({ searchParams }: PageProps) => {
   const page = parseInt(searchParams.page as string) || 1;
   const pageSize = parseInt(searchParams.pageSize as string) || 10;
   const search = searchParams.search;
@@ -32,4 +32,4 @@ const DepartementPage = async ({ searchParams }: PageProps) => {
   );
 };
 
-export default DepartementPage;
+export default DepartmentPage;

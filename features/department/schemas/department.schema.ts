@@ -1,5 +1,3 @@
-import { DivisionSchema } from "@/features/division/schemas/division.schema";
-import { FieldSchema } from "@/features/field/schemas/field.schema";
 import { z } from "zod";
 
 export const DepartmentSchema = z.object({
@@ -12,8 +10,6 @@ export const DepartmentSchema = z.object({
     .string()
     .min(3, { message: "Kode divisi harus lebih dari 3 karakter" })
     .max(32, { message: "Kode divisi maksimal 32 karakter" }),
-  divisions: z.array(DivisionSchema).nullable().optional(),
-  fields: z.array(FieldSchema).nullable().optional(),
   createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),

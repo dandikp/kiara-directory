@@ -2,25 +2,40 @@
 
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SafeDepartmentType } from "../types/department.type";
+import { SafeDivisionType } from "../types/division.type";
 
-type GetDepartmentCountParams = {
+type GetDivisionsCountParams = {
   search?: string;
   code?: string;
+  departmentId?: number;
+  fieldId?: number | null;
 };
 
-type GetDepartmentsParams = GetDepartmentCountParams & {
+type GetDivisionsParams = GetDivisionsCountParams & {
   page: number;
   limit?: number;
 };
 
-export const getDepartments = async (params: GetDepartmentsParams) => {
+export const getDivisions = async (params: GetDivisionsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  return await prisma.department.findMany({
+  return await prisma.division.findMany({
     skip,
     take,
+    select: {
+      id: true,
+      code: true,
+      fieldId: true,
+      name: true,
+      departmentId: true,
+      field: {
+        select: { id: true, name: true, code: true, departmentId: true },
+      },
+      department: {
+        select: { id: true, name: true, code: true },
+      },
+    },
     where: {
       deletedAt: null,
       ...(params.search !== undefined && {
@@ -37,8 +52,8 @@ export const getDepartments = async (params: GetDepartmentsParams) => {
   });
 };
 
-export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
-  return await prisma.department.count({
+export const getDivisionsCount = async (params: GetDivisionsCountParams) => {
+  return await prisma.division.count({
     where: {
       deletedAt: null,
       ...(params.search !== undefined && {
@@ -55,15 +70,15 @@ export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
   });
 };
 
-export const getDepartmentsTable = async (params: GetDepartmentsParams) => {
+export const getDivisionsTable = async (params: GetDivisionsParams) => {
   const limit = params.limit ?? 10;
-  const [departments, count] = await Promise.all([
-    getDepartments({ ...params, limit }),
-    getDepartmentsCount(params),
+  const [divisions, count] = await Promise.all([
+    getDivisions({ ...params, limit }),
+    getDivisionsCount(params),
   ]);
 
-  return DatatableResponse.response<SafeDepartmentType>(
-    departments,
+  return DatatableResponse.response<SafeDivisionType>(
+    divisions,
     params.page,
     limit,
     count,

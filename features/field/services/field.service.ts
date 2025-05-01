@@ -2,23 +2,24 @@
 
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SafeDepartmentType } from "../types/department.type";
+import { SafeFieldType } from "../types/field.type";
 
-type GetDepartmentCountParams = {
+type GetFieldsCountParams = {
   search?: string;
   code?: string;
+  departmentId?: number;
 };
 
-type GetDepartmentsParams = GetDepartmentCountParams & {
+type GetFieldsParams = GetFieldsCountParams & {
   page: number;
   limit?: number;
 };
 
-export const getDepartments = async (params: GetDepartmentsParams) => {
+export const getFields = async (params: GetFieldsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  return await prisma.department.findMany({
+  return await prisma.field.findMany({
     skip,
     take,
     where: {
@@ -33,12 +34,15 @@ export const getDepartments = async (params: GetDepartmentsParams) => {
         },
       }),
       ...(params.code !== undefined && { code: params.code }),
+      ...(params.departmentId !== undefined && {
+        departmentId: params.departmentId,
+      }),
     },
   });
 };
 
-export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
-  return await prisma.department.count({
+export const getFieldsCount = async (params: GetFieldsCountParams) => {
+  return await prisma.field.count({
     where: {
       deletedAt: null,
       ...(params.search !== undefined && {
@@ -51,19 +55,21 @@ export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
         },
       }),
       ...(params.code !== undefined && { code: params.code }),
+      ...(params.departmentId !== undefined && {
+        departmentId: params.departmentId,
+      }),
     },
   });
 };
 
-export const getDepartmentsTable = async (params: GetDepartmentsParams) => {
+export const getFieldsTable = async (params: GetFieldsParams) => {
   const limit = params.limit ?? 10;
-  const [departments, count] = await Promise.all([
-    getDepartments({ ...params, limit }),
-    getDepartmentsCount(params),
+  const [fields, count] = await Promise.all([
+    getFields({ ...params, limit }),
+    getFieldsCount(params),
   ]);
-
-  return DatatableResponse.response<SafeDepartmentType>(
-    departments,
+  return DatatableResponse.response<SafeFieldType>(
+    fields,
     params.page,
     limit,
     count,

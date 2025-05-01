@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const Team = z.object({
+export const TeamSchema = z.object({
   id: z.number().positive({ message: "ID harus lebih besar dari 0" }),
   name: z
     .string()
@@ -9,4 +9,10 @@ export const Team = z.object({
   createdAt: z.string().time({ precision: 3 }),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
+});
+
+export const SafeTeamSchema = TeamSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
 });

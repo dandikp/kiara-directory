@@ -2,23 +2,22 @@
 
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SafeDepartmentType } from "../types/department.type";
+import { SafeTeamType } from "../types/team.type";
 
-type GetDepartmentCountParams = {
+type GetTeamsCountParams = {
   search?: string;
-  code?: string;
 };
 
-type GetDepartmentsParams = GetDepartmentCountParams & {
+type GetTeamsParams = GetTeamsCountParams & {
   page: number;
   limit?: number;
 };
 
-export const getDepartments = async (params: GetDepartmentsParams) => {
+export const getTeams = async (params: GetTeamsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  return await prisma.department.findMany({
+  return await prisma.team.findMany({
     skip,
     take,
     where: {
@@ -32,13 +31,12 @@ export const getDepartments = async (params: GetDepartmentsParams) => {
             .join(" | "),
         },
       }),
-      ...(params.code !== undefined && { code: params.code }),
     },
   });
 };
 
-export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
-  return await prisma.department.count({
+export const getTeamsCount = async (params: GetTeamsCountParams) => {
+  return await prisma.team.count({
     where: {
       deletedAt: null,
       ...(params.search !== undefined && {
@@ -50,20 +48,19 @@ export const getDepartmentsCount = async (params: GetDepartmentCountParams) => {
             .join(" | "),
         },
       }),
-      ...(params.code !== undefined && { code: params.code }),
     },
   });
 };
 
-export const getDepartmentsTable = async (params: GetDepartmentsParams) => {
+export const getTeamsTable = async (params: GetTeamsParams) => {
   const limit = params.limit ?? 10;
-  const [departments, count] = await Promise.all([
-    getDepartments({ ...params, limit }),
-    getDepartmentsCount(params),
+  const [teams, count] = await Promise.all([
+    getTeams({ ...params, limit }),
+    getTeamsCount(params),
   ]);
 
-  return DatatableResponse.response<SafeDepartmentType>(
-    departments,
+  return DatatableResponse.response<SafeTeamType>(
+    teams,
     params.page,
     limit,
     count,

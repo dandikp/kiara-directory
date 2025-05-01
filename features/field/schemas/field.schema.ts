@@ -1,3 +1,4 @@
+import { SafeDepartmentSchema } from "@/features/department/schemas/department.schema";
 import { z } from "zod";
 
 export const FieldSchema = z.object({
@@ -11,7 +12,14 @@ export const FieldSchema = z.object({
   code: z
     .string()
     .min(3, { message: "Kode bidang harus lebih dari 3 karakter" }),
+  department: SafeDepartmentSchema.nullable().optional(),
   createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
+});
+
+export const SafeFieldSchema = FieldSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
 });
