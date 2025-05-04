@@ -23,8 +23,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const session = await getServerSession();
 
@@ -34,6 +36,7 @@ export default async function RootLayout({
         className={`${inter.variable} ${jetBrainsMono.variable} antialiased`}
       >
         <SessionHookProvider session={session}>{children}</SessionHookProvider>
+        {modal}
         <Toaster richColors position="top-center" />
       </body>
     </html>

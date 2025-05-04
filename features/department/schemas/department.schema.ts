@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const DepartmentSchema = z.object({
-  id: z.number().positive(),
+  id: z.number({ message: "ID Departemen harus berupa angka" }).positive(),
   name: z
     .string()
     .min(3, { message: "Nama divisi harus lebih dari 3 karakter" })
@@ -9,7 +9,12 @@ export const DepartmentSchema = z.object({
   code: z
     .string()
     .min(3, { message: "Kode divisi harus lebih dari 3 karakter" })
-    .max(32, { message: "Kode divisi maksimal 32 karakter" }),
+    .max(32, { message: "Kode divisi maksimal 32 karakter" })
+    .toUpperCase()
+    .refine((value) => /^[A-Z0-9_]+/.test(value), {
+      message:
+        "Kode harus menggunakan huruf kapital dan tanpa spasi. Penggunaan underscore (_) dan angka diperbolehkan",
+    }),
   createdAt: z.string().time({ precision: 3 }).nullable().optional(),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),
@@ -20,3 +25,5 @@ export const SafeDepartmentSchema = DepartmentSchema.omit({
   updatedAt: true,
   deletedAt: true,
 });
+
+export const DepartmentFormSchema = SafeDepartmentSchema.omit({ id: true });

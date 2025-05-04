@@ -2,7 +2,13 @@
 
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SafeDepartmentType } from "../types/department.type";
+import {
+  DepartmentFormType,
+  SafeDepartmentType,
+} from "../types/department.type";
+import { DepartmentFormSchema } from "../schemas/department.schema";
+import AppResponse from "@/lib/response/AppResponse";
+import { revalidatePath } from "next/cache";
 
 type GetDepartmentCountParams = {
   search?: string;
@@ -17,6 +23,8 @@ type GetDepartmentsParams = GetDepartmentCountParams & {
 export const getDepartments = async (params: GetDepartmentsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
+
+  console.log({ skip });
 
   return await prisma.department.findMany({
     skip,
@@ -68,4 +76,61 @@ export const getDepartmentsTable = async (params: GetDepartmentsParams) => {
     limit,
     count,
   );
+};
+
+export const upsertDepartment = async (
+  data: DepartmentFormType,
+  id?: number,
+) => {
+  const validation = DepartmentFormSchema.safeParse(data);
+
+  if (!validation.success) {
+    const message = AppResponse.getErrorMessages(validation.error);
+    return AppResponse.error(`Terjadi Kesalahan - ${message}`).toJSON();
+  }
+
+  const existsData = await prisma.department.findFirst({
+    where: {
+      code: validation.data?.code,
+      id: {
+        not: id,
+      },
+    },
+  });
+
+  if (existsData) {
+    return AppResponse.error(
+      `Kode ${validation.data?.code} telah dipakai pada department lain.`,
+    ).toJSON();
+  }
+
+  if (id) {
+    const updatedDepartment = await prisma.department.update({
+      where: { id },
+      data: { ...validation.data },
+    });
+
+    if (!updatedDepartment)
+      return AppResponse.error("Gagal memperbarui data departemen");
+
+    revalidatePath("/departments");
+
+    return AppResponse.success<SafeDepartmentType>(
+      "Data berhasil diperbarui",
+      updatedDepartment,
+    ).toJSON();
+  }
+
+  const createdDepartment = await prisma.department.create({
+    data: { ...validation.data },
+  });
+  if (!createdDepartment)
+    return AppResponse.error("Gagal menambah data departemen");
+
+  revalidatePath("/departments");
+
+  return AppResponse.success<SafeDepartmentType>(
+    "Data departemen baru berhasil ditambah",
+    createdDepartment,
+  ).toJSON();
 };

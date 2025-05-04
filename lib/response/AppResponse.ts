@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StandardResponse } from "@/types/response.type";
+import { z } from "zod";
 
 type Meta = { timestamp: string };
 
 class AppResponse<T = any> {
-  public status: string = "";
+  public status: "success" | "error" = "error";
   public message: string = "";
   public code: number = 200;
   public data?: T;
@@ -27,6 +28,13 @@ class AppResponse<T = any> {
 
   static error(message: string = "Error", code: number = 500, errors?: any) {
     return new AppResponse(message, code, undefined, errors);
+  }
+
+  static getErrorMessages(error: z.ZodError): string[] {
+    return error.errors.map((err) => {
+      const path = err.path.join(".");
+      return path ? `${path}: ${err.message}` : err.message;
+    });
   }
 
   toJSON(): StandardResponse<T> {

@@ -124,7 +124,7 @@ const DepartmentTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href={`#`}>
+        <Link href="/departments/create">
           <Button size={"sm"} variant={"default"}>
             <IconWrapper size={12} icon={Plus} /> Tambah Departemen
           </Button>

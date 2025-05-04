@@ -12,7 +12,7 @@ const DepartmentPage = async ({ searchParams }: PageProps) => {
   const page = parseInt(searchParams.page as string) || 1;
   const pageSize = parseInt(searchParams.pageSize as string) || 10;
   const search = searchParams.search;
-  const code = searchParams.code;
+  const code = searchParams?.code;
 
   const result = await getDepartmentsTable({
     page,
