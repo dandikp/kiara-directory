@@ -6,7 +6,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "scripts": {
-    "dev": "next dev -p 4044",
+    "dev": "next dev --turbopack -p 4044",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -134,3 +134,6 @@ export const upsertDepartment = async (
     createdDepartment,
   ).toJSON();
 };
+
+export const getDepartmentById = async (id: number) =>
+  prisma.department.findFirst({ where: { id, deletedAt: null } });
