@@ -1,12 +1,12 @@
 "use client";
 
 import Modal from "@/components/modal";
+import DeleteDepartmentPrompt from "./delete-department-prompt";
 import { useRouter } from "next/navigation";
 import React from "react";
-import DepartmentForm from "./department-form";
 import { SafeDepartmentType } from "../types/department.type";
 
-const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
+const DeleteDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +23,11 @@ const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Departemen"
-      description="Ubah dan simpan data departemen ke dalam data unit kerja"
-      renderContent={<DepartmentForm data={data} />}
+      title="Hapus Departemen"
+      description=""
+      renderContent={<DeleteDepartmentPrompt data={data} />}
     />
   );
 };
 
-export default EditDepartmentModal;
+export default DeleteDepartmentModal;

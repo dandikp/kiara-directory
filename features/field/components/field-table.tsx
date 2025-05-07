@@ -86,16 +86,16 @@ const FieldTable = ({
           const id = row.getValue("id") as string;
           return (
             <div className="flex gap-2 self-end justify-end">
-              <TooltipWrapper text="Edit User">
-                <Link href={`/admin/users/admins/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+              <TooltipWrapper text="Edit Bidang Kerja">
+                <Link href={`/fields/${id}/edit`}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
-              <TooltipWrapper text={"Delete User"}>
-                <Link href={`/admin/users/admins/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+              <TooltipWrapper text="Hapus Bidang Kerja">
+                <Link href={`/fields/${id}/delete`}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>
@@ -107,12 +107,11 @@ const FieldTable = ({
     ],
     [pagination?.pageIndex, pagination?.pageSize],
   );
+
   const { table } = useDataTable({
     data,
     columns,
-    states: {
-      pagination,
-    },
+    states: { pagination },
     perPage: total,
   });
 
@@ -125,7 +124,7 @@ const FieldTable = ({
       showFilterPageSize
       renderToolbarActions={() => (
         <Link href={`#`}>
-          <Button size={"sm"} variant={"default"}>
+          <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Bidang Kerja
           </Button>
         </Link>

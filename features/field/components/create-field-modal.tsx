@@ -3,10 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import DepartmentForm from "./department-form";
-import { SafeDepartmentType } from "../types/department.type";
+import FieldForm from "./field-form";
 
-const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
+const CreateFieldModal = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +22,11 @@ const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Departemen"
-      description="Ubah dan simpan data departemen ke dalam data unit kerja"
-      renderContent={<DepartmentForm data={data} />}
+      title="Tambah Bidang Kerja Baru"
+      description="Simpan dan tambah bidang kerja baru ke dalam data unit kerja"
+      renderContent={<FieldForm />}
     />
   );
 };
 
-export default EditDepartmentModal;
+export default CreateFieldModal;

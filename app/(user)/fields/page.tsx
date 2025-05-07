@@ -26,8 +26,8 @@ const FieldPage = async ({ searchParams }: PageProps) => {
   return (
     <PageContainer>
       <PageTitle
-        title="Divisi"
-        subtitle="Menampilkan semua data divisi di perusahaan"
+        title="Bidang Kerja"
+        subtitle="Menampilkan semua data bidang kerja di perusahaan"
       />
       <FieldTable {...result} />
     </PageContainer>

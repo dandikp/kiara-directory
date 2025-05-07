@@ -87,15 +87,15 @@ const DepartmentTable = ({
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit User">
-                <Link href={`/admin/users/admins/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+                <Link href={`/departments/${id}/edit`}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text={"Delete User"}>
-                <Link href={`/admin/users/admins/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+                <Link href={`/departments/${id}/delete`}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>

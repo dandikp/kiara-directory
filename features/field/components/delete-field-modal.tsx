@@ -3,10 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import DepartmentForm from "./department-form";
-import { SafeDepartmentType } from "../types/department.type";
+import { SafeFieldType } from "../types/field.type";
+import DeleteFieldPrompt from "./delete-field-prompt";
 
-const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
+const DeleteDepartmentModal = ({ data }: { data: SafeFieldType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +23,11 @@ const EditDepartmentModal = ({ data }: { data: SafeDepartmentType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Departemen"
-      description="Ubah dan simpan data departemen ke dalam data unit kerja"
-      renderContent={<DepartmentForm data={data} />}
+      title="Hapus Bidang Kerja"
+      description=""
+      renderContent={<DeleteFieldPrompt data={data} />}
     />
   );
 };
 
-export default EditDepartmentModal;
+export default DeleteDepartmentModal;

@@ -4,18 +4,36 @@ export interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical";
   label?: string;
   labelPosition?: "center" | "left" | "right";
-  thickness?: string; // e.g. "1px", "2px"
+  thickness?: "light" | "default" | "medium" | "bold" | "heavy";
   color?: string; // e.g. "border-gray-300"
   length?: string; // e.g. "w-full", "w-1/2", etc.
   className?: string;
 }
 
+function getThicknessClass(
+  thickness: DividerProps["thickness"],
+  orientation: DividerProps["orientation"],
+): string {
+  const isHorizontal = orientation === "horizontal";
+  switch (thickness) {
+    case "light":
+      return isHorizontal ? "h-[1px]" : "w-[1px]";
+    case "medium":
+      return isHorizontal ? "h-[3px]" : "w-[3px]";
+    case "bold":
+      return isHorizontal ? "h-[4px]" : "w-[4px]";
+    case "heavy":
+      return isHorizontal ? "h-[8px]" : "w-[8px]";
+    default:
+      return isHorizontal ? "h-[2px]" : "w-[2px]";
+  }
+}
+
 export function Divider({
   orientation = "horizontal",
   label,
+  thickness = "light",
   labelPosition = "center",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  thickness = "1px",
   color = "border-border",
   length = "w-full",
   className,
@@ -29,14 +47,10 @@ export function Divider({
     className,
   );
 
-  const borderThickness = isHorizontal
-    ? `h-[${thickness}]`
-    : `w-[${thickness}]`;
-
   const lineClass = cn(
     "shrink-0 bg-border",
     color,
-    borderThickness,
+    getThicknessClass(thickness, orientation),
     isHorizontal ? length : "h-full",
   );
 

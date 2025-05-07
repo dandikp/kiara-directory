@@ -9,6 +9,7 @@ import {
 import { DepartmentFormSchema } from "../schemas/department.schema";
 import AppResponse from "@/lib/response/AppResponse";
 import { revalidatePath } from "next/cache";
+import { formatISO } from "date-fns";
 
 type GetDepartmentCountParams = {
   search?: string;
@@ -137,3 +138,12 @@ export const upsertDepartment = async (
 
 export const getDepartmentById = async (id: number) =>
   prisma.department.findFirst({ where: { id, deletedAt: null } });
+
+export const deleteDepartmentById = async (id: number) => {
+  await prisma.department.update({
+    where: { id },
+    data: { deletedAt: formatISO(new Date()) },
+  });
+
+  return AppResponse.success(`Data berhasil dihapus`).toJSON();
+};

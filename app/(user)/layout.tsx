@@ -11,7 +11,7 @@ const UserBaseLayout = async ({
     <AppSidebar />
     <main className="relative flex-1 space-y-6 h-full max-h-dvh overflow-y-auto">
       <AppHeader />
-      <div className="relative flex-1 space-y-6 px-2 max-w-screen-xl mx-auto">
+      <div className="relative flex-1 space-y-6 px-4 xl:lg-6 max-w-screen-xl mx-auto">
         {children}
       </div>
     </main>
