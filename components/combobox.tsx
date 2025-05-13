@@ -22,7 +22,7 @@ interface ComboboxProps {
   placeholder?: string;
   searchPlaceholder?: string;
   emptyText?: string;
-  value?: string;
+  value?: string | number;
   onChange?: (value: string) => void;
   className?: string;
 }
@@ -36,6 +36,7 @@ function Combobox({
   onChange,
   className,
 }: ComboboxProps) {
+  console.log({ options });
   const [open, setOpen] = React.useState(false);
 
   const selectedLabel = options.find((opt) => opt.value === value)?.label;
@@ -44,19 +45,20 @@ function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          type="button"
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-full justify-between", className)}
         >
           {selectedLabel || placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
+      <PopoverContent className="w-full p-0 max-w-64 z-[100]">
+        <Command className="z-[60]">
           <CommandInput placeholder={searchPlaceholder} className="h-9" />
-          <CommandList>
+          <CommandList className="z-[100] pointer-events-auto">
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (

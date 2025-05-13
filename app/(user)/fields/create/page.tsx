@@ -1,25 +1,24 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import React from "react";
+import FieldForm from "@/features/field/components/field-form";
 
-const CreateDepartmentPage = () => {
+const CreateFieldPage = () => {
   return (
     <PageContainer>
       <Card>
         <CardHeader>
           <PageTitle
-            title="Tambah Departemen"
-            subtitle="Tambah data departemen baru"
+            title="Tambah Bidang Kerja"
+            subtitle="Tambah data data bidang kerja baru"
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm />
+          <FieldForm />
         </CardContent>
       </Card>
     </PageContainer>
   );
 };
 
-export default CreateDepartmentPage;
+export default CreateFieldPage;

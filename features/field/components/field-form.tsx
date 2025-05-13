@@ -13,34 +13,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FieldFormType, SafeFieldType } from "../types/field.type";
 import { FieldFormSchema } from "../schemas/field.schema";
 import { upsertField } from "../services/field.service";
 import Combobox from "@/components/combobox";
+import { getDepartments } from "@/features/department/services/department.service";
 
 interface FieldFormProps {
   data?: SafeFieldType;
 }
 
-const frameworks = [
-  { value: "next.js", label: "Next.js" },
-  { value: "sveltekit", label: "SvelteKit" },
-  { value: "nuxt.js", label: "Nuxt.js" },
-  { value: "remix", label: "Remix" },
-  { value: "astro", label: "Astro" },
-];
+type ComboboxValueType = {
+  value: string;
+  label: string;
+};
 
 const FieldForm = ({ data }: FieldFormProps) => {
+  const [departments, setDepartments] = useState<ComboboxValueType[]>([]);
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const form = useForm<FieldFormType>({
     resolver: zodResolver(FieldFormSchema),
     mode: "all",
     defaultValues: {
-      departmentId: data?.departmentId ?? undefined,
+      departmentId: data?.departmentId ?? 0,
       name: data?.name ?? "",
       code: data?.code ?? "",
     },
@@ -81,6 +80,35 @@ const FieldForm = ({ data }: FieldFormProps) => {
     }
   };
 
+  const fetchDepartments = async () => {
+    try {
+      const result = await getDepartments({ page: 1, limit: 100 });
+      if (result)
+        setDepartments(
+          result.map((department) => ({
+            value: String(department.id),
+            label: department.name,
+          })),
+        );
+    } catch (error) {
+      console.error("An error occured while executing fetchDepartments", error);
+    }
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchDepartments();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log({ departments });
+  }, [departments]);
+
   return (
     <div className="flex justify-center max-w-lg mt-4">
       <Form {...form}>
@@ -106,7 +134,7 @@ const FieldForm = ({ data }: FieldFormProps) => {
             name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kode Departemen</FormLabel>
+                <FormLabel>Kode Bidang Kerja</FormLabel>
                 <FormControl>
                   <Input placeholder="Masukkan kode bidang kerja" {...field} />
                 </FormControl>
@@ -116,16 +144,20 @@ const FieldForm = ({ data }: FieldFormProps) => {
           />
           <FormField
             control={form.control}
-            name="code"
+            name="departmentId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kode Departemen</FormLabel>
+                <FormLabel>Nama Departemen</FormLabel>
                 <FormControl>
                   <Combobox
-                    options={frameworks}
-                    {...field}
-                    placeholder="Select framework..."
-                    searchPlaceholder="Search framework..."
+                    options={departments}
+                    value={String(field.value)}
+                    placeholder="Pilih departemen"
+                    searchPlaceholder="Cari departemen..."
+                    onChange={(value) => {
+                      console.log({ value });
+                      form.setValue("departmentId", Number(value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

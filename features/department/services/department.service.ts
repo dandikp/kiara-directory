@@ -25,8 +25,6 @@ export const getDepartments = async (params: GetDepartmentsParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  console.log({ skip });
-
   return await prisma.department.findMany({
     skip,
     take,

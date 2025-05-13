@@ -123,7 +123,7 @@ const FieldTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href={`#`}>
+        <Link href="/fields/create">
           <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Bidang Kerja
           </Button>

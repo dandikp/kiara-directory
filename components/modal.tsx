@@ -37,7 +37,10 @@ const Modal = ({
   const bodyClasses = cn(fullWidth ? "flex-1 h-full overflow-y-auto pr-2" : "");
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className={rootClasses}>
+      <DialogContent
+        className={rootClasses}
+        onWheel={(e) => e.stopPropagation()}
+      >
         <DialogHeader className="space-y-0 gap-2 justify-start">
           <DialogTitle className="text-left">{title}</DialogTitle>
           <DialogDescription className="text-left">
