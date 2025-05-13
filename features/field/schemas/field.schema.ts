@@ -31,6 +31,7 @@ export const SafeFieldSchema = FieldSchema.omit({
 });
 
 export const FieldFormSchema = FieldSchema.omit({
+  id: true,
   department: true,
   createdAt: true,
   updatedAt: true,

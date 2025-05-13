@@ -6,7 +6,7 @@ import React from "react";
 import { SafeFieldType } from "../types/field.type";
 import DeleteFieldPrompt from "./delete-field-prompt";
 
-const DeleteDepartmentModal = ({ data }: { data: SafeFieldType }) => {
+const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -30,4 +30,4 @@ const DeleteDepartmentModal = ({ data }: { data: SafeFieldType }) => {
   );
 };
 
-export default DeleteDepartmentModal;
+export default DeleteFieldModal;
