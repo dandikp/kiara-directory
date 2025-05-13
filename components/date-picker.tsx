@@ -57,7 +57,7 @@ export function DatePicker({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant="outline"
             className={cn(
               "w-full flex-1 justify-start text-left font-normal",
               !date && "text-muted-foreground",
@@ -111,7 +111,7 @@ export function DatePickerWithRange({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant="outline"
             className={cn(
               "w-full flex-1 justify-start text-left font-normal",
               date.from && !date.to ? "border-red-500" : "",

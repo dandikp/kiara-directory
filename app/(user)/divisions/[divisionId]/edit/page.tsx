@@ -1,18 +1,17 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import { getDepartmentById } from "@/features/department/services/department.service";
-import React from "react";
+import DivisionForm from "@/features/division/components/division-form";
+import { getDivisionById } from "@/features/division/services/division.service";
 
 type Props = {
   params: {
-    departmentId: string;
+    divisionId: string;
   };
 };
 
 const EditDepartmentPage = async ({ params }: Props) => {
-  const data = await getDepartmentById(Number(params.departmentId));
+  const data = await getDivisionById(Number(params.divisionId));
   if (!data) return null;
 
   return (
@@ -20,12 +19,12 @@ const EditDepartmentPage = async ({ params }: Props) => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Edit Departemen"
-            subtitle="Ubah dan simpan data departemen ke dalam data unit kerja."
+            title="Edit Divisi"
+            subtitle="Ubah dan simpan data divisi ke dalam data unit kerja."
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm data={data} />
+          <DivisionForm data={data} />
         </CardContent>
       </Card>
     </PageContainer>

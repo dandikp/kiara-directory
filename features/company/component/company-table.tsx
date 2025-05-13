@@ -76,14 +76,14 @@ const CompanyTable = ({
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Perusahaan">
                 <Link href={`/companies/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Perusahaan">
                 <Link href={`/companies/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>
@@ -113,7 +113,7 @@ const CompanyTable = ({
       showFilterPageSize
       renderToolbarActions={() => (
         <Link href={`#`}>
-          <Button size={"sm"} variant={"default"}>
+          <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
           </Button>
         </Link>

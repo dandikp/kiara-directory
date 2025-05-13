@@ -69,28 +69,30 @@ const DivisionTable = ({
         ),
       },
       {
-        accessorKey: "code",
+        accessorKey: "department.name",
         meta: {
-          displayColumnName: "code",
+          displayColumnName: "department.name",
         },
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Nama Departemen" />
         ),
-        cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("code")}</DatatableBodyCell>
-        ),
+        cell: ({ row }) => {
+          const departmentName = row.original.department?.name ?? "-";
+          return <DatatableBodyCell>{departmentName}</DatatableBodyCell>;
+        },
       },
       {
-        accessorKey: "code",
+        accessorKey: "field.name",
         meta: {
-          displayColumnName: "code",
+          displayColumnName: "field.name",
         },
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Nama Bidang Kerja" />
         ),
-        cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("code")}</DatatableBodyCell>
-        ),
+        cell: ({ row }) => {
+          const fieldName = row.original.field?.name ?? "-";
+          return <DatatableBodyCell>{fieldName}</DatatableBodyCell>;
+        },
       },
       {
         accessorKey: "actions",
@@ -112,14 +114,14 @@ const DivisionTable = ({
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Divisi">
                 <Link href={`/divisions/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Divisi">
                 <Link href={`/divisions/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>
@@ -148,8 +150,8 @@ const DivisionTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href={`#`}>
-          <Button size={"sm"} variant={"default"}>
+        <Link href="/divisions/create">
+          <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Divisi
           </Button>
         </Link>

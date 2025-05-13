@@ -84,14 +84,14 @@ const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Peran">
                 <Link href={`/roles/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Peran">
                 <Link href={`/roles/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>
@@ -121,7 +121,7 @@ const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
       showFilterPageSize
       renderToolbarActions={() => (
         <Link href={`#`}>
-          <Button size={"sm"} variant={"default"}>
+          <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Add Record
           </Button>
         </Link>

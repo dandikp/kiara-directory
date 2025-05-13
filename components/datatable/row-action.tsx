@@ -79,7 +79,7 @@ export function DatatableRowActions({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          size={"icon"}
+          size="icon"
           variant="outline"
           className="data-[state=open]:bg-muted"
         >

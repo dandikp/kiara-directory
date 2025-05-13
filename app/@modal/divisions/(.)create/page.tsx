@@ -1,6 +1,5 @@
-import CreateDepartmentModal from "@/features/department/components/create-department-modal";
-import React from "react";
+import CreateDivisionModal from "@/features/division/components/create-division-modal";
 
-const CreateDepartmentIntercept = () => <CreateDepartmentModal />;
+const CreateDivisionIntercept = () => <CreateDivisionModal />;
 
-export default CreateDepartmentIntercept;
+export default CreateDivisionIntercept;

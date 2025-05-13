@@ -22,13 +22,13 @@ const DatatableViewOptions = <TData,>({ table }: Props<TData>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"sm"} variant="outline">
+        <Button size="sm" variant="outline">
           <IconWrapper size={12} icon={FadersHorizontal} />
           View
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Pilih Kolom</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

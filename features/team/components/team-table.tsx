@@ -73,14 +73,14 @@ const TeamTable = ({ data, total }: DatatableResponseReturn<SafeTeamType>) => {
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Tim">
                 <Link href={`/teams/${id}/edit`}>
-                  <Button size={"icon"} variant={"outline"}>
+                  <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Tim">
                 <Link href={`/teams/${id}/delete`}>
-                  <Button size={"icon"} variant={"destructive"}>
+                  <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
                 </Link>
@@ -110,7 +110,7 @@ const TeamTable = ({ data, total }: DatatableResponseReturn<SafeTeamType>) => {
       showFilterPageSize
       renderToolbarActions={() => (
         <Link href={`#`}>
-          <Button size={"sm"} variant={"default"}>
+          <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Tim Unit
           </Button>
         </Link>

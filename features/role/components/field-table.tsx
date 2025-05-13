@@ -17,14 +17,14 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
-import { SafeProjectType } from "../types/project.type";
+import { SafeFieldType } from "../types/field.type";
 
-const ProjectTable = ({
+const FieldTable = ({
   data,
   total,
-}: DatatableResponseReturn<SafeProjectType>) => {
+}: DatatableResponseReturn<SafeFieldType>) => {
   const { pagination } = useDataTablePagination();
-  const columns = useMemo<ColumnDef<SafeProjectType>[]>(
+  const columns = useMemo<ColumnDef<SafeFieldType>[]>(
     () => [
       {
         accessorKey: "id",
@@ -57,15 +57,15 @@ const ProjectTable = ({
         ),
       },
       {
-        accessorKey: "company.name",
+        accessorKey: "code",
         meta: {
-          displayColumnName: "company.name",
+          displayColumnName: "code",
         },
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Nama Perusahaan" />
+          <DatatableColumnHeader column={column} title="Kode Bidang Kerja" />
         ),
         cell: ({ row }) => (
-          <DatatableBodyCell>{row.getValue("name")}</DatatableBodyCell>
+          <DatatableBodyCell>{row.getValue("code")}</DatatableBodyCell>
         ),
       },
       {
@@ -86,15 +86,15 @@ const ProjectTable = ({
           const id = row.getValue("id") as string;
           return (
             <div className="flex gap-2 self-end justify-end">
-              <TooltipWrapper text="Edit Proyek">
-                <Link href={`/projects/${id}/edit`}>
+              <TooltipWrapper text="Edit Bidang Kerja">
+                <Link href={`/fields/${id}/edit`}>
                   <Button size="icon" variant="outline">
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
-              <TooltipWrapper text="Hapus Proyek">
-                <Link href={`/projects/${id}/delete`}>
+              <TooltipWrapper text="Hapus Bidang Kerja">
+                <Link href={`/fields/${id}/delete`}>
                   <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
@@ -107,26 +107,25 @@ const ProjectTable = ({
     ],
     [pagination?.pageIndex, pagination?.pageSize],
   );
+
   const { table } = useDataTable({
     data,
     columns,
-    states: {
-      pagination,
-    },
+    states: { pagination },
     perPage: total,
   });
 
   return (
     <Datatable
-      title="Tabel Perusahaan"
+      title="Tabel Bidang Kerja"
       table={table}
       showDensity
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href={`#`}>
+        <Link href="/fields/create">
           <Button size="sm" variant="default">
-            <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
+            <IconWrapper size={12} icon={Plus} /> Tambah Bidang Kerja
           </Button>
         </Link>
       )}
@@ -135,9 +134,13 @@ const ProjectTable = ({
           key: "search",
           placeholder: "Pencarian...",
         },
+        {
+          key: "code",
+          placeholder: "Kode Bidang Kerja",
+        },
       ]}
     />
   );
 };
 
-export default ProjectTable;
+export default FieldTable;

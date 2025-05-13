@@ -65,16 +65,16 @@ const DatatableToolbar = <TData,>({
               {isManualPagination ? (
                 <CollapsibleContent className="inline-flex gap-2">
                   <Button
-                    size={"sm"}
-                    variant={"outline"}
+                    size="sm"
+                    variant="outline"
                     onClick={applyFilters}
                     disabled={!isAnyValuePresent}
                   >
                     Apply Filter
                   </Button>
                   <Button
-                    size={"sm"}
-                    variant={"outline"}
+                    size="sm"
+                    variant="outline"
                     onClick={handleReset}
                     disabled={!canReset}
                   >
@@ -83,8 +83,8 @@ const DatatableToolbar = <TData,>({
                 </CollapsibleContent>
               ) : (
                 <Button
-                  size={"sm"}
-                  variant={"outline"}
+                  size="sm"
+                  variant="outline"
                   onClick={() => table.resetColumnFilters()}
                 >
                   Reset
@@ -94,7 +94,7 @@ const DatatableToolbar = <TData,>({
           )}
         </div>
 
-        <div className="self-start flex md:inline-flex gap-3 justify-start md:  justify-end flex-wrap">
+        <div className="self-start flex md:inline-flex gap-3 justify-start md:justify-end flex-wrap">
           {showDensity ? (
             <Button
               variant="outline"

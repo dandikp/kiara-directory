@@ -11,7 +11,12 @@ export const DivisionSchema = z.object({
   code: z
     .string()
     .min(3, { message: "Kode divisi harus lebih dari 3 karakter" })
-    .max(32, { message: "Kode divisi maksimal 32 karakter" }),
+    .max(32, { message: "Kode divisi maksimal 32 karakter" })
+    .toUpperCase()
+    .refine((value) => /^[A-Z0-9_]+/.test(value), {
+      message:
+        "Kode harus menggunakan huruf kapital dan tanpa spasi. Penggunaan underscore (_) dan angka diperbolehkan",
+    }),
   departmentId: z.number().positive({ message: "ID harus lebih besar dari 0" }),
   fieldId: z
     .number()
@@ -30,4 +35,10 @@ export const SafeDivisionSchema = DivisionSchema.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
+});
+
+export const DivisionFormSchema = SafeDivisionSchema.omit({
+  id: true,
+  department: true,
+  field: true,
 });
