@@ -96,15 +96,15 @@ const UserTable = ({
           const id = row.getValue("id") as string;
           return (
             <div className="flex gap-2 self-end justify-end">
-              <TooltipWrapper text="Edit User">
-                <Link href={`/admin/users/admins/${id}/edit`}>
+              <TooltipWrapper text="Edit Pengguna">
+                <Link href={`/users/${id}/edit`}>
                   <Button size={"icon"} variant={"outline"}>
                     <IconWrapper size={4} icon={PencilSimple} />
                   </Button>
                 </Link>
               </TooltipWrapper>
-              <TooltipWrapper text={"Delete User"}>
-                <Link href={`/admin/users/admins/${id}/delete`}>
+              <TooltipWrapper text="Hapus Pengguna">
+                <Link href={`/users/${id}/delete`}>
                   <Button size={"icon"} variant={"destructive"}>
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
