@@ -47,7 +47,6 @@ const FieldForm = ({ data }: FieldFormProps) => {
 
   const onSubmitHandler = async (values: FieldFormType) => {
     let id: string | number = "";
-    console.log({ values });
 
     try {
       setIsPending(true);
@@ -106,14 +105,6 @@ const FieldForm = ({ data }: FieldFormProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log({ departments });
-  }, [departments]);
-
-  useEffect(() => {
-    console.log("Form errors:", form.formState.errors);
-  }, [form.formState.errors]);
-
   return (
     <div className="flex justify-center max-w-lg mt-4">
       <Form {...form}>
@@ -160,7 +151,6 @@ const FieldForm = ({ data }: FieldFormProps) => {
                     placeholder="Pilih departemen"
                     searchPlaceholder="Cari departemen..."
                     onChange={(value) => {
-                      console.log({ value });
                       form.setValue("departmentId", Number(value));
                     }}
                   />
