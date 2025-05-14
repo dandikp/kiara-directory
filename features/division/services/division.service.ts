@@ -130,7 +130,7 @@ export const upsertDivision = async (data: DivisionFormType, id?: number) => {
     ).toJSON();
   }
 
-  const createdField = await prisma.field.create({
+  const createdField = await prisma.division.create({
     data: { ...validation.data },
   });
   if (!createdField) return AppResponse.error("Gagal menambah data divisi");

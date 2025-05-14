@@ -32,6 +32,11 @@ type ComboboxValueType = {
   label: string;
 };
 
+type LoadingStateType = {
+  department: boolean;
+  field: boolean;
+};
+
 const DEFAULT_FIELD = {
   value: "0",
   label: "Tidak Dipilih",
@@ -42,23 +47,25 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
   const [fields, setFields] = useState<ComboboxValueType[]>([]);
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
+  const [loading, setLoading] = useState<LoadingStateType>({
+    department: false,
+    field: false,
+  });
   const form = useForm<DivisionFormType>({
     resolver: zodResolver(DivisionFormSchema),
     mode: "all",
     defaultValues: {
       departmentId: data?.departmentId ?? 0,
-      fieldId: data?.fieldId ?? 0,
+      fieldId: data?.fieldId ?? null,
       name: data?.name ?? "",
       code: data?.code ?? "",
     },
   });
 
-  const { watch } = form;
-  const departmentId = watch("departmentId");
+  const departmentId = form.watch("departmentId");
 
   const onSubmitHandler = async (values: DivisionFormType) => {
     let id: string | number = "";
-    console.log({ values });
 
     try {
       setIsPending(true);
@@ -93,6 +100,8 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
   };
 
   const fetchDepartments = async () => {
+    setLoading((prev) => ({ ...prev, department: true }));
+
     try {
       const result = await getDepartments({ page: 1, limit: 100 });
       if (result)
@@ -104,23 +113,30 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
         );
     } catch (error) {
       console.error("An error occured while executing fetchDepartments", error);
+    } finally {
+      setLoading((prev) => ({ ...prev, department: false }));
     }
   };
 
   const fetchFields = async (departmentId: number) => {
-    if (!departmentId) return null;
+    if (!departmentId || !Number(departmentId)) return null;
+
+    setLoading((prev) => ({ ...prev, field: true }));
 
     try {
       const result = await getFields({ page: 1, limit: 100, departmentId });
       if (result)
-        setFields(
-          result.map((field) => ({
+        setFields([
+          DEFAULT_FIELD,
+          ...result.map((field) => ({
             value: String(field.id),
             label: field.name,
           })),
-        );
+        ]);
     } catch (error) {
       console.error("An error occured while executing fetchFields", error);
+    } finally {
+      setLoading((prev) => ({ ...prev, field: false }));
     }
   };
 
@@ -136,12 +152,14 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      form.setValue("fieldId", data?.fieldId ?? null);
       fetchFields(departmentId);
     }, 500);
 
     return () => {
       clearTimeout(timeout);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departmentId]);
 
   return (
@@ -185,6 +203,7 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
                 <FormLabel>Nama Departemen</FormLabel>
                 <FormControl>
                   <Combobox
+                    disabled={loading.department}
                     options={departments}
                     value={String(field.value)}
                     placeholder="Pilih departemen"
@@ -206,12 +225,14 @@ const DivisionForm = ({ data }: DivisionFormProps) => {
                 <FormLabel>Nama Bidang Kerja (Opsional)</FormLabel>
                 <FormControl>
                   <Combobox
-                    options={departments}
-                    value={String(field.value)}
+                    disabled={loading.field || !departmentId}
+                    options={fields}
+                    value={String(field.value ?? 0)}
                     placeholder="Pilih bidang kerja"
                     searchPlaceholder="Cari bidang kerja..."
                     onChange={(value) => {
-                      form.setValue("fieldId", value ? Number(value) : null);
+                      const num = Number(value);
+                      form.setValue("fieldId", num > 0 ? num : null);
                     }}
                   />
                 </FormControl>
