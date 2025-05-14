@@ -31,10 +31,6 @@ const AccountDropdown = () => {
   const { session, purgeSession } = useAccount();
   const sessionUser = session?.user || { name: "", email: "" };
 
-  React.useEffect(() => {
-    console.log({ session });
-  }, [session]);
-
   const signOutHandler = () => {
     purgeSession();
   };

@@ -19,7 +19,6 @@ export const dateToQueryString = (date: Date): string => {
     console.warn("Invalid date provided:", date);
     return "";
   }
-  console.log(date.toISOString());
   // Format the date to 'YYYY-MM-DD'
   return moment(date).format("YYYY-MM-DD");
 };

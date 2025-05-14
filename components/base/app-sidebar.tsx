@@ -88,10 +88,6 @@ export const SidebarTrigger = ({
 }: React.ComponentProps<typeof Button>) => {
   const { toggleSidebar, state, open } = useSidebar();
 
-  React.useEffect(() => {
-    console.log({ state, open });
-  }, [state, open]);
-
   return (
     <Button
       data-sidebar="trigger"

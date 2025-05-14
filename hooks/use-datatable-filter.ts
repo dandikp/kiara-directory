@@ -63,7 +63,7 @@ const useDataTableFilter = (
             if (value.from && value.to) {
               params.set(key, dateRangeToQueryString(value));
             } else {
-              console.log(`DateRange for key "${key}" is incomplete.`, value);
+              console.warn(`DateRange for key "${key}" is incomplete.`, value);
             }
           } else if (value instanceof Date) {
             params.set(key, dateToQueryString(value));
