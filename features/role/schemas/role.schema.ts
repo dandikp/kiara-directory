@@ -13,7 +13,7 @@ export const RoleSchema = z.object({
     .gte(1, {
       message: "Level minimal 1 (tertinggi)",
     })
-    .lte(7, {
+    .lte(8, {
       message: "Level maksimal 7 (terendah)",
     }),
   createdAt: z.string().time({ precision: 3 }).nullable().optional(),
@@ -72,3 +72,5 @@ export const SafeRoleScopeSchema = RoleScopeSchema.omit({
   field: FieldSchema.pick({ name: true }).nullable().optional(),
   division: DivisionSchema.pick({ name: true }).nullable().optional(),
 });
+
+export const RoleFormSchema = SafeRoleSchema.omit({ id: true });

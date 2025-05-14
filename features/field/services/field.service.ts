@@ -1,5 +1,3 @@
-"use server";
-
 import { prisma } from "@/lib/database";
 import DatatableResponse from "@/lib/response/DatatableResponse";
 import { FieldFormType, SafeFieldType } from "../types/field.type";

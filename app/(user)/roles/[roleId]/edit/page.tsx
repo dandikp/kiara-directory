@@ -1,18 +1,17 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import { getDepartmentById } from "@/features/department/services/department.service";
-import React from "react";
+import RoleForm from "@/features/role/components/role-form";
+import { getRoleById } from "@/features/role/services/role.service";
 
 type Props = {
   params: {
-    departmentId: string;
+    roleId: string;
   };
 };
 
-const EditDepartmentPage = async ({ params }: Props) => {
-  const data = await getDepartmentById(Number(params.departmentId));
+const EditRolePage = async ({ params }: Props) => {
+  const data = await getRoleById(Number(params.roleId));
   if (!data) return null;
 
   return (
@@ -20,16 +19,16 @@ const EditDepartmentPage = async ({ params }: Props) => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Edit Departemen"
-            subtitle="Ubah dan simpan data departemen ke dalam data unit kerja."
+            title="Edit Peran / Jabatan"
+            subtitle="Ubah dan simpan peran atau jabatan untuk pengguna."
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm data={data} />
+          <RoleForm data={data} />
         </CardContent>
       </Card>
     </PageContainer>
   );
 };
 
-export default EditDepartmentPage;
+export default EditRolePage;

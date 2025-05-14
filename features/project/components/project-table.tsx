@@ -124,7 +124,7 @@ const ProjectTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href={`#`}>
+        <Link href="#">
           <Button size="sm" variant="default">
             <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
           </Button>

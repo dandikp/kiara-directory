@@ -1,8 +1,7 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import React from "react";
+import RoleForm from "@/features/role/components/role-form";
 
 const CreateDepartmentPage = () => {
   return (
@@ -10,12 +9,12 @@ const CreateDepartmentPage = () => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Tambah Departemen"
-            subtitle="Tambah data departemen baru"
+            title="Tambah Peran / Jabatan"
+            subtitle="Tambah peran atau jabatan untuk pengguna."
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm />
+          <RoleForm />
         </CardContent>
       </Card>
     </PageContainer>

@@ -1,6 +1,5 @@
-import CreateDepartmentModal from "@/features/department/components/create-department-modal";
-import React from "react";
+import CreateTeamModal from "@/features/team/components/create-team-modal";
 
-const CreateDepartmentIntercept = () => <CreateDepartmentModal />;
+const CreateTeamIntercept = () => <CreateTeamModal />;
 
-export default CreateDepartmentIntercept;
+export default CreateTeamIntercept;

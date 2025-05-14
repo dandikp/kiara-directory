@@ -2,7 +2,7 @@ import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import RoleTable from "@/features/role/components/role-table";
 import { getRolesTable } from "@/features/role/services/role.service";
-import { type RolePageSearchParams } from "@/features/role/types/role.types";
+import { RolePageSearchParams } from "@/features/role/types/role.types";
 
 interface PageProps {
   searchParams: RolePageSearchParams;
@@ -14,7 +14,12 @@ const RolePage = async ({ searchParams }: PageProps) => {
   const search = searchParams.search;
   const level = searchParams.level;
 
-  const result = await getRolesTable({ page, limit: pageSize, search, level });
+  const result = await getRolesTable({
+    page,
+    limit: pageSize,
+    search,
+    level,
+  });
 
   return (
     <PageContainer>

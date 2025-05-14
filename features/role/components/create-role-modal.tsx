@@ -3,10 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import DeleteFieldPrompt from "./delete-field-prompt";
+import RoleForm from "./role-form";
 
-const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
+const CreateRoleModal = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +22,11 @@ const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Hapus Bidang Kerja"
-      description=""
-      renderContent={<DeleteFieldPrompt data={data} />}
+      title="Tambah Peran / Jabatan"
+      description="Simpan dan tambah peran atau jabatan untuk pengguna"
+      renderContent={<RoleForm />}
     />
   );
 };
 
-export default DeleteFieldModal;
+export default CreateRoleModal;

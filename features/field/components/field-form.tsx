@@ -105,6 +105,10 @@ const FieldForm = ({ data }: FieldFormProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("Form errors:", form.formState.errors);
+  }, [form.formState.errors]);
+
   return (
     <div className="flex justify-center max-w-lg mt-4">
       <Form {...form}>

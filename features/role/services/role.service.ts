@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/database";
+import AppResponse from "@/lib/response/AppResponse";
 import DatatableResponse from "@/lib/response/DatatableResponse";
-import { SafeRoleType } from "../types/role.types";
+// import { revalidatePath } from "next/cache";
+import { RoleFormSchema } from "../schemas/role.schema";
+import { RoleFormType, SafeRoleType } from "../types/role.types";
+import { revalidatePath } from "next/cache";
 
 type GetRoleScopesParams = {
   userRoleId?: number;
@@ -88,4 +92,50 @@ export const getRolesTable = async (params: GetRolesParams) => {
     limit,
     count,
   );
+};
+
+export const upsertRole = async (data: RoleFormType, id?: number) => {
+  const validation = RoleFormSchema.safeParse(data);
+
+  if (!validation.success) {
+    const message = AppResponse.getErrorMessages(validation.error);
+    return AppResponse.error(`Terjadi Kesalahan - ${message}`).toJSON();
+  }
+
+  if (id) {
+    const updatedRole = await prisma.role.update({
+      where: { id },
+      data: { ...validation.data },
+    });
+
+    if (!updatedRole)
+      return AppResponse.error("Gagal memperbarui data peran / jabatan");
+
+    revalidatePath("/roles");
+
+    return AppResponse.success<SafeRoleType>(
+      "Data berhasil diperbarui",
+      updatedRole,
+    ).toJSON();
+  }
+
+  const createdRole = await prisma.role.create({
+    data: { ...validation.data },
+  });
+  if (!createdRole)
+    return AppResponse.error("Gagal menambah data peran / jabatan");
+
+  return AppResponse.success<SafeRoleType>(
+    "Data peran / jabatan baru berhasil ditambah",
+    createdRole,
+  ).toJSON();
+};
+
+export const getRoleById = async (id: number) =>
+  prisma.role.findFirst({ where: { id } });
+
+export const deleteFieldById = async (id: number) => {
+  await prisma.field.delete({ where: { id } });
+
+  return AppResponse.success(`Data berhasil dihapus`).toJSON();
 };

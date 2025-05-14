@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   ExtendedSafeRoleSchema,
   ExtendedSafeUserRoleSchema,
+  RoleFormSchema,
   RoleSchema,
   RoleScopeSchema,
   SafeRoleSchema,
@@ -21,3 +22,4 @@ export type RoleScopeType = z.infer<typeof RoleScopeSchema>;
 export type SafeRoleScopeType = z.infer<typeof SafeRoleScopeSchema>;
 export type RolePageSearchParams = PaginationSearchParams &
   Partial<SafeRoleType>;
+export type RoleFormType = z.infer<typeof RoleFormSchema>;

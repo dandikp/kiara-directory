@@ -8,12 +8,12 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
 import { DatatableResponseReturn } from "@/types/response.type";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { PencilSimple } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -83,17 +83,14 @@ const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Peran">
-                <Link href={`/roles/${id}/edit`}>
-                  <Button size="icon" variant="outline">
-                    <IconWrapper size={4} icon={PencilSimple} />
-                  </Button>
-                </Link>
-              </TooltipWrapper>
-              <TooltipWrapper text="Hapus Peran">
-                <Link href={`/roles/${id}/delete`}>
-                  <Button size="icon" variant="destructive">
-                    <IconWrapper size={4} icon={Trash} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/roles/${id}/edit`}
+                >
+                  <IconWrapper size={4} icon={PencilSimple} />
                 </Link>
               </TooltipWrapper>
             </div>
@@ -110,8 +107,6 @@ const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
     perPage: count,
   });
 
-  console.log({ table });
-
   return (
     <Datatable
       title="Tabel Pengguna"
@@ -119,13 +114,6 @@ const RoleTable = ({ data, count }: DatatableResponseReturn<SafeRoleType>) => {
       showDensity
       showColumnVisibility
       showFilterPageSize
-      renderToolbarActions={() => (
-        <Link href={`#`}>
-          <Button size="sm" variant="default">
-            <IconWrapper size={12} icon={Plus} /> Add Record
-          </Button>
-        </Link>
-      )}
       filters={[
         {
           key: "search",

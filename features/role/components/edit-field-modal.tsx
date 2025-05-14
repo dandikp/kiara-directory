@@ -1,10 +1,10 @@
 "use client";
 
 import Modal from "@/components/modal";
+import FieldForm from "@/features/field/components/field-form";
+import { SafeFieldType } from "@/features/field/types/field.type";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import FieldForm from "./field-form";
 
 const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
   const router = useRouter();

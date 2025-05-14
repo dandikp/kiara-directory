@@ -3,9 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import FieldForm from "./field-form";
+import { SafeRoleType } from "../types/role.types";
+import RoleForm from "./role-form";
 
-const CreateFieldModal = () => {
+const EditRoleModal = ({ data }: { data: SafeRoleType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -22,11 +23,11 @@ const CreateFieldModal = () => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Tambah Bidang Kerja Baru"
-      description="Simpan dan tambah bidang kerja baru ke dalam data unit kerja"
-      renderContent={<FieldForm />}
+      title="Edit Peran / Jabatan"
+      description="Ubah dan simpan data peran atau jabatan untuk pengguna"
+      renderContent={<RoleForm data={data} />}
     />
   );
 };
 
-export default CreateFieldModal;
+export default EditRoleModal;
