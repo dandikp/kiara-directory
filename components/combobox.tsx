@@ -25,6 +25,7 @@ interface ComboboxProps {
   value?: string | number;
   onChange?: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 function Combobox({
@@ -35,15 +36,15 @@ function Combobox({
   value,
   onChange,
   className,
+  disabled = false,
 }: ComboboxProps) {
-  console.log({ options });
   const [open, setOpen] = React.useState(false);
 
   const selectedLabel = options.find((opt) => opt.value === value)?.label;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled={disabled}>
         <Button
           type="button"
           variant="outline"
