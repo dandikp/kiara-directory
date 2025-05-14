@@ -3,10 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import FieldForm from "./field-form";
+import { SafeTeamType } from "../types/team.type";
+import DeleteTeamPrompt from "./delete-team-prompt";
 
-const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
+const DeleteTeamModal = ({ data }: { data: SafeTeamType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +23,11 @@ const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Bidang Kerja"
-      description="Ubah dan simpan data bidang kerja ke dalam data unit kerja"
-      renderContent={<FieldForm data={data} />}
+      title="Hapus Tim Unit"
+      description=""
+      renderContent={<DeleteTeamPrompt data={data} />}
     />
   );
 };
 
-export default EditFieldModal;
+export default DeleteTeamModal;

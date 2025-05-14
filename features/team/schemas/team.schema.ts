@@ -16,3 +16,5 @@ export const SafeTeamSchema = TeamSchema.omit({
   updatedAt: true,
   deletedAt: true,
 });
+
+export const TeamFormSchema = SafeTeamSchema.omit({ id: true });

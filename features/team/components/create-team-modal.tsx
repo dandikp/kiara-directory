@@ -3,10 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import DeleteFieldPrompt from "./delete-field-prompt";
+import TeamForm from "./team-form";
 
-const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
+const CreateTeamModal = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +22,11 @@ const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Hapus Bidang Kerja"
-      description=""
-      renderContent={<DeleteFieldPrompt data={data} />}
+      title="Tambah Tim Unit Baru"
+      description="Simpan dan tambah tim unit baru ke dalam data unit kerja"
+      renderContent={<TeamForm />}
     />
   );
 };
 
-export default DeleteFieldModal;
+export default CreateTeamModal;

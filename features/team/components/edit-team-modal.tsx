@@ -3,9 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import FieldForm from "./field-form";
+import { SafeTeamType } from "../types/team.type";
+import TeamForm from "./team-form";
 
-const CreateFieldModal = () => {
+const EditTeamModal = ({ data }: { data: SafeTeamType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -22,11 +23,11 @@ const CreateFieldModal = () => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Tambah Bidang Kerja Baru"
-      description="Simpan dan tambah bidang kerja baru ke dalam data unit kerja"
-      renderContent={<FieldForm />}
+      title="Edit Tim Unit"
+      description="Ubah dan simpan data bidang tim unit ke dalam data unit kerja"
+      renderContent={<TeamForm data={data} />}
     />
   );
 };
 
-export default CreateFieldModal;
+export default EditTeamModal;
