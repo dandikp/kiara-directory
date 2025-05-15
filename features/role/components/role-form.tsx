@@ -1,5 +1,6 @@
 "use client";
 
+import ControlledSlider from "@/components/controlled-slider";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -38,8 +38,6 @@ const RoleForm = ({ data }: RoleFormProps) => {
     },
   });
 
-  const level = form.watch("level");
-
   const onSubmitHandler = async (values: RoleFormType) => {
     let id: string | number = "";
 
@@ -57,6 +55,7 @@ const RoleForm = ({ data }: RoleFormProps) => {
           response.data?.id
         ) {
           router.replace("/roles");
+          router.refresh();
         }
       } else {
         toast.error(response.message);
@@ -105,17 +104,16 @@ const RoleForm = ({ data }: RoleFormProps) => {
               <FormItem>
                 <FormLabel>Level Peran</FormLabel>
                 <FormControl>
-                  <Slider
+                  <ControlledSlider
                     min={1}
                     max={7}
                     step={1}
-                    value={[field.value]}
-                    onValueChange={(val) => field.onChange(val[0])}
+                    {...field}
+                    label="Level"
                   />
                 </FormControl>
-                <FormDescription className="flex flex-col gap-1.5">
-                  <span>Level: {level}</span>
-                  <span>Semakin kecil angka semakin tinggi level jabatan</span>
+                <FormDescription>
+                  Semakin kecil angka semakin tinggi level jabatan
                 </FormDescription>
                 <FormMessage />
               </FormItem>
