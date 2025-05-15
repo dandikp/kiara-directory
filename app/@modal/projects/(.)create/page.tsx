@@ -1,6 +1,5 @@
-import CreateDepartmentModal from "@/features/department/components/create-department-modal";
-import React from "react";
+import CreateProjectForm from "@/features/project/components/create-project-modal";
 
-const CreateDepartmentIntercept = () => <CreateDepartmentModal />;
+const CreateProjectIntercept = () => <CreateProjectForm />;
 
-export default CreateDepartmentIntercept;
+export default CreateProjectIntercept;

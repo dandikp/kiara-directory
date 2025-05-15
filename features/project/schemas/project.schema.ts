@@ -1,4 +1,5 @@
 import { SafeCompanySchema } from "@/features/company/schemas/company.schema";
+import { WorkFieldEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const ProjectSchema = z.object({
@@ -15,6 +16,7 @@ export const ProjectSchema = z.object({
     .string()
     .min(3, { message: "Kode divisi harus lebih dari 3 karakter" })
     .max(16, { message: "Kode divisi maksimal 16 karakter" }),
+  workField: z.nativeEnum(WorkFieldEnum),
   year: z
     .string()
     .regex(/^\d{4}$/, { message: "Tahun harus terdiri dari 4 angka" })
@@ -31,4 +33,12 @@ export const SafeProjectSchema = ProjectSchema.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
+  company: true,
+}).extend({
+  company: SafeCompanySchema.nullable().optional(),
+});
+
+export const ProjectFormSchema = SafeProjectSchema.omit({
+  id: true,
+  company: true,
 });

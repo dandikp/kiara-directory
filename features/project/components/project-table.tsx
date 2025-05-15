@@ -8,7 +8,7 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
@@ -124,10 +124,11 @@ const ProjectTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href="#">
-          <Button size="sm" variant="default">
-            <IconWrapper size={12} icon={Plus} /> Tambah Perusahaan
-          </Button>
+        <Link
+          className={buttonVariants({ size: "sm", variant: "default" })}
+          href="/projects/create"
+        >
+          <IconWrapper size={12} icon={Plus} /> Tambah Proyek
         </Link>
       )}
       filters={[

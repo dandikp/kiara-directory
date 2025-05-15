@@ -3,9 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import FieldForm from "./field-form";
+import ProjectForm from "./project-form";
 
-const CreateFieldModal = () => {
+const CreateProjectForm = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -22,11 +22,11 @@ const CreateFieldModal = () => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Tambah Bidang Kerja Baru"
-      description="Simpan dan tambah bidang kerja baru ke dalam data unit kerja"
-      renderContent={<FieldForm />}
+      title="Tambah Proyek Baru"
+      description="Simpan dan tambah proyek pekerjaan baru"
+      renderContent={<ProjectForm />}
     />
   );
 };
 
-export default CreateFieldModal;
+export default CreateProjectForm;
