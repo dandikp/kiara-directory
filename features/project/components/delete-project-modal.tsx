@@ -3,10 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import FieldForm from "./field-form";
+import { SafeProjectType } from "../types/project.type";
 
-const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
+const DeleteProjectModal = ({ data }: { data: SafeProjectType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +22,11 @@ const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Bidang Kerja"
-      description="Ubah dan simpan data bidang kerja ke dalam data unit kerja"
-      renderContent={<FieldForm data={data} />}
+      title="Hapus Proyek Kerja"
+      description=""
+      renderContent={<DeleteProjectModal data={data} />}
     />
   );
 };
 
-export default EditFieldModal;
+export default DeleteProjectModal;

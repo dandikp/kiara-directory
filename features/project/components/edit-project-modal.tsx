@@ -3,10 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import DeleteFieldPrompt from "./delete-field-prompt";
+import { SafeProjectType } from "../types/project.type";
+import ProjectForm from "./project-form";
 
-const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
+const EditProjectModal = ({ data }: { data: SafeProjectType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +23,11 @@ const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Hapus Bidang Kerja"
-      description=""
-      renderContent={<DeleteFieldPrompt data={data} />}
+      title="Edit Proyek Pekerjaan"
+      description="Ubah dan simpan data proyek pekerjaan"
+      renderContent={<ProjectForm data={data} />}
     />
   );
 };
 
-export default DeleteFieldModal;
+export default EditProjectModal;

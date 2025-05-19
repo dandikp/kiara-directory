@@ -4,22 +4,22 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { deleteFieldById } from "../services/field.service";
-import { SafeFieldType } from "../types/field.type";
+import { SafeProjectType } from "../types/project.type";
+import { deleteProjectById } from "../services/project.service";
 
-const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
+const DeleteProjectPrompt = ({ data }: { data: SafeProjectType }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
     startTransition(() => {
-      const deletePromise = deleteFieldById(data.id);
+      const deletePromise = deleteProjectById(data.id);
 
       toast.promise(deletePromise, {
         loading: "Menghapus data...",
         success: (response) => {
           if (response.status === "success") {
-            router.replace("/fields");
+            router.replace("/projects");
             return response.message;
           } else {
             throw new Error(
@@ -73,4 +73,4 @@ const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
   );
 };
 
-export default DeleteFieldPrompt;
+export default DeleteProjectPrompt;

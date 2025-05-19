@@ -6,6 +6,7 @@ import DatatableResponse from "@/lib/response/DatatableResponse";
 import { revalidatePath } from "next/cache";
 import { ProjectFormSchema } from "../schemas/project.schema";
 import { ProjectFormType, SafeProjectType } from "../types/project.type";
+import { formatISO } from "date-fns";
 
 type GetProjectsCountParams = {
   search?: string;
@@ -130,4 +131,16 @@ export const upsertProject = async (data: ProjectFormType, id?: number) => {
     "Data proyek pekerjaan baru berhasil ditambah",
     createdProject,
   ).toJSON();
+};
+
+export const getProjectById = async (id: number) =>
+  prisma.project.findFirst({ where: { id, deletedAt: null } });
+
+export const deleteProjectById = async (id: number) => {
+  await prisma.project.update({
+    where: { id },
+    data: { deletedAt: formatISO(new Date()) },
+  });
+
+  return AppResponse.success(`Data berhasil dihapus`).toJSON();
 };
