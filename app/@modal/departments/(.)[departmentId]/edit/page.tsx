@@ -7,11 +7,11 @@ type Props = {
   };
 };
 
-const EditProjectIntercept = async ({ params }: Props) => {
+const EditDepartmentIntercept = async ({ params }: Props) => {
   const data = await getDepartmentById(Number(params?.departmentId));
   if (!data) return null;
 
   return <EditDepartmentModal data={data} />;
 };
 
-export default EditProjectIntercept;
+export default EditDepartmentIntercept;

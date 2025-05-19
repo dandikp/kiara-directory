@@ -1,17 +1,17 @@
-import DeleteProjectModal from "@/features/project/components/delete-project-modal";
-import { getProjectById } from "@/features/project/services/project.service";
+import DeleteDepartmentModal from "@/features/department/components/delete-department-modal";
+import { getDepartmentById } from "@/features/department/services/department.service";
 
 type Props = {
   params: {
-    projectId: string;
+    departmentId: string;
   };
 };
 
-const DeleteProjectIntercept = async ({ params }: Props) => {
-  const data = await getProjectById(Number(params?.projectId));
+const DeleteDepartmentIntercept = async ({ params }: Props) => {
+  const data = await getDepartmentById(Number(params?.departmentId));
   if (!data) return null;
 
-  return <DeleteProjectModal data={data} />;
+  return <DeleteDepartmentModal data={data} />;
 };
 
-export default DeleteProjectIntercept;
+export default DeleteDepartmentIntercept;
