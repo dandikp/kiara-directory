@@ -2,10 +2,13 @@ import { SafeCompanySchema } from "@/features/company/schemas/company.schema";
 import { WorkFieldEnum } from "@prisma/client";
 import { z } from "zod";
 
+const MIN_YEAR = 1970;
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const ProjectSchema = z.object({
   id: z.number().positive({ message: "ID harus lebih besar dari 0" }),
   companyId: z.number().positive({
-    message: "Company ID harus lebih dari 0",
+    message: "Perusahaan (company) harus dipilih",
   }),
   company: SafeCompanySchema,
   name: z
@@ -18,12 +21,13 @@ export const ProjectSchema = z.object({
     .max(16, { message: "Kode divisi maksimal 16 karakter" }),
   workField: z.nativeEnum(WorkFieldEnum),
   year: z
-    .string()
-    .regex(/^\d{4}$/, { message: "Tahun harus terdiri dari 4 angka" })
-    .transform(Number)
-    .refine((val) => val >= 1900 && val <= 2100, {
-      message: "Tahun harus antara 1900-2100",
-    }),
+    .number({
+      required_error: "Tahun harus diisi",
+      invalid_type_error: "Tahun harus berupa angka",
+    })
+    .int()
+    .gte(MIN_YEAR, { message: `Tahun minimal ${MIN_YEAR}` })
+    .lte(CURRENT_YEAR, { message: `Tahun maksimal ${CURRENT_YEAR}` }),
   createdAt: z.string().time({ precision: 3 }),
   updatedAt: z.string().time({ precision: 3 }).nullable().optional(),
   deletedAt: z.string().time({ precision: 3 }).nullable().optional(),

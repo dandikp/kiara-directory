@@ -12,17 +12,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getCompanies } from "@/features/company/services/company.service";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { SafeCompanyType } from "@/features/company/types/company.type";
+import { AppResponseJSON } from "@/lib/response/AppResponse";
+import { StandardGetApiResponse } from "@/types/response.type";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { WorkFieldEnum } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ProjectFormSchema } from "../schemas/project.schema";
-import { ProjectFormType, SafeProjectType } from "../types/project.type";
-import { WorkFieldEnum } from "@prisma/client";
 import { upsertProject } from "../services/project.service";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ProjectFormType, SafeProjectType } from "../types/project.type";
 
 interface ProjectFormProps {
   data?: SafeProjectType;
@@ -55,7 +57,7 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
     mode: "all",
     defaultValues: {
       companyId: data?.companyId ?? 0,
-      year: data?.year ?? 0,
+      year: data?.year ?? new Date().getFullYear(),
       name: data?.name ?? "",
       code: data?.code ?? "",
       workField: data?.workField ?? WorkFieldEnum.ENVIRONMENTAL,
@@ -78,7 +80,7 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           !Array.isArray(response.data) &&
           response.data?.id
         ) {
-          router.replace("/fields");
+          router.replace("/projects");
         }
       } else {
         toast.error(response.message);
@@ -99,14 +101,18 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
 
   const fetchCompanies = async () => {
     try {
-      const result = await getCompanies({ page: 1, limit: 100 });
-      if (result)
+      const response = await fetch("/api/companies");
+      const result: AppResponseJSON = await response.json();
+
+      if (result.status === "success" && result.data) {
+        const data: StandardGetApiResponse<SafeCompanyType> = result.data;
         setCompanies(
-          result.map((companies) => ({
+          data.items.map((companies) => ({
             value: String(companies.id),
             label: companies.name,
           })),
         );
+      }
     } catch (error) {
       console.error("An error occured while executing fetchCompanies", error);
     }

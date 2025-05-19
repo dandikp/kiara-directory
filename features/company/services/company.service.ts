@@ -31,7 +31,7 @@ export const getCompanies = async (params: GetCompaniesParams) => {
   const take = params.limit ?? 10;
   const skip = params.page ? (params.page - 1) * take : 0;
 
-  return await prisma.user.findMany({
+  return await prisma.company.findMany({
     skip,
     take,
     where: {

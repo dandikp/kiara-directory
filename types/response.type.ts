@@ -18,3 +18,10 @@ export type DatatableResponseReturn<T> = {
   page: number;
   perPage: number;
 };
+
+export type StandardGetApiResponse<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  perPage: number;
+};
