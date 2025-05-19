@@ -1,5 +1,6 @@
 "use client";
 
+import Combobox from "@/components/combobox";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,16 +12,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { getDepartments } from "@/features/department/services/department.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { FieldFormType, SafeFieldType } from "../types/field.type";
 import { FieldFormSchema } from "../schemas/field.schema";
-import { upsertField } from "../services/field.service";
-import Combobox from "@/components/combobox";
-import { getDepartments } from "@/features/department/services/department.service";
+import { FieldFormType, SafeFieldType } from "../types/field.type";
 
 interface FieldFormProps {
   data?: SafeFieldType;
@@ -51,25 +50,28 @@ const FieldForm = ({ data }: FieldFormProps) => {
     try {
       setIsPending(true);
       id = toast.loading("Mohon tunggu, sedang memproses...");
-      const response = await upsertField(values, data?.id);
+      const promise = await fetch("/api/fields", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...values,
+          ...(data ? { id: data.id } : undefined),
+        }),
+      });
+      const response = await promise.json();
 
-      if (response.status === "success") {
+      if (response.status === "success" && response?.data) {
         toast.success(response.message);
-
-        if (
-          response.data &&
-          !Array.isArray(response.data) &&
-          response.data?.id
-        ) {
-          router.replace("/fields");
-        }
+        router.replace("/fields");
       } else {
-        toast.error(response.message);
+        throw new Error(response.message);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      let message = "";
+      if (error instanceof Error) message = error.message;
       toast.error(
-        "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
+        message ||
+          "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
       );
     } finally {
       setTimeout(() => {
@@ -104,10 +106,6 @@ const FieldForm = ({ data }: FieldFormProps) => {
       clearTimeout(timeout);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("Form errors:", form.formState.errors);
-  }, [form.formState.errors]);
 
   return (
     <div className="flex justify-center max-w-lg mt-4">

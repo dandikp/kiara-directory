@@ -14,10 +14,6 @@ const DeleteProjectModal = ({ data }: { data: SafeProjectType }) => {
     router.back();
   };
 
-  React.useEffect(() => {
-    setOpen(true);
-  }, []);
-
   return (
     <Modal
       open={open}

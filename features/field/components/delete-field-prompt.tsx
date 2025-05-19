@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { deleteFieldById } from "../services/field.service";
 import { SafeFieldType } from "../types/field.type";
 
 const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
@@ -13,11 +12,22 @@ const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
 
   const handleDelete = async () => {
     startTransition(() => {
-      const deletePromise = deleteFieldById(data.id);
+      const deletePromise = fetch(`/api/fields/${data.id}`, {
+        method: "DELETE",
+      }).then(async (res) => {
+        const result = await res.json();
+
+        if (!res.ok || result.code !== 200) {
+          throw new Error(result.message || "Gagal menghapus data");
+        }
+
+        return result;
+      });
 
       toast.promise(deletePromise, {
         loading: "Menghapus data...",
         success: (response) => {
+          console.log({ response });
           if (response.status === "success") {
             router.replace("/fields");
             return response.message;

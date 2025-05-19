@@ -83,7 +83,7 @@ export const upsertField = async (data: FieldFormType, id?: number) => {
 
   if (!validation.success) {
     const message = AppResponse.getErrorMessages(validation.error);
-    return AppResponse.error(`Terjadi Kesalahan - ${message}`).toJSON();
+    return AppResponse.error(`Terjadi Kesalahan - ${message}`, 400).toJSON();
   }
 
   const existsData = await prisma.field.findFirst({
@@ -99,6 +99,7 @@ export const upsertField = async (data: FieldFormType, id?: number) => {
   if (existsData) {
     return AppResponse.error(
       `Kode ${validation.data?.code} telah dipakai pada bidang kerja lain.`,
+      400,
     ).toJSON();
   }
 
@@ -116,6 +117,7 @@ export const upsertField = async (data: FieldFormType, id?: number) => {
     return AppResponse.success<SafeFieldType>(
       "Data berhasil diperbarui",
       updatedField,
+      201,
     ).toJSON();
   }
 
@@ -128,6 +130,7 @@ export const upsertField = async (data: FieldFormType, id?: number) => {
   return AppResponse.success<SafeFieldType>(
     "Data bidang kerja baru berhasil ditambah",
     createdField,
+    201,
   ).toJSON();
 };
 
