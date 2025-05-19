@@ -22,12 +22,11 @@ import {
 } from "@phosphor-icons/react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { GUEST_PATHS } from "../config/routes.config";
 import {
   ForgotPasswordSchema,
   ResetPasswordSchema,
@@ -43,6 +42,8 @@ const SignInForm = () => {
     React.useState<boolean>(false);
   const [isPending, startTransition] = React.useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const toggleVisibility = React.useCallback(() => {
     setIsPasswordVisible((visible) => !visible);
@@ -66,7 +67,7 @@ const SignInForm = () => {
               toast.success("Berhasil masuk! Sedang mengalihkan...", {
                 duration: 2000,
                 onAutoClose: () => {
-                  router.push(GUEST_PATHS.signIn);
+                  router.push(callbackUrl);
                 },
               });
             } else {
