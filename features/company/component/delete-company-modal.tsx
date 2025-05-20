@@ -3,9 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import FieldForm from "./field-form";
+import { SafeCompanyType } from "../types/company.type";
+import DeleteCompanyPrompt from "./delete-company-prompt";
 
-const CreateFieldModal = () => {
+const DeleteCompanyModal = ({ data }: { data: SafeCompanyType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -22,11 +23,11 @@ const CreateFieldModal = () => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Tambah Bidang Kerja Baru"
-      description="Simpan dan tambah bidang kerja baru ke dalam data unit kerja"
-      renderContent={<FieldForm />}
+      title="Hapus Perusahaan"
+      description=""
+      renderContent={<DeleteCompanyPrompt data={data} />}
     />
   );
 };
 
-export default CreateFieldModal;
+export default DeleteCompanyModal;

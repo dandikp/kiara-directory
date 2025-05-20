@@ -4,6 +4,8 @@ export const CompanySchema = z.object({
   id: z.number().positive({ message: "ID harus lebih besar dari 0" }),
   name: z
     .string()
+    .trim()
+    .toUpperCase()
     .min(3, { message: "Nama perusahaan harus lebih dari 3 karakter" })
     .max(128, { message: "Nama perusahaan maksimal 128 karakter" }),
   createdAt: z.string().time({ precision: 3 }).nullable().optional(),
@@ -16,3 +18,5 @@ export const SafeCompanySchema = CompanySchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export const CompanyFormSchema = SafeCompanySchema.omit({ id: true });

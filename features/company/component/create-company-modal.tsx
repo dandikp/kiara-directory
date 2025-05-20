@@ -3,10 +3,9 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import DeleteFieldPrompt from "./delete-field-prompt";
+import CompanyForm from "./company-form";
 
-const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
+const CreateCompanyModal = () => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +22,11 @@ const DeleteFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Hapus Bidang Kerja"
-      description=""
-      renderContent={<DeleteFieldPrompt data={data} />}
+      title="Tambah Perusahaan"
+      description="Simpan dan tambah data perusahaan"
+      renderContent={<CompanyForm />}
     />
   );
 };
 
-export default DeleteFieldModal;
+export default CreateCompanyModal;

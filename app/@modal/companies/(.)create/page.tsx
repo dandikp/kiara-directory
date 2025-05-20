@@ -1,6 +1,5 @@
-import CreateDepartmentModal from "@/features/department/components/create-department-modal";
-import React from "react";
+import CreateCompanyModal from "@/features/company/component/create-company-modal";
 
-const CreateDepartmentIntercept = () => <CreateDepartmentModal />;
+const CreateCompanyIntercept = () => <CreateCompanyModal />;
 
-export default CreateDepartmentIntercept;
+export default CreateCompanyIntercept;

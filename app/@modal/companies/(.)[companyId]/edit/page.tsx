@@ -1,17 +1,16 @@
-import EditDepartmentModal from "@/features/department/components/edit-department-modal";
-import { getDepartmentById } from "@/features/department/services/department.service";
+import EditCompanyModal from "@/features/company/component/edit-field-modal";
+import { getCompanyById } from "@/features/company/services/company.service";
 
 type Props = {
-  params: {
-    departmentId: string;
-  };
+  params: Promise<{ companyId: string }>;
 };
 
 const EditDepartmentIntercept = async ({ params }: Props) => {
-  const data = await getDepartmentById(Number(params?.departmentId));
+  const id = (await params).companyId;
+  const data = await getCompanyById(Number(id));
   if (!data) return null;
 
-  return <EditDepartmentModal data={data} />;
+  return <EditCompanyModal data={data} />;
 };
 
 export default EditDepartmentIntercept;

@@ -3,10 +3,10 @@
 import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { SafeFieldType } from "../types/field.type";
-import FieldForm from "./field-form";
+import { SafeCompanyType } from "../types/company.type";
+import CompanyForm from "./company-form";
 
-const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
+const EditCompanyModal = ({ data }: { data: SafeCompanyType }) => {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
 
@@ -23,11 +23,11 @@ const EditFieldModal = ({ data }: { data: SafeFieldType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Bidang Kerja"
-      description="Ubah dan simpan data bidang kerja ke dalam data unit kerja"
-      renderContent={<FieldForm data={data} />}
+      title="Edit Perusahaan"
+      description="Ubah dan simpan data perusahaan"
+      renderContent={<CompanyForm data={data} />}
     />
   );
 };
 
-export default EditFieldModal;
+export default EditCompanyModal;

@@ -4,22 +4,31 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { deleteFieldById } from "../services/field.service";
-import { SafeFieldType } from "../types/field.type";
+import { SafeCompanyType } from "../types/company.type";
 
-const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
+const DeleteCompanyPrompt = ({ data }: { data: SafeCompanyType }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
     startTransition(() => {
-      const deletePromise = deleteFieldById(data.id);
+      const deletePromise = fetch(`/api/companies/${data.id}`, {
+        method: "DELETE",
+      }).then(async (res) => {
+        const result = await res.json();
+
+        if (!res.ok || result.code !== 200) {
+          throw new Error(result.message || "Gagal menghapus data");
+        }
+
+        return result;
+      });
 
       toast.promise(deletePromise, {
         loading: "Menghapus data...",
         success: (response) => {
           if (response.status === "success") {
-            router.replace("/fields");
+            router.replace("/companies");
             return response.message;
           } else {
             throw new Error(
@@ -73,4 +82,4 @@ const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
   );
 };
 
-export default DeleteFieldPrompt;
+export default DeleteCompanyPrompt;
