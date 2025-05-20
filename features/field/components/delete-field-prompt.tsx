@@ -27,7 +27,6 @@ const DeleteFieldPrompt = ({ data }: { data: SafeFieldType }) => {
       toast.promise(deletePromise, {
         loading: "Menghapus data...",
         success: (response) => {
-          console.log({ response });
           if (response.status === "success") {
             router.replace("/fields");
             return response.message;
