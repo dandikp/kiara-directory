@@ -56,17 +56,17 @@ export const SimpleUserSchema = UserSchema.omit({
   userRoles: true,
 });
 
-export const CreateUserSchema = UserSchema.omit({
+export const UserFormSchema = UserSchema.omit({
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
-})
-  .extend({
-    passwordConfirmation: z
-      .string()
-      .min(6, { message: "Password minimal berisi 6 karakter" }),
-  })
-  .refine((data) => data.passwordConfirmation === data.password, {
-    message: "Password dan konfirmasi password harus sama",
-    path: ["passwordConfirmation"],
-  });
+});
+
+export const RegisterUserSchema = UserFormSchema.extend({
+  passwordConfirmation: z
+    .string()
+    .min(6, { message: "Password minimal berisi 6 karakter" }),
+}).refine((data) => data.passwordConfirmation === data.password, {
+  message: "Password dan konfirmasi password harus sama",
+  path: ["passwordConfirmation"],
+});

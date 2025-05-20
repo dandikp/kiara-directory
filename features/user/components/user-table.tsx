@@ -8,7 +8,7 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
@@ -115,9 +115,7 @@ const UserTable = ({
                   })}
                   href={`/users/${id}/delete`}
                 >
-                  <Button size="icon" variant="destructive">
-                    <IconWrapper size={4} icon={Trash} />
-                  </Button>
+                  <IconWrapper size={4} icon={Trash} />
                 </Link>
               </TooltipWrapper>
             </div>
