@@ -8,7 +8,7 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
@@ -72,17 +72,25 @@ const TeamTable = ({ data, total }: DatatableResponseReturn<SafeTeamType>) => {
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Tim">
-                <Link href={`/teams/${id}/edit`}>
-                  <Button size="icon" variant="outline">
-                    <IconWrapper size={4} icon={PencilSimple} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/teams/${id}/edit`}
+                >
+                  <IconWrapper size={4} icon={PencilSimple} />
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Tim">
-                <Link href={`/teams/${id}/delete`}>
-                  <Button size="icon" variant="destructive">
-                    <IconWrapper size={4} icon={Trash} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "destructive",
+                  })}
+                  href={`/teams/${id}/delete`}
+                >
+                  <IconWrapper size={4} icon={Trash} />
                 </Link>
               </TooltipWrapper>
             </div>

@@ -8,7 +8,7 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
@@ -87,17 +87,25 @@ const DepartmentTable = ({
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Departemen">
-                <Link href={`/departments/${id}/edit`}>
-                  <Button size="icon" variant="outline">
-                    <IconWrapper size={4} icon={PencilSimple} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/departments/${id}/edit`}
+                >
+                  <IconWrapper size={4} icon={PencilSimple} />
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Departemen">
-                <Link href={`/departments/${id}/delete`}>
-                  <Button size="icon" variant="destructive">
-                    <IconWrapper size={4} icon={Trash} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "destructive",
+                  })}
+                  href={`/departments/${id}/delete`}
+                >
+                  <IconWrapper size={4} icon={Trash} />
                 </Link>
               </TooltipWrapper>
             </div>
@@ -124,10 +132,14 @@ const DepartmentTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href="/departments/create">
-          <Button size="sm" variant="default">
-            <IconWrapper size={12} icon={Plus} /> Tambah Departemen
-          </Button>
+        <Link
+          className={buttonVariants({
+            size: "sm",
+            variant: "default",
+          })}
+          href="/departments/create"
+        >
+          <IconWrapper size={12} icon={Plus} /> Tambah Departemen
         </Link>
       )}
       filters={[

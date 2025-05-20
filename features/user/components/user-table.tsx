@@ -8,7 +8,7 @@ import {
 import Datatable from "@/components/datatable/datatable";
 import { IconWrapper } from "@/components/icon";
 import { TooltipWrapper } from "@/components/tooltip";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
@@ -97,14 +97,24 @@ const UserTable = ({
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Pengguna">
-                <Link href={`/users/${id}/edit`}>
-                  <Button size="icon" variant="outline">
-                    <IconWrapper size={4} icon={PencilSimple} />
-                  </Button>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/users/${id}/edit`}
+                >
+                  <IconWrapper size={4} icon={PencilSimple} />
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Pengguna">
-                <Link href={`/users/${id}/delete`}>
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "destructive",
+                  })}
+                  href={`/users/${id}/delete`}
+                >
                   <Button size="icon" variant="destructive">
                     <IconWrapper size={4} icon={Trash} />
                   </Button>
@@ -134,10 +144,14 @@ const UserTable = ({
       showColumnVisibility
       showFilterPageSize
       renderToolbarActions={() => (
-        <Link href="#">
-          <Button size="sm" variant="default">
-            <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
-          </Button>
+        <Link
+          className={buttonVariants({
+            size: "sm",
+            variant: "default",
+          })}
+          href="#"
+        >
+          <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
         </Link>
       )}
       filters={[
