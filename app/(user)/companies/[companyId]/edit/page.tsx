@@ -1,18 +1,16 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import { getDepartmentById } from "@/features/department/services/department.service";
-import React from "react";
+import CompanyForm from "@/features/company/component/company-form";
+import { getCompanyById } from "@/features/company/services/company.service";
 
 type Props = {
-  params: {
-    departmentId: string;
-  };
+  params: Promise<{ companyId: string }>;
 };
 
-const EditDepartmentPage = async ({ params }: Props) => {
-  const data = await getDepartmentById(Number(params.departmentId));
+const EditCompanyPage = async ({ params }: Props) => {
+  const id = (await params).companyId;
+  const data = await getCompanyById(Number(id));
   if (!data) return null;
 
   return (
@@ -20,16 +18,16 @@ const EditDepartmentPage = async ({ params }: Props) => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Edit Departemen"
-            subtitle="Ubah dan simpan data departemen ke dalam data unit kerja."
+            title="Edit Perusahaan"
+            subtitle="Ubah dan simpan data perusahaan."
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm data={data} />
+          <CompanyForm data={data} />
         </CardContent>
       </Card>
     </PageContainer>
   );
 };
 
-export default EditDepartmentPage;
+export default EditCompanyPage;
