@@ -68,7 +68,10 @@ export function DatePicker({
             {date ? formatDate(date) : <span>{placeholder}</span>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent
+          className="w-auto p-0 z-[100] pointer-events-auto"
+          align="start"
+        >
           <Calendar
             initialFocus
             mode="single"
