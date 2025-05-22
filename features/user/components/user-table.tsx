@@ -147,7 +147,7 @@ const UserTable = ({
             size: "sm",
             variant: "default",
           })}
-          href="#"
+          href="/users/create"
         >
           <IconWrapper size={12} icon={Plus} /> Tambah Pengguna
         </Link>

@@ -1,6 +1,5 @@
 "use client";
 
-import Combobox from "@/components/combobox";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,62 +11,49 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { SafeCompanyType } from "@/features/company/types/company.type";
-import { AppResponseJSON } from "@/lib/response/AppResponse";
-import { StandardGetApiResponse } from "@/types/response.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WorkFieldEnum } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { CreateUserSchema, EditUserSchema } from "../schemas/user.schema";
+import {
+  CreateUserType,
+  EditUserType,
+  SafeUserType,
+} from "../types/user.types";
+import { DatePicker } from "@/components/date-picker";
 
-interface ProjectFormProps {
-  data?: SafeProjectType;
-}
-
-type ComboboxValueType = {
-  value: string;
-  label: string;
-};
-
-const startYear = new Date().getFullYear();
-const endYear = 1970;
-const years: ComboboxValueType[] = Array.from(
-  { length: startYear - endYear + 1 },
-  (_, i) => {
-    const year = startYear - i;
-    return {
-      value: year.toString(),
-      label: year.toString(),
-    };
-  },
-);
-
-const ProjectForm = ({ data }: ProjectFormProps) => {
-  const [companies, setCompanies] = useState<ComboboxValueType[]>([]);
+export const CreateUserForm = () => {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
-  const form = useForm<ProjectFormType>({
-    resolver: zodResolver(ProjectFormSchema),
+  const form = useForm<CreateUserType>({
+    resolver: zodResolver(CreateUserSchema),
     mode: "all",
     defaultValues: {
-      companyId: data?.companyId ?? 0,
-      year: data?.year ?? new Date().getFullYear(),
-      name: data?.name ?? "",
-      code: data?.code ?? "",
-      workField: data?.workField ?? WorkFieldEnum.ENVIRONMENTAL,
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      passwordConfirmation: "",
+      avatar: null,
+      bio: null,
+      dob: null,
     },
   });
 
-  const onSubmitHandler = async (values: ProjectFormType) => {
+  const onSubmitHandler = async (values: CreateUserType) => {
     let id: string | number = "";
 
     try {
       setIsPending(true);
       id = toast.loading("Mohon tunggu, sedang memproses...");
-      const response = await upsertProject(values, data?.id);
+      const promise = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const response = await promise.json();
 
       if (response.status === "success") {
         toast.success(response.message);
@@ -77,7 +63,7 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           !Array.isArray(response.data) &&
           response.data?.id
         ) {
-          router.replace("/projects");
+          router.replace("/users");
         }
       } else {
         toast.error(response.message);
@@ -96,35 +82,6 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
     }
   };
 
-  const fetchCompanies = async () => {
-    try {
-      const response = await fetch("/api/companies");
-      const result: AppResponseJSON = await response.json();
-
-      if (result.status === "success" && result.data) {
-        const data: StandardGetApiResponse<SafeCompanyType> = result.data;
-        setCompanies(
-          data.items.map((companies) => ({
-            value: String(companies.id),
-            label: companies.name,
-          })),
-        );
-      }
-    } catch (error) {
-      console.error("An error occured while executing fetchCompanies", error);
-    }
-  };
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetchCompanies();
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
-
   return (
     <div className="flex justify-center max-w-lg mt-4">
       <Form {...form}>
@@ -137,9 +94,9 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nama Proyek Pekerjaan</FormLabel>
+                <FormLabel>Nama Pengguna</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan proyek pekerjaan" {...field} />
+                  <Input placeholder="Masukkan nama pengguna" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,13 +104,14 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           />
           <FormField
             control={form.control}
-            name="code"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kode Proyek Pekerjaan</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Masukkan kode proyek pekerjaan"
+                    placeholder="Masukkan email pengguna"
+                    type="email"
                     {...field}
                   />
                 </FormControl>
@@ -163,19 +121,14 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           />
           <FormField
             control={form.control}
-            name="companyId"
+            name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nama Perusahaan</FormLabel>
+                <FormLabel>Nomor Telepon</FormLabel>
                 <FormControl>
-                  <Combobox
-                    options={companies}
-                    value={String(field.value)}
-                    placeholder="Pilih perusahaan"
-                    searchPlaceholder="Cari perusahaan..."
-                    onChange={(value) => {
-                      form.setValue("companyId", Number(value));
-                    }}
+                  <Input
+                    placeholder="Masukkan no. telepon pengguna"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -184,19 +137,14 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           />
           <FormField
             control={form.control}
-            name="year"
+            name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tahun Pekerjaan</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Combobox
-                    options={years}
-                    value={String(field.value)}
-                    placeholder="Pilih tahun"
-                    searchPlaceholder="Cari tahun..."
-                    onChange={(value) => {
-                      form.setValue("year", Number(value));
-                    }}
+                  <Input
+                    placeholder="Masukkan password baru pengguna"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -205,39 +153,15 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
           />
           <FormField
             control={form.control}
-            name="workField"
+            name="passwordConfirmation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bidang Pekerjaan</FormLabel>
+                <FormLabel>Konfirmasi Password</FormLabel>
                 <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="ENVIRONMENTAL" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Lingkungan</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="URBAN_PLANNING" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Tata Ruang</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="FLAG_BORROWING" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        Pinjam Bendera
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
+                  <Input
+                    placeholder="Masukkan konfirmasi password pengguna"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -251,7 +175,7 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
             disabled={isPending}
             className="mt-4 w-fit ml-auto"
           >
-            {data ? "Simpan" : "Tambah"}
+            Tambah
           </Button>
         </form>
       </Form>
@@ -259,4 +183,165 @@ const ProjectForm = ({ data }: ProjectFormProps) => {
   );
 };
 
-export default ProjectForm;
+export const UpdateUserForm = ({
+  data,
+  userId,
+}: {
+  data: SafeUserType;
+  userId: number;
+}) => {
+  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
+  const form = useForm<EditUserType>({
+    resolver: zodResolver(EditUserSchema),
+    mode: "all",
+    defaultValues: {
+      name: data.name ?? "",
+      email: data.email ?? "",
+      phone: data.phone ?? "",
+      bio: data?.bio ?? "",
+      dob: data?.dob ? new Date(data.dob) : undefined,
+    },
+  });
+
+  const onSubmitHandler = async (values: EditUserType) => {
+    let id: string | number = "";
+
+    try {
+      setIsPending(true);
+      id = toast.loading("Mohon tunggu, sedang memproses...");
+      const promise = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, dob: values.dob?.toISOString() }),
+      });
+      const response = await promise.json();
+
+      if (response.status === "success") {
+        toast.success(response.message);
+
+        if (
+          response.data &&
+          !Array.isArray(response.data) &&
+          response.data?.id
+        ) {
+          router.replace("/users");
+        }
+      } else {
+        toast.error(response.message);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error(
+        "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
+      );
+    } finally {
+      setTimeout(() => {
+        if (id) toast.dismiss(id);
+      }, 300);
+
+      setIsPending(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-center max-w-lg mt-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmitHandler)}
+          className="w-full flex flex-col gap-4"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nama Pengguna</FormLabel>
+                <FormControl>
+                  <Input placeholder="Masukkan nama pengguna" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Masukkan email pengguna"
+                    type="email"
+                    readOnly
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nomor Telepon</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Masukkan no. telepon pengguna"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio (Singkat)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Masukkan bio singkat pengguna"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dob"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tanggal Lahir</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    placeholder="Masukkan tanggal lahir pengguna"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Divider />
+
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="mt-4 w-fit ml-auto"
+          >
+            Tambah
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
+};

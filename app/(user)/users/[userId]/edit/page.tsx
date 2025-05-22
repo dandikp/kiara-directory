@@ -6,13 +6,15 @@ import { getDepartmentById } from "@/features/department/services/department.ser
 import React from "react";
 
 type Props = {
-  params: {
-    departmentId: string;
-  };
+  params: Promise<{
+    userId: string;
+  }>;
 };
 
-const EditDepartmentPage = async ({ params }: Props) => {
-  const data = await getDepartmentById(Number(params.departmentId));
+const EditUserPage = async ({ params }: Props) => {
+  const id = (await params).userId;
+  const data = await getDepartmentById(Number(id));
+
   if (!data) return null;
 
   return (
@@ -20,8 +22,8 @@ const EditDepartmentPage = async ({ params }: Props) => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Edit Departemen"
-            subtitle="Ubah dan simpan data departemen ke dalam data unit kerja."
+            title="Edit Pengguna"
+            subtitle="Ubah dan simpan data pengguna."
           />
         </CardHeader>
         <CardContent>
@@ -32,4 +34,4 @@ const EditDepartmentPage = async ({ params }: Props) => {
   );
 };
 
-export default EditDepartmentPage;
+export default EditUserPage;

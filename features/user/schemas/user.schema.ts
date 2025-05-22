@@ -5,9 +5,12 @@ export const UserSchema = z.object({
   id: z.number(),
   userRoles: z.array(SafeUserRoleSchema),
   email: z.string().email().trim().toLowerCase(),
-  phone: z.string().regex(/^(?:\+62|62|0)8[1235789][0-9]{7,10}$/, {
-    message: "Nomor telepon tidak valid",
-  }),
+  phone: z
+    .string()
+    .regex(/^(?:\+62|62|0)8[1235789][0-9]{7,10}$/, {
+      message: "Nomor telepon tidak valid",
+    })
+    .trim(),
   password: z
     .string()
     .min(6, { message: "Password minimal berisi 6 karakter" })
@@ -57,12 +60,26 @@ export const SimpleUserSchema = UserSchema.omit({
 });
 
 export const UserFormSchema = UserSchema.omit({
+  id: true,
   createdAt: true,
   updatedAt: true,
   deletedAt: true,
+  userRoles: true,
 });
 
-export const RegisterUserSchema = UserFormSchema.extend({
+export const EditUserSchema = UserFormSchema.omit({
+  password: true,
+  bio: true,
+  dob: true,
+}).extend({
+  bio: z
+    .string()
+    .max(1024, { message: "Maksimal isi bio 1024 karakter" })
+    .optional(),
+  dob: z.date().optional(),
+});
+
+export const CreateUserSchema = UserFormSchema.extend({
   passwordConfirmation: z
     .string()
     .min(6, { message: "Password minimal berisi 6 karakter" }),
@@ -70,3 +87,9 @@ export const RegisterUserSchema = UserFormSchema.extend({
   message: "Password dan konfirmasi password harus sama",
   path: ["passwordConfirmation"],
 });
+
+export const SafeUserWithNoRolesSchema = SafeUserSchema.omit({
+  userRoles: true,
+});
+
+export type SafeUserWithNoRolesType = z.infer<typeof SafeUserWithNoRolesSchema>;

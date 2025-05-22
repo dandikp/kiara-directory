@@ -9,11 +9,12 @@ interface PageProps {
 }
 
 const UserPage = async ({ searchParams }: PageProps) => {
-  const page = parseInt(searchParams.page as string) || 1;
-  const pageSize = parseInt(searchParams.pageSize as string) || 10;
-  const search = searchParams.search;
-  const email = searchParams.email;
-  const phone = searchParams.phone;
+  const params = await searchParams;
+  const page = parseInt(params.page as string) || 1;
+  const pageSize = parseInt(params.pageSize as string) || 10;
+  const search = params.search;
+  const email = params.email;
+  const phone = params.phone;
 
   const result = await getUsersTable({
     page,

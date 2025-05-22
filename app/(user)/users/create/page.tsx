@@ -10,8 +10,8 @@ const CreateDepartmentPage = () => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Tambah Departemen"
-            subtitle="Tambah data departemen baru"
+            title="Tambah Pengguna"
+            subtitle="Tambah data pengguna baru"
           />
         </CardHeader>
         <CardContent>

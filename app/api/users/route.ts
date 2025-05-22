@@ -1,4 +1,8 @@
-import { getUsers, getUsersCount } from "@/features/user/services/user.service";
+import {
+  createUser,
+  getUsers,
+  getUsersCount,
+} from "@/features/user/services/user.service";
 import type { SimpleUserType } from "@/features/user/types/user.types";
 import AppResponse from "@/lib/response/AppResponse";
 import { NextResponse } from "next/server";
@@ -10,8 +14,8 @@ type GetReturnType = {
   perPage: number;
 };
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
 
@@ -33,4 +37,11 @@ export async function GET(req: Request) {
       total,
     }),
   );
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const result = await createUser(body);
+
+  return NextResponse.json(result, { status: result.code });
 }
