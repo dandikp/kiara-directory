@@ -100,6 +100,16 @@ const ResetPasswordPage = async ({ searchParams }: PageProps) => {
       </div>
 
       <ResetPasswordForm token={token} userId={userId} />
+      <Link
+        href="/auth/sign-in"
+        className={cn(
+          buttonVariants({ variant: "default", size: "lg" }),
+          "bg-white text-neutral-800 text-sm -mt-2.5 ml-auto w-full hover:bg-neutral-50 hover:text-neutral-800 flex justify-center items-center",
+        )}
+      >
+        <ArrowLeft />
+        <span>Kembali ke Login</span>
+      </Link>
     </div>
   );
 };

@@ -7,7 +7,7 @@ type Props = {
   }>;
 };
 
-const EditUserIntercept = async ({ params }: Props) => {
+const ResetPasswordUserIntercept = async ({ params }: Props) => {
   const id = (await params).userId;
   const data = await getUserById(Number(id));
   if (!data) return null;
@@ -16,4 +16,4 @@ const EditUserIntercept = async ({ params }: Props) => {
   return <EditUserModal data={safeData} />;
 };
 
-export default EditUserIntercept;
+export default ResetPasswordUserIntercept;
