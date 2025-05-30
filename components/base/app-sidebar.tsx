@@ -5,8 +5,10 @@ import {
   AccountDropdown,
   RoleDropdown,
 } from "@/features/account/component/navigation";
+import { ADMIN_MENU_GROUP } from "@/lib/config/config.menu";
 import { isActivePath } from "@/lib/sidebar";
 import { removeTrailingSlash } from "@/lib/string";
+import { cn } from "@/lib/utils";
 import {
   Calendar,
   EnvelopeSimple,
@@ -15,9 +17,9 @@ import {
   MagnifyingGlass,
   type Icon,
 } from "@phosphor-icons/react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { MenuGroup } from "../menu";
 import { Button } from "../ui/button";
 import {
   Collapsible,
@@ -28,9 +30,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -39,9 +38,6 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "../ui/sidebar";
-import { cn } from "@/lib/utils";
-import { MenuGroup } from "../menu";
-import { ADMIN_MENU_GROUP } from "@/lib/config/config.menu";
 interface MenuItem {
   title: string;
   path: string;

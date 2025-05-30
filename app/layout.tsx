@@ -1,9 +1,10 @@
 import { Toaster } from "@/components/ui/sonner";
+import { SessionHookProvider } from "@/lib/session";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionHookProvider } from "@/lib/session";
+import { AUTH_OPTIONS } from "@/features/auth/config/auth.config";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,15 +29,17 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  const session = await getServerSession(AUTH_OPTIONS);
 
   return (
     <html lang="en">
       <body
         className={`${inter.variable} ${jetBrainsMono.variable} antialiased`}
       >
-        <SessionHookProvider session={session}>{children}</SessionHookProvider>
-        {modal}
+        <SessionHookProvider session={session}>
+          {children}
+          {modal}
+        </SessionHookProvider>
         <Toaster richColors position="top-center" />
       </body>
     </html>

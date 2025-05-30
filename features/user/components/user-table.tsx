@@ -13,7 +13,7 @@ import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
 import { DatatableResponseReturn } from "@/types/response.type";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Key, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -105,6 +105,17 @@ const UserTable = ({
                   href={`/users/${id}/edit`}
                 >
                   <IconWrapper size={4} icon={PencilSimple} />
+                </Link>
+              </TooltipWrapper>
+              <TooltipWrapper text="Ubah Password">
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/users/${id}/reset-password`}
+                >
+                  <IconWrapper size={4} icon={Key} />
                 </Link>
               </TooltipWrapper>
               <TooltipWrapper text="Hapus Pengguna">

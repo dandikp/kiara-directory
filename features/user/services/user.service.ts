@@ -10,6 +10,10 @@ import {
   SafeUserWithNoRolesType,
   SimpleUserType,
 } from "../types/user.types";
+import { ResetPasswordSchema } from "@/features/auth/schemas/auth.schema";
+import { z } from "zod";
+import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
 
 export const getUserByEmail = async (email: string) =>
   prisma.user.findFirst({
@@ -251,4 +255,42 @@ export const updateUser = async (data: EditUserType, id: number) => {
     safeUser,
     201,
   ).toJSON();
+};
+
+export const setNewPasswordByUserId = async (
+  data: z.infer<typeof ResetPasswordSchema>,
+  userId: number,
+) => {
+  const validation = ResetPasswordSchema.safeParse(data);
+
+  if (!validation.success) {
+    const message = AppResponse.getErrorMessages(validation.error);
+    return AppResponse.error(`Terjadi Kesalahan - ${message}`, 400).toJSON();
+  }
+  try {
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: { password: bcrypt.hashSync(data.password, 10) },
+      }),
+    ]);
+
+    return AppResponse.success(
+      "Pengaturan ulang password berhasil. Silakan informasikan kepada pengguna bahwa mereka dapat masuk dengan password yang baru.",
+    ).toJSON(); // <- PENTING: return di sini
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return AppResponse.error(
+        `Terjadi kesalahan: ${error.message}`,
+        500,
+      ).toJSON();
+    }
+
+    return AppResponse.error(
+      error instanceof Error
+        ? error.message
+        : "Terjadi kesalahan yang tidak diketahui. Coba beberapa saat lagi.",
+      500,
+    ).toJSON();
+  }
 };

@@ -4,6 +4,8 @@ import Modal from "@/components/modal";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SafeUserType } from "../types/user.types";
+import ResetUserPasswordForm from "./reset-password-form";
+import useAccount from "@/features/account/hooks/use-account";
 
 const ModalContent = ({
   data,
@@ -12,7 +14,16 @@ const ModalContent = ({
   data: SafeUserType;
   userId: number;
 }) => {
-  return <div></div>;
+  const { session } = useAccount();
+  const sessionUser = session?.user;
+
+  console.log({ sessionUser });
+
+  return (
+    <div className="w-full flex flex-col gap-2">
+      <ResetUserPasswordForm userId={userId} data={data} />
+    </div>
+  );
 };
 
 const ResetPasswordUserModal = ({ data }: { data: SafeUserType }) => {
@@ -32,8 +43,8 @@ const ResetPasswordUserModal = ({ data }: { data: SafeUserType }) => {
     <Modal
       open={open}
       handleClose={closeModalHandler}
-      title="Edit Pengguna"
-      description="Ubah dan simpan data pengguna"
+      title="Ubah Password"
+      description="Ubah dan simpan data password pengguna."
       renderContent={<ModalContent data={data} userId={data.id} />}
     />
   );

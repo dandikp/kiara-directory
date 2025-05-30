@@ -1,4 +1,4 @@
-import EditUserModal from "@/features/user/components/edit-user-modal";
+import ResetPasswordUserModal from "@/features/user/components/reset-password-user-modal";
 import { getUserById } from "@/features/user/services/user.service";
 
 type Props = {
@@ -13,7 +13,7 @@ const ResetPasswordUserIntercept = async ({ params }: Props) => {
   if (!data) return null;
   const safeData = { ...data, dob: data?.dob ? data.dob.toISOString() : null };
 
-  return <EditUserModal data={safeData} />;
+  return <ResetPasswordUserModal data={safeData} />;
 };
 
 export default ResetPasswordUserIntercept;
