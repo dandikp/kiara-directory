@@ -18,11 +18,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
 import { SimpleUserType } from "../types/user.types";
+import useAccount from "@/features/account/hooks/use-account";
 
 const UserTable = ({
   data,
   total,
 }: DatatableResponseReturn<SimpleUserType>) => {
+  const { session } = useAccount();
+  const sessionUser = session?.user ?? { id: 0 };
   const { pagination } = useDataTablePagination();
   const columns = useMemo<ColumnDef<SimpleUserType>[]>(
     () => [
@@ -94,6 +97,7 @@ const UserTable = ({
         ),
         cell: ({ row }) => {
           const id = row.getValue("id") as string;
+          if (sessionUser.id === id) return null;
           return (
             <div className="flex gap-2 self-end justify-end">
               <TooltipWrapper text="Edit Pengguna">
@@ -134,7 +138,7 @@ const UserTable = ({
         },
       },
     ],
-    [pagination?.pageIndex, pagination?.pageSize],
+    [pagination?.pageIndex, pagination?.pageSize, sessionUser.id],
   );
   const { table } = useDataTable({
     data,

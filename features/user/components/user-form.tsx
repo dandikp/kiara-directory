@@ -16,13 +16,19 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { CreateUserSchema, EditUserSchema } from "../schemas/user.schema";
+import {
+  CreateUserSchema,
+  EditUserSchema,
+  UserRolesFormSchema,
+} from "../schemas/user.schema";
 import {
   CreateUserType,
   EditUserType,
   SafeUserType,
 } from "../types/user.types";
 import { DatePicker } from "@/components/date-picker";
+import { SafeRoleType } from "@/features/role/types/role.types";
+import { z } from "zod";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -341,6 +347,35 @@ export const UpdateUserForm = ({
             Tambah
           </Button>
         </form>
+      </Form>
+    </div>
+  );
+};
+
+export const SelectUserRolesForm = ({
+  data,
+  userId,
+  roles,
+}: {
+  roles: SafeRoleType[];
+  data: SafeUserType;
+  userId: number;
+}) => {
+  const form = useForm<z.infer<typeof UserRolesFormSchema>>({
+    resolver: zodResolver(UserRolesFormSchema),
+    mode: "all",
+    defaultValues: { roleIds: [] },
+  });
+
+  const onSubmitHandler = () => {};
+
+  return (
+    <div className="flex justify-center max-w-lg mt-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmitHandler)}
+          className="w-full flex flex-col gap-4"
+        ></form>
       </Form>
     </div>
   );

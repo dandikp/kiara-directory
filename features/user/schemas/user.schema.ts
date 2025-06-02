@@ -92,4 +92,16 @@ export const SafeUserWithNoRolesSchema = SafeUserSchema.omit({
   userRoles: true,
 });
 
-export type SafeUserWithNoRolesType = z.infer<typeof SafeUserWithNoRolesSchema>;
+export const UserRolesFormSchema = z.object({
+  roleIds: z.array(
+    z
+      .number({
+        required_error: "ID peran / jabatan harus diisi.",
+        message: "ID peran / jabatan harus berupa angka.",
+      })
+      .min(1, {
+        message:
+          "Pengguna harus setidaknya memiliki 1 peran / jabatan yang aktif.",
+      }),
+  ),
+});
