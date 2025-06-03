@@ -13,7 +13,13 @@ import useDataTable from "@/hooks/use-datatable";
 import useDataTablePagination from "@/hooks/use-datatable-pagination";
 import { rowIndexInContext } from "@/lib/datatable.guard";
 import { DatatableResponseReturn } from "@/types/response.type";
-import { Key, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import {
+  IdentificationBadge,
+  Key,
+  PencilSimple,
+  Plus,
+  Trash,
+} from "@phosphor-icons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -122,6 +128,17 @@ const UserTable = ({
                   <IconWrapper size={4} icon={Key} />
                 </Link>
               </TooltipWrapper>
+              <TooltipWrapper text="Ubah Peran / Jabatan">
+                <Link
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "outline",
+                  })}
+                  href={`/users/${id}/edit-roles`}
+                >
+                  <IconWrapper size={4} icon={IdentificationBadge} />
+                </Link>
+              </TooltipWrapper>
               <TooltipWrapper text="Hapus Pengguna">
                 <Link
                   className={buttonVariants({
@@ -182,3 +199,5 @@ const UserTable = ({
 };
 
 export default UserTable;
+
+export const UserRolesTable = () => {};

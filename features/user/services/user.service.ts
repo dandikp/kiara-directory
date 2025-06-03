@@ -294,3 +294,15 @@ export const setNewPasswordByUserId = async (
     ).toJSON();
   }
 };
+
+export const getUserRolesByUserId = async (userId: number) => {
+  return await prisma.userRole.findMany({
+    include: {
+      roleScopes: true,
+    },
+    where: {
+      id: userId,
+      deletedAt: null,
+    },
+  });
+};

@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "@/components/modal";
 import { SafeRoleType } from "@/features/role/types/role.types";
 import { useRouter } from "next/navigation";

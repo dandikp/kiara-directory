@@ -29,6 +29,8 @@ import {
 import { DatePicker } from "@/components/date-picker";
 import { SafeRoleType } from "@/features/role/types/role.types";
 import { z } from "zod";
+import { Select } from "@/components/ui/select";
+import Combobox from "@/components/combobox";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -348,6 +350,39 @@ export const UpdateUserForm = ({
           </Button>
         </form>
       </Form>
+    </div>
+  );
+};
+
+type UserRolesInputProps = {
+  roles: SafeRoleType[];
+  onChange?: (roleId: number) => void;
+  index?: number;
+};
+
+export const UserRolesInputGroup = ({
+  roles,
+  onChange,
+  index,
+}: UserRolesInputProps) => {
+  const selection = roles.map((role) => ({
+    label: role.name,
+    value: String(role.id),
+  }));
+  const onChangeHandler = (selectedId: string) =>
+    onChange && onChange(Number(selectedId));
+  return (
+    <div className="w-full flex flex-nowrap flex-col gap-2">
+      <span>Peran {index}</span>
+      <div className="w-full flex flex-wrap gap-2">
+        <Combobox
+          options={selection}
+          value=""
+          placeholder="Pilih "
+          searchPlaceholder="Cari departemen..."
+          onChange={onChangeHandler}
+        />
+      </div>
     </div>
   );
 };
