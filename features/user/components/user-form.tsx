@@ -31,6 +31,9 @@ import { SafeRoleType } from "@/features/role/types/role.types";
 import { z } from "zod";
 import { Select } from "@/components/ui/select";
 import Combobox from "@/components/combobox";
+import { ScopeType } from "@prisma/client";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -360,7 +363,16 @@ type UserRolesInputProps = {
   index?: number;
 };
 
-export const UserRolesInputGroup = ({
+const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
+  value,
+  label: {
+    DEPARTMENT: "Departemen",
+    FIELD: "Bidang",
+    DIVISION: "Divisi",
+  }[value],
+}));
+
+export const UserRoleScopeInputGroup = ({
   roles,
   onChange,
   index,
@@ -371,17 +383,41 @@ export const UserRolesInputGroup = ({
   }));
   const onChangeHandler = (selectedId: string) =>
     onChange && onChange(Number(selectedId));
+
+  console.log({ SCOPE_TYPE_OPTIONS });
+
   return (
     <div className="w-full flex flex-nowrap flex-col gap-2">
-      <span>Peran {index}</span>
-      <div className="w-full flex flex-wrap gap-2">
+      <span className="text-lg font-semibold">Peran {index}</span>
+      <div className="w-full flex flex-wrap gap-4">
         <Combobox
           options={selection}
-          value=""
-          placeholder="Pilih "
-          searchPlaceholder="Cari departemen..."
+          placeholder="Pilih peran / jabatan"
+          searchPlaceholder="Cari peran / jabatan..."
           onChange={onChangeHandler}
         />
+        <div className="w-full gap-2 grid grid-cols-2">
+          <Combobox
+            className="basis-1/2"
+            options={SCOPE_TYPE_OPTIONS}
+            placeholder="Pilih unit kerja"
+            searchPlaceholder="Cari unit kerja..."
+            onChange={onChangeHandler}
+          />
+          <Combobox
+            className="basis-1/2"
+            options={SCOPE_TYPE_OPTIONS}
+            placeholder="Pilih unit kerja"
+            searchPlaceholder="Cari unit kerja..."
+            onChange={onChangeHandler}
+          />
+        </div>
+        <div className="w-full flex items-center space-x-2">
+          <Switch id={`main-role-switch=${index}`} />
+          <Label htmlFor={`main-role-switch=${index}`} className="w-fit">
+            Peran / jabatan utama
+          </Label>
+        </div>
       </div>
     </div>
   );
@@ -409,8 +445,13 @@ export const SelectUserRolesForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmitHandler)}
-          className="w-full flex flex-col gap-4"
-        ></form>
+          className="w-full flex flex-col gap-6"
+        >
+          <UserRoleScopeInputGroup roles={roles} index={1} />
+          <UserRoleScopeInputGroup roles={roles} index={2} />
+          <UserRoleScopeInputGroup roles={roles} index={3} />
+          <Button>Tambah Peran / Jabatan</Button>
+        </form>
       </Form>
     </div>
   );

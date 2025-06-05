@@ -56,16 +56,27 @@ function Combobox({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 max-w-64 z-[100]">
-        <Command className="z-[60]">
-          <CommandInput placeholder={searchPlaceholder} className="h-9" />
-          <CommandList className="z-[100] pointer-events-auto">
+      <PopoverContent
+        className="w-full p-0 max-w-64 z-50"
+        style={{ pointerEvents: "auto" }}
+      >
+        <Command
+          filter={(value, search, keywords = []) => {
+            const extendValue = `${value} ${keywords.join(" ")}`;
+            if (extendValue.toLowerCase().includes(search.toLowerCase()))
+              return 1;
+            return 0;
+          }}
+        >
+          <CommandInput placeholder={searchPlaceholder} />
+          <CommandList>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
                   value={option.value}
+                  keywords={[option.label]}
                   onSelect={(currentValue) => {
                     if (onChange) {
                       onChange(currentValue === value ? "" : currentValue);

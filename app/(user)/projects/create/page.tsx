@@ -1,8 +1,7 @@
 import { PageTitle } from "@/components/base/app-title";
 import { PageContainer } from "@/components/layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import DepartmentForm from "@/features/department/components/department-form";
-import React from "react";
+import ProjectForm from "@/features/project/components/project-form";
 
 const CreateDepartmentPage = () => {
   return (
@@ -10,12 +9,12 @@ const CreateDepartmentPage = () => {
       <Card>
         <CardHeader>
           <PageTitle
-            title="Tambah Departemen"
-            subtitle="Tambah data departemen baru"
+            title="Tambah Proyek Baru"
+            subtitle="Simpan dan tambah proyek pekerjaan baru"
           />
         </CardHeader>
         <CardContent>
-          <DepartmentForm />
+          <ProjectForm />
         </CardContent>
       </Card>
     </PageContainer>
