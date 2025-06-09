@@ -105,3 +105,65 @@ export const UserRolesFormSchema = z.object({
       }),
   ),
 });
+
+const ScopeTypeEnum = z.enum(["DEPARTMENT", "FIELD", "DIVISION"]);
+
+export const UserRoleScopeFormSchema = z
+  .object({
+    userId: z
+      .number({
+        required_error: "ID pengguna harus diisi.",
+        message: "ID pengguna harus berupa angka.",
+      })
+      .positive(),
+    roleId: z
+      .number({
+        required_error: "ID peran / jabatan harus diisi.",
+        message: "ID peran / jabatan harus berupa angka.",
+      })
+      .positive(),
+    scopeType: ScopeTypeEnum.optional(),
+    departmentId: z
+      .number({
+        required_error: "ID departemen harus diisi.",
+        message: "ID departemen harus berupa angka.",
+      })
+      .positive()
+      .optional(),
+    fieldId: z
+      .number({
+        required_error: "ID bidang kerja harus diisi.",
+        message: "ID bidang kerja harus berupa angka.",
+      })
+      .positive()
+      .optional(),
+    divisionId: z
+      .number({
+        required_error: "ID divisi harus diisi.",
+        message: "ID divisi harus berupa angka.",
+      })
+      .positive()
+      .optional(),
+  })
+  .refine(
+    (data) => {
+      // roleId === 1 for System Administrator
+      // roleId === 2 for CEO
+      if (data.roleId > 2 && !data.scopeType) return false;
+      return true;
+    },
+    { message: "Tipe scope peran / jabatan harus diisi.", path: ["scopeType"] },
+  )
+  .refine(
+    (data) => {
+      if (data.scopeType === "DIVISION") return !!data.divisionId;
+      if (data.scopeType === "FIELD") return !!data.fieldId;
+      if (data.scopeType === "DEPARTMENT") return !!data.departmentId;
+
+      return true;
+    },
+    {
+      message: "ID scope sesuai harus diisi berdasarkan tipe scope.",
+      path: ["scopeType"],
+    },
+  );

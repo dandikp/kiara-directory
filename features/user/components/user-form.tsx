@@ -19,12 +19,14 @@ import { toast } from "sonner";
 import {
   CreateUserSchema,
   EditUserSchema,
+  UserRoleScopeFormSchema,
   UserRolesFormSchema,
 } from "../schemas/user.schema";
 import {
   CreateUserType,
   EditUserType,
   SafeUserType,
+  UserRoleScopeFormType,
 } from "../types/user.types";
 import { DatePicker } from "@/components/date-picker";
 import { SafeRoleType } from "@/features/role/types/role.types";
@@ -377,14 +379,22 @@ export const UserRoleScopeInputGroup = ({
   onChange,
   index,
 }: UserRolesInputProps) => {
+  const form = useForm<UserRoleScopeFormType>({
+    resolver: zodResolver(UserRoleScopeFormSchema),
+    mode: "all",
+    defaultValues: {
+      userId: 0,
+      scopeType: undefined,
+      roleId: 0,
+    },
+  });
+
   const selection = roles.map((role) => ({
     label: role.name,
     value: String(role.id),
   }));
   const onChangeHandler = (selectedId: string) =>
     onChange && onChange(Number(selectedId));
-
-  console.log({ SCOPE_TYPE_OPTIONS });
 
   return (
     <div className="w-full flex flex-nowrap flex-col gap-2">
@@ -413,8 +423,8 @@ export const UserRoleScopeInputGroup = ({
           />
         </div>
         <div className="w-full flex items-center space-x-2">
-          <Switch id={`main-role-switch=${index}`} />
-          <Label htmlFor={`main-role-switch=${index}`} className="w-fit">
+          <Switch id={`main-role-switch-${index}`} />
+          <Label htmlFor={`main-role-switch-${index}`} className="w-fit">
             Peran / jabatan utama
           </Label>
         </div>
