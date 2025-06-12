@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Divider } from "@/components/divider";
@@ -13,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -36,6 +37,10 @@ import Combobox from "@/components/combobox";
 import { ScopeType } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useQuery } from "@tanstack/react-query";
+import { ROLE_QUERY_KEYS } from "@/features/role/config/role.config";
+import { AppResponseJSON } from "@/lib/response/AppResponse";
+import { StandardResponse } from "@/types/response.type";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -360,8 +365,7 @@ export const UpdateUserForm = ({
 };
 
 type UserRolesInputProps = {
-  roles: SafeRoleType[];
-  onChange?: (roleId: number) => void;
+  onSubmit?: (type: "CREATE" | "UPDATE", userRoleId: number) => void;
   index?: number;
 };
 
@@ -374,11 +378,28 @@ const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
   }[value],
 }));
 
-export const UserRoleScopeInputGroup = ({
-  roles,
-  onChange,
-  index,
-}: UserRolesInputProps) => {
+const fetchRoles = async () => {
+  const res = await fetch("/api/roles");
+  if (!res.ok) throw new Error("Failed to fetch roles");
+  return res.json();
+};
+
+export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
+  const {
+    data: roleData,
+    isLoading,
+    error,
+  } = useQuery<StandardResponse<SafeRoleType>>({
+    queryKey: [ROLE_QUERY_KEYS.API_GET],
+    queryFn: fetchRoles,
+    staleTime: 1000 * 60,
+    gcTime: 5 * 1000 * 60,
+  });
+  const [scopes, setScopes] = useState<
+    { value: number; label: number }[] | undefined
+  >();
+  const [roles, setRoles] = useState<SafeRoleType[]>([]);
+
   const form = useForm<UserRoleScopeFormType>({
     resolver: zodResolver(UserRoleScopeFormSchema),
     mode: "all",
@@ -393,8 +414,13 @@ export const UserRoleScopeInputGroup = ({
     label: role.name,
     value: String(role.id),
   }));
-  const onChangeHandler = (selectedId: string) =>
-    onChange && onChange(Number(selectedId));
+
+  const onSubmitHandler = () => onSubmit && onSubmit("CREATE", 0);
+
+  useEffect(() => {
+    if (roleData?.status === "success" && Array.isArray(roleData?.data))
+      setRoles(roleData?.data);
+  }, [roleData]);
 
   return (
     <div className="w-full flex flex-nowrap flex-col gap-2">
@@ -404,7 +430,6 @@ export const UserRoleScopeInputGroup = ({
           options={selection}
           placeholder="Pilih peran / jabatan"
           searchPlaceholder="Cari peran / jabatan..."
-          onChange={onChangeHandler}
         />
         <div className="w-full gap-2 grid grid-cols-2">
           <Combobox
@@ -412,14 +437,12 @@ export const UserRoleScopeInputGroup = ({
             options={SCOPE_TYPE_OPTIONS}
             placeholder="Pilih unit kerja"
             searchPlaceholder="Cari unit kerja..."
-            onChange={onChangeHandler}
           />
           <Combobox
             className="basis-1/2"
             options={SCOPE_TYPE_OPTIONS}
             placeholder="Pilih unit kerja"
             searchPlaceholder="Cari unit kerja..."
-            onChange={onChangeHandler}
           />
         </div>
         <div className="w-full flex items-center space-x-2">
@@ -457,9 +480,9 @@ export const SelectUserRolesForm = ({
           onSubmit={form.handleSubmit(onSubmitHandler)}
           className="w-full flex flex-col gap-6"
         >
-          <UserRoleScopeInputGroup roles={roles} index={1} />
-          <UserRoleScopeInputGroup roles={roles} index={2} />
-          <UserRoleScopeInputGroup roles={roles} index={3} />
+          <UserRoleScopeForm index={1} />
+          <UserRoleScopeForm index={2} />
+          <UserRoleScopeForm index={3} />
           <Button>Tambah Peran / Jabatan</Button>
         </form>
       </Form>

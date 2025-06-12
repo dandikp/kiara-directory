@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AUTH_OPTIONS } from "@/features/auth/config/auth.config";
+import { QueryProviders } from "@/components/query-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,10 +37,12 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${jetBrainsMono.variable} antialiased`}
       >
-        <SessionHookProvider session={session}>
-          {children}
-          {modal}
-        </SessionHookProvider>
+        <QueryProviders>
+          <SessionHookProvider session={session}>
+            {children}
+            {modal}
+          </SessionHookProvider>
+        </QueryProviders>
         <Toaster richColors position="top-center" />
       </body>
     </html>
