@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
   CreateUserSchema,
@@ -41,6 +41,8 @@ import { useQuery } from "@tanstack/react-query";
 import { ROLE_QUERY_KEYS } from "@/features/role/config/role.config";
 import { AppResponseJSON } from "@/lib/response/AppResponse";
 import { StandardResponse } from "@/types/response.type";
+import useRoles from "@/features/role/hooks/useRoles";
+import { getScopeTypeByRoleID } from "@/features/role/iibs/role-scope.lib";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -248,7 +250,6 @@ export const UpdateUserForm = ({
       } else {
         toast.error(response.message);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error(
         "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
@@ -378,27 +379,8 @@ const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
   }[value],
 }));
 
-const fetchRoles = async () => {
-  const res = await fetch("/api/roles");
-  if (!res.ok) throw new Error("Failed to fetch roles");
-  return res.json();
-};
-
 export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
-  const {
-    data: roleData,
-    isLoading,
-    error,
-  } = useQuery<StandardResponse<SafeRoleType>>({
-    queryKey: [ROLE_QUERY_KEYS.API_GET],
-    queryFn: fetchRoles,
-    staleTime: 1000 * 60,
-    gcTime: 5 * 1000 * 60,
-  });
-  const [scopes, setScopes] = useState<
-    { value: number; label: number }[] | undefined
-  >();
-  const [roles, setRoles] = useState<SafeRoleType[]>([]);
+  const { roles, loading: loadingRoles } = useRoles();
 
   const form = useForm<UserRoleScopeFormType>({
     resolver: zodResolver(UserRoleScopeFormSchema),
@@ -407,6 +389,7 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
       userId: 0,
       scopeType: undefined,
       roleId: 0,
+      isMain: false,
     },
   });
 
@@ -416,76 +399,99 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
   }));
 
   const onSubmitHandler = () => onSubmit && onSubmit("CREATE", 0);
-
-  useEffect(() => {
-    if (roleData?.status === "success" && Array.isArray(roleData?.data))
-      setRoles(roleData?.data);
-  }, [roleData]);
+  const roleId = useWatch({
+    control: form.control,
+    name: "roleId",
+  });
+  const scopeType = getScopeTypeByRoleID(roleId);
 
   return (
-    <div className="w-full flex flex-nowrap flex-col gap-2">
-      <span className="text-lg font-semibold">Peran {index}</span>
-      <div className="w-full flex flex-wrap gap-4">
-        <Combobox
-          options={selection}
-          placeholder="Pilih peran / jabatan"
-          searchPlaceholder="Cari peran / jabatan..."
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmitHandler)}
+        className="w-full flex flex-nowrap flex-col gap-2"
+      >
+        <span className="text-lg font-semibold">Peran {index}</span>
+        <FormField
+          control={form.control}
+          name="roleId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Peran / Jabatan</FormLabel>
+              <FormControl>
+                <Combobox
+                  options={selection}
+                  placeholder="Pilih peran / jabatan"
+                  searchPlaceholder="Cari peran / jabatan..."
+                  disabled={loadingRoles}
+                  value={String(field.value)}
+                  onChange={(value) => {
+                    form.setValue("roleId", Number(value));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <div className="w-full gap-2 grid grid-cols-2">
-          <Combobox
-            className="basis-1/2"
-            options={SCOPE_TYPE_OPTIONS}
-            placeholder="Pilih unit kerja"
-            searchPlaceholder="Cari unit kerja..."
-          />
-          <Combobox
-            className="basis-1/2"
-            options={SCOPE_TYPE_OPTIONS}
-            placeholder="Pilih unit kerja"
-            searchPlaceholder="Cari unit kerja..."
+        <div className="w-full flex flex-wrap gap-4">
+          {scopeType && (
+            <div className="w-full gap-2 grid grid-cols-2">
+              <Combobox
+                className="basis-1/2"
+                options={SCOPE_TYPE_OPTIONS}
+                placeholder="Pilih unit kerja"
+                searchPlaceholder="Cari unit kerja..."
+              />
+              <Combobox
+                className="basis-1/2"
+                options={SCOPE_TYPE_OPTIONS}
+                placeholder="Pilih unit kerja"
+                searchPlaceholder="Cari unit kerja..."
+              />
+            </div>
+          )}
+          <FormField
+            control={form.control}
+            name="isMain"
+            render={({ field }) => (
+              <FormItem>
+                <div className="w-full flex items-center space-x-2">
+                  <Switch
+                    id={`main-role-switch-${index}`}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <Label
+                    htmlFor={`main-role-switch-${index}`}
+                    className="w-fit"
+                  >
+                    Peran / jabatan utama
+                  </Label>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
-        <div className="w-full flex items-center space-x-2">
-          <Switch id={`main-role-switch-${index}`} />
-          <Label htmlFor={`main-role-switch-${index}`} className="w-fit">
-            Peran / jabatan utama
-          </Label>
-        </div>
-      </div>
-    </div>
+      </form>
+    </Form>
   );
 };
 
 export const SelectUserRolesForm = ({
   data,
   userId,
-  roles,
 }: {
-  roles: SafeRoleType[];
   data: SafeUserType;
   userId: number;
 }) => {
-  const form = useForm<z.infer<typeof UserRolesFormSchema>>({
-    resolver: zodResolver(UserRolesFormSchema),
-    mode: "all",
-    defaultValues: { roleIds: [] },
-  });
-
-  const onSubmitHandler = () => {};
-
   return (
-    <div className="flex justify-center max-w-lg mt-4">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmitHandler)}
-          className="w-full flex flex-col gap-6"
-        >
-          <UserRoleScopeForm index={1} />
-          <UserRoleScopeForm index={2} />
-          <UserRoleScopeForm index={3} />
-          <Button>Tambah Peran / Jabatan</Button>
-        </form>
-      </Form>
+    <div className="flex justify-center w-full flex-col gap-6 max-w-lg mt-4">
+      <UserRoleScopeForm index={1} />
+      <UserRoleScopeForm index={2} />
+      <UserRoleScopeForm index={3} />
+      <Button>Tambah Peran / Jabatan</Button>
     </div>
   );
 };

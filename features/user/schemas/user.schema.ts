@@ -144,6 +144,7 @@ export const UserRoleScopeFormSchema = z
       })
       .positive()
       .optional(),
+    isMain: z.boolean().default(false),
   })
   .refine(
     (data) => {
