@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import Combobox from "@/components/combobox";
+import { DatePicker } from "@/components/date-picker";
 import { Divider } from "@/components/divider";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,16 +14,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import useRoles from "@/features/role/hooks/useRoles";
+import { getScopeTypeByRoleID } from "@/features/role/iibs/role-scope.lib";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ScopeType } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
   CreateUserSchema,
   EditUserSchema,
   UserRoleScopeFormSchema,
-  UserRolesFormSchema,
 } from "../schemas/user.schema";
 import {
   CreateUserType,
@@ -29,20 +35,6 @@ import {
   SafeUserType,
   UserRoleScopeFormType,
 } from "../types/user.types";
-import { DatePicker } from "@/components/date-picker";
-import { SafeRoleType } from "@/features/role/types/role.types";
-import { z } from "zod";
-import { Select } from "@/components/ui/select";
-import Combobox from "@/components/combobox";
-import { ScopeType } from "@prisma/client";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { useQuery } from "@tanstack/react-query";
-import { ROLE_QUERY_KEYS } from "@/features/role/config/role.config";
-import { AppResponseJSON } from "@/lib/response/AppResponse";
-import { StandardResponse } from "@/types/response.type";
-import useRoles from "@/features/role/hooks/useRoles";
-import { getScopeTypeByRoleID } from "@/features/role/iibs/role-scope.lib";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -404,6 +396,10 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
     name: "roleId",
   });
   const scopeType = getScopeTypeByRoleID(roleId);
+  const scopeTypeOptions = SCOPE_TYPE_OPTIONS.map((option) => ({
+    ...option,
+    ...(option.value !== scopeType ? { disabled: true } : undefined),
+  }));
 
   return (
     <Form {...form}>
@@ -437,11 +433,21 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
         <div className="w-full flex flex-wrap gap-4">
           {scopeType && (
             <div className="w-full gap-2 grid grid-cols-2">
-              <Combobox
-                className="basis-1/2"
-                options={SCOPE_TYPE_OPTIONS}
-                placeholder="Pilih unit kerja"
-                searchPlaceholder="Cari unit kerja..."
+              <FormField
+                control={form.control}
+                name="scopeType"
+                render={({ field }) => (
+                  <FormItem>
+                    <Combobox
+                      className="basis-1/2"
+                      options={scopeTypeOptions}
+                      placeholder="Pilih unit kerja"
+                      searchPlaceholder="Cari unit kerja..."
+                      {...field}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <Combobox
                 className="basis-1/2"

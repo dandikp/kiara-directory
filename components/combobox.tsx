@@ -15,6 +15,7 @@ import {
 type Option = {
   label: string;
   value: string;
+  disabled?: boolean;
 };
 
 interface ComboboxProps {
@@ -78,11 +79,16 @@ function Combobox({
                   value={option.value}
                   keywords={[option.label]}
                   onSelect={(currentValue) => {
+                    if (option?.disabled) return;
                     if (onChange) {
                       onChange(currentValue === value ? "" : currentValue);
                     }
                     setOpen(false);
                   }}
+                  className={cn(
+                    option.disabled &&
+                      "opacity-50 pointer-events-none cursor-not-allowed",
+                  )}
                 >
                   {option.label}
                   <Check
