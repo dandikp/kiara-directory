@@ -123,24 +123,10 @@ export const UserRoleScopeFormSchema = z
       })
       .positive(),
     scopeType: ScopeTypeEnum.optional(),
-    departmentId: z
+    scopeId: z
       .number({
-        required_error: "ID departemen harus diisi.",
-        message: "ID departemen harus berupa angka.",
-      })
-      .positive()
-      .optional(),
-    fieldId: z
-      .number({
-        required_error: "ID bidang kerja harus diisi.",
-        message: "ID bidang kerja harus berupa angka.",
-      })
-      .positive()
-      .optional(),
-    divisionId: z
-      .number({
-        required_error: "ID divisi harus diisi.",
-        message: "ID divisi harus berupa angka.",
+        required_error: "ID unit kerja harus diisi.",
+        message: "ID unit kerja harus berupa angka.",
       })
       .positive()
       .optional(),
@@ -157,14 +143,11 @@ export const UserRoleScopeFormSchema = z
   )
   .refine(
     (data) => {
-      if (data.scopeType === "DIVISION") return !!data.divisionId;
-      if (data.scopeType === "FIELD") return !!data.fieldId;
-      if (data.scopeType === "DEPARTMENT") return !!data.departmentId;
-
+      if (data.scopeType) return !!data.scopeId;
       return true;
     },
     {
-      message: "ID scope sesuai harus diisi berdasarkan tipe scope.",
-      path: ["scopeType"],
+      message: "ID harus diisi berdasarkan tipe scope.",
+      path: ["scopeId"],
     },
   );
