@@ -20,19 +20,24 @@ const ENDPOINTS: Record<ScopeType, string> = {
 
 async function fetchRoleScope<T extends ScopeType>(
   type: T,
+  signal?: AbortSignal,
 ): Promise<StandardResponse<RoleScopeMap[T]>> {
-  const res = await fetch(ENDPOINTS[type]);
+  const res = await fetch(ENDPOINTS[type], { signal });
   if (!res.ok) throw new Error("Failed to fetch role scope");
   const json = (await res.json()) as StandardResponse<RoleScopeMap[T]>;
   return json;
 }
 
-export default function useRoleScope(type: ScopeType) {
+export default function useRoleScope<T extends ScopeType>(
+  type: T | undefined,
+  options?: { enabled?: boolean },
+) {
   const query = useQuery({
     queryKey: [ROLE_QUERY_KEYS.API_GET_SCOPE, type],
-    queryFn: () => fetchRoleScope(type),
-    staleTime: 1000 * 60, // 1 menit
-    gcTime: 5 * 60 * 1000, // 5 menit
+    queryFn: ({ signal }) => fetchRoleScope(type as T, signal),
+    enabled: !!type && options?.enabled !== false,
+    staleTime: 60_000, // 1 menit
+    gcTime: 300_000, // 5 menit
     retry: 1,
   });
 
@@ -42,8 +47,17 @@ export default function useRoleScope(type: ScopeType) {
         query.data?.status === "success" && Array.isArray(query.data?.data)
           ? query.data?.data
           : [],
-      loading: query.isFetching || query.isLoading,
+      isLoading: query.isFetching || query.isLoading,
+      error: query.error,
+      refetch: query.refetch,
     }),
-    [query.isFetching, query.isLoading, query.data],
+    [
+      query.data?.status,
+      query.data?.data,
+      query.isFetching,
+      query.isLoading,
+      query.error,
+      query.refetch,
+    ],
   );
 }

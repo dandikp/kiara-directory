@@ -21,7 +21,7 @@ import { getScopeTypeByRoleID } from "@/features/role/iibs/role-scope.lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScopeType } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -35,6 +35,7 @@ import {
   SafeUserType,
   UserRoleScopeFormType,
 } from "../types/user.types";
+import useRoleScope from "@/features/role/hooks/useRoleScope";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -371,6 +372,8 @@ const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
   }[value],
 }));
 
+type MinimalScope = { id: number; name: string };
+
 export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
   const { roles, loading: loadingRoles } = useRoles();
 
@@ -395,11 +398,33 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
     control: form.control,
     name: "roleId",
   });
-  const scopeType = getScopeTypeByRoleID(roleId);
+  const scopeType = useWatch({
+    control: form.control,
+    name: "scopeType",
+  });
+  const availableScopeType = getScopeTypeByRoleID(roleId);
+  const finalScopeType =
+    scopeType === availableScopeType ? scopeType : undefined;
+  const { data: scopes, isLoading: isLoadingScope } = useRoleScope(
+    finalScopeType,
+    {
+      enabled: !!finalScopeType,
+    },
+  ) as { data: MinimalScope[]; isLoading: boolean };
   const scopeTypeOptions = SCOPE_TYPE_OPTIONS.map((option) => ({
     ...option,
-    ...(option.value !== scopeType ? { disabled: true } : undefined),
+    ...(option.value !== availableScopeType ? { disabled: true } : undefined),
   }));
+  const scopeOptions = Array.isArray(scopes)
+    ? scopes.map((scope) => ({ value: scope.id.toString(), label: scope.name }))
+    : [];
+
+  useEffect(() => {
+    if (!finalScopeType) {
+      form.setValue("scopeType", undefined);
+      form.setValue("scopeId", undefined);
+    }
+  }, [finalScopeType, form]);
 
   return (
     <Form {...form}>
@@ -431,7 +456,7 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
           )}
         />
         <div className="w-full flex flex-wrap gap-4">
-          {scopeType && (
+          {availableScopeType && (
             <div className="w-full gap-2 grid grid-cols-2">
               <FormField
                 control={form.control}
@@ -449,11 +474,25 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
                   </FormItem>
                 )}
               />
-              <Combobox
-                className="basis-1/2"
-                options={SCOPE_TYPE_OPTIONS}
-                placeholder="Pilih unit kerja"
-                searchPlaceholder="Cari unit kerja..."
+              <FormField
+                control={form.control}
+                name="scopeId"
+                render={({ field }) => (
+                  <FormItem>
+                    <Combobox
+                      className="basis-1/2"
+                      options={scopeOptions}
+                      placeholder="Pilih unit kerja"
+                      searchPlaceholder="Cari unit kerja..."
+                      value={String(field.value)}
+                      disabled={!finalScopeType || isLoadingScope}
+                      onChange={(value) => {
+                        form.setValue("scopeId", Number(value));
+                      }}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           )}
