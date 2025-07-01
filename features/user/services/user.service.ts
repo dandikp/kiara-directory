@@ -267,6 +267,7 @@ export const setNewPasswordByUserId = async (
     const message = AppResponse.getErrorMessages(validation.error);
     return AppResponse.error(`Terjadi Kesalahan - ${message}`, 400).toJSON();
   }
+
   try {
     await prisma.$transaction([
       prisma.user.update({

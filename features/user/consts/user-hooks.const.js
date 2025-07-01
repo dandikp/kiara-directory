@@ -1,0 +1,3 @@
+export const USER_ROLE_QUERY_KEYS = {
+  API_GET: "QUERY.API.USER_ROLES",
+};

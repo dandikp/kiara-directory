@@ -36,6 +36,7 @@ import {
   UserRoleScopeFormType,
 } from "../types/user.types";
 import useRoleScope from "@/features/role/hooks/useRoleScope";
+import useUserRoles from "../hooks/useUserRoles";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -81,7 +82,6 @@ export const CreateUserForm = () => {
       } else {
         toast.error(response.message);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error(
         "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
@@ -531,6 +531,11 @@ export const SelectUserRolesForm = ({
   data: SafeUserType;
   userId: number;
 }) => {
+  const {
+    isLoading,
+    data: roles,
+    refetch,
+  } = useUserRoles(userId, { enabled: !!userId });
   return (
     <div className="flex justify-center w-full flex-col gap-6 max-w-lg mt-4">
       <UserRoleScopeForm index={1} />
