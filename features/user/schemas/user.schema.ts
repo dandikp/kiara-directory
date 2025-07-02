@@ -151,3 +151,33 @@ export const UserRoleScopeFormSchema = z
       path: ["scopeId"],
     },
   );
+
+export const UserRoleScopeSchema = z.object({
+  id: z
+    .number({
+      required_error: "ID peran / jabatan pengguna harus diisi.",
+      message: "ID peran / jabatan pengguna harus berupa angka.",
+    })
+    .optional(),
+  // userId: z
+  //   .number({
+  //     required_error: "ID pengguna harus diisi.",
+  //     message: "ID pengguna harus berupa angka.",
+  //   })
+  //   .positive(),
+  roleId: z
+    .number({
+      required_error: "ID peran / jabatan harus diisi.",
+      message: "ID peran / jabatan harus berupa angka.",
+    })
+    .positive(),
+  scopeType: ScopeTypeEnum.optional(),
+  scopeId: z
+    .number({
+      required_error: "ID unit kerja harus diisi.",
+      message: "ID unit kerja harus berupa angka.",
+    })
+    .positive()
+    .optional(),
+  isMain: z.boolean().default(false),
+});

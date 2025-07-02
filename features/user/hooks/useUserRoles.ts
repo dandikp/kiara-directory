@@ -1,6 +1,10 @@
+"use client";
+
 import { USER_ROLE_QUERY_KEYS } from "@/features/user/consts/user-hooks.const";
+import { StandardResponse } from "@/types/response.type";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { UserRoleScopeType } from "../types/user.types";
 
 const ENDPOINTS = {
   USER_ROLES: "/api/users/[userId]/roles",
@@ -15,26 +19,34 @@ function getEndpoint(type: keyof typeof ENDPOINTS, userId?: number): string {
 
 async function fetchUserRoles(userId: number, signal?: AbortSignal) {
   const res = await fetch(getEndpoint("USER_ROLES", userId), { signal });
-  if (res.ok) throw new Error("Failed to fetch user roles.");
-  return await res.json();
+  if (!res.ok) throw new Error("Failed to fetch user roles.");
+  const result = await res.json();
+  return result;
 }
 
 export default function useUserRoles(
   userId: number,
   options?: { enabled?: boolean },
 ) {
-  const query = useQuery({
+  const query = useQuery<StandardResponse<UserRoleScopeType>>({
     queryKey: [USER_ROLE_QUERY_KEYS.API_GET, userId],
     queryFn: ({ signal }) => fetchUserRoles(userId, signal),
     enabled: !!userId && options?.enabled,
-    staleTime: 60_000,
-    gcTime: 300_000,
+    staleTime: 100,
+    gcTime: 100,
     retry: 1,
   });
 
+  useEffect(() => {
+    console.log({ data: query.data, query });
+  }, [query.data, query]);
+
   return useMemo(
     () => ({
-      data: query.data && Array.isArray(query.data) ? query.data : [],
+      data:
+        query.data?.status === "success" && Array.isArray(query.data?.data)
+          ? query.data?.data
+          : [],
       isLoading: query.isFetching || query.isLoading,
       error: query.error,
       refetch: query.refetch,

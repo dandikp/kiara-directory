@@ -7,6 +7,7 @@ import {
   SafeUserWithNoRolesSchema,
   SimpleUserSchema,
   UserRoleScopeFormSchema,
+  UserRoleScopeSchema,
   UserSchema,
 } from "../schemas/user.schema";
 
@@ -20,3 +21,4 @@ export type CreateUserType = z.infer<typeof CreateUserSchema>;
 export type EditUserType = z.infer<typeof EditUserSchema>;
 export type SafeUserWithNoRolesType = z.infer<typeof SafeUserWithNoRolesSchema>;
 export type UserRoleScopeFormType = z.infer<typeof UserRoleScopeFormSchema>;
+export type UserRoleScopeType = z.infer<typeof UserRoleScopeSchema>;

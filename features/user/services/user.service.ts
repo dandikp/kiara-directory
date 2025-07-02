@@ -9,6 +9,7 @@ import {
   EditUserType,
   SafeUserWithNoRolesType,
   SimpleUserType,
+  UserRoleScopeType,
 } from "../types/user.types";
 import { ResetPasswordSchema } from "@/features/auth/schemas/auth.schema";
 import { z } from "zod";
@@ -296,7 +297,7 @@ export const setNewPasswordByUserId = async (
   }
 };
 
-export const getUserRolesByUserId = async (userId: number) => {
+export const findUserRolesByUserId = async (userId: number) => {
   return await prisma.userRole.findMany({
     include: {
       roleScopes: true,
@@ -306,4 +307,62 @@ export const getUserRolesByUserId = async (userId: number) => {
       deletedAt: null,
     },
   });
+};
+
+export const getUserRolesByUserId = async (userId: number) => {
+  if (!userId)
+    return AppResponse.error("ID pengguna wajib diisi.", 400).toJSON();
+
+  try {
+    const userRoles = await findUserRolesByUserId(userId);
+
+    if (!userRoles?.length)
+      throw new Error("Peran / jabatan pengguna tidak ditemukan.");
+
+    const mappedRoles = userRoles.map((userRole) => {
+      const scopeType = userRole.roleScopes?.[0]?.scopeType ?? undefined;
+      let scopeId = undefined;
+
+      switch (scopeType) {
+        case "DEPARTMENT":
+          scopeId = userRole.roleScopes?.[0]?.departmentId ?? undefined;
+          break;
+        case "DIVISION":
+          scopeId = userRole.roleScopes?.[0]?.divisionId ?? undefined;
+          break;
+        case "FIELD":
+          scopeId = userRole.roleScopes?.[0]?.fieldId ?? undefined;
+          break;
+        default:
+          break;
+      }
+
+      return {
+        id: userRole.id,
+        roleId: userRole.roleId,
+        isMain: userRole.isMain,
+        scopeType,
+        scopeId,
+      };
+    });
+
+    return AppResponse.success<UserRoleScopeType[]>(
+      "Peran / jabatan pengguna ditemukan.",
+      mappedRoles,
+    ).toJSON();
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return AppResponse.error(
+        `Terjadi kesalahan: ${error.message}`,
+        500,
+      ).toJSON();
+    }
+
+    return AppResponse.error(
+      error instanceof Error
+        ? error.message
+        : "Terjadi kesalahan yang tidak diketahui. Coba beberapa saat lagi.",
+      500,
+    ).toJSON();
+  }
 };

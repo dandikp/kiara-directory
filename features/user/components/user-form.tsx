@@ -536,6 +536,11 @@ export const SelectUserRolesForm = ({
     data: roles,
     refetch,
   } = useUserRoles(userId, { enabled: !!userId });
+
+  useEffect(() => {
+    console.log({ roles, isLoading });
+  }, [roles, isLoading]);
+
   return (
     <div className="flex justify-center w-full flex-col gap-6 max-w-lg mt-4">
       <UserRoleScopeForm index={1} />
