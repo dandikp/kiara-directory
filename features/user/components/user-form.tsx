@@ -37,6 +37,7 @@ import {
 } from "../types/user.types";
 import useRoleScope from "@/features/role/hooks/useRoleScope";
 import useUserRoles from "../hooks/useUserRoles";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -524,6 +525,18 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
   );
 };
 
+const UserRoleScopeFormSkeleton = () => (
+  <div className="w-full flex flex-nowrap flex-col gap-2">
+    <Skeleton className="h-6 w-20" />
+    <Skeleton className="h-3.5 w-16" />
+    <Skeleton className="w-full h-9" />
+    <div className="w-full flex flex-nowrap items-center gap-2">
+      <Skeleton className="w-8 h-[18px]" />
+      <Skeleton className="w-28 h-3.5" />
+    </div>
+  </div>
+);
+
 export const SelectUserRolesForm = ({
   data,
   userId,
@@ -536,16 +549,20 @@ export const SelectUserRolesForm = ({
     data: roles,
     refetch,
   } = useUserRoles(userId, { enabled: !!userId });
-
-  useEffect(() => {
-    console.log({ roles, isLoading });
-  }, [roles, isLoading]);
+  const roleExists = Array.isArray(roles) && roles.length > 0;
 
   return (
     <div className="flex justify-center w-full flex-col gap-6 max-w-lg mt-4">
-      <UserRoleScopeForm index={1} />
-      <UserRoleScopeForm index={2} />
-      <UserRoleScopeForm index={3} />
+      {isLoading &&
+        Array.from({ length: 2 }).map((item, i) => (
+          <UserRoleScopeFormSkeleton key={i + 1} />
+        ))}
+
+      {!isLoading &&
+        roleExists &&
+        roles.map((data, i) => (
+          <UserRoleScopeForm index={i + 1} key={data.id} />
+        ))}
       <Button>Tambah Peran / Jabatan</Button>
     </div>
   );
