@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SafeUserType } from "../types/user.types";
 import ResetUserPasswordForm from "./reset-password-form";
-import useAccount from "@/features/account/hooks/use-account";
 
 const ModalContent = ({
   data,
@@ -14,11 +13,6 @@ const ModalContent = ({
   data: SafeUserType;
   userId: number;
 }) => {
-  const { session } = useAccount();
-  const sessionUser = session?.user;
-
-  console.log({ sessionUser });
-
   return (
     <div className="w-full flex flex-col gap-2">
       <ResetUserPasswordForm userId={userId} data={data} />

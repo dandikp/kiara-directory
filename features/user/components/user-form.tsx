@@ -34,10 +34,12 @@ import {
   EditUserType,
   SafeUserType,
   UserRoleScopeFormType,
+  UserRoleScopeType,
 } from "../types/user.types";
 import useRoleScope from "@/features/role/hooks/useRoleScope";
 import useUserRoles from "../hooks/useUserRoles";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PlusCircle } from "@phosphor-icons/react";
 
 export const CreateUserForm = () => {
   const router = useRouter();
@@ -362,6 +364,7 @@ export const UpdateUserForm = ({
 type UserRolesInputProps = {
   onSubmit?: (type: "CREATE" | "UPDATE", userRoleId: number) => void;
   index?: number;
+  data?: UserRoleScopeType;
 };
 
 const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
@@ -375,17 +378,19 @@ const SCOPE_TYPE_OPTIONS = Object.values(ScopeType).map((value) => ({
 
 type MinimalScope = { id: number; name: string };
 
-export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
+export const UserRoleScopeForm = ({
+  onSubmit,
+  data,
+  index,
+}: UserRolesInputProps) => {
   const { roles, loading: loadingRoles } = useRoles();
-
+  const isNewRole = data?.id ? true : false;
   const form = useForm<UserRoleScopeFormType>({
     resolver: zodResolver(UserRoleScopeFormSchema),
     mode: "all",
     defaultValues: {
       userId: 0,
-      scopeType: undefined,
-      roleId: 0,
-      isMain: false,
+      roleId: data?.roleId,
     },
   });
 
@@ -421,11 +426,19 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
     : [];
 
   useEffect(() => {
-    if (!finalScopeType) {
+    if (data) {
+      form.setValue("scopeType", data?.scopeType);
+      form.setValue("scopeId", data?.scopeId);
+      form.setValue("isMain", data?.isMain);
+    }
+  }, [data, form]);
+
+  useEffect(() => {
+    if (form.getValues("scopeType") !== availableScopeType) {
       form.setValue("scopeType", undefined);
       form.setValue("scopeId", undefined);
     }
-  }, [finalScopeType, form]);
+  }, [form, availableScopeType]);
 
   return (
     <Form {...form}>
@@ -520,6 +533,12 @@ export const UserRoleScopeForm = ({ onSubmit, index }: UserRolesInputProps) => {
             )}
           />
         </div>
+
+        {isNewRole && (
+          <Button type="submit" className="flex justify-center gap-1">
+            <PlusCircle /> Tambah Peran / Jabatan
+          </Button>
+        )}
       </form>
     </Form>
   );
@@ -560,10 +579,9 @@ export const SelectUserRolesForm = ({
 
       {!isLoading &&
         roleExists &&
-        roles.map((data, i) => (
-          <UserRoleScopeForm index={i + 1} key={data.id} />
+        roles.map((userRole, i) => (
+          <UserRoleScopeForm index={i + 1} key={data.id} data={userRole} />
         ))}
-      <Button>Tambah Peran / Jabatan</Button>
     </div>
   );
 };

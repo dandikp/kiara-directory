@@ -3,7 +3,7 @@
 import { USER_ROLE_QUERY_KEYS } from "@/features/user/consts/user-hooks.const";
 import { StandardResponse } from "@/types/response.type";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { UserRoleScopeType } from "../types/user.types";
 
 const ENDPOINTS = {
@@ -36,10 +36,6 @@ export default function useUserRoles(
     gcTime: 100,
     retry: 1,
   });
-
-  useEffect(() => {
-    console.log({ data: query.data, query });
-  }, [query.data, query]);
 
   return useMemo(
     () => ({

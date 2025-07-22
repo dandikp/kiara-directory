@@ -61,7 +61,7 @@ const RoleForm = ({ data }: RoleFormProps) => {
         toast.error(response.message);
       }
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
       toast.error(
         "Terjadi kesalahan yang tidak diketahui. Mohon coba beberapa saat lagi.",
       );

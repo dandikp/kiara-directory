@@ -40,8 +40,9 @@ function Combobox({
   disabled = false,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-
   const selectedLabel = options.find((opt) => opt.value === value)?.label;
+
+  console.log({ value });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -80,10 +81,10 @@ function Combobox({
                   keywords={[option.label]}
                   onSelect={(currentValue) => {
                     if (option?.disabled) return;
-                    if (onChange) {
-                      onChange(currentValue === value ? "" : currentValue);
+                    if (onChange && currentValue !== value) {
+                      onChange(currentValue);
+                      setOpen(false);
                     }
-                    setOpen(false);
                   }}
                   className={cn(
                     option.disabled &&

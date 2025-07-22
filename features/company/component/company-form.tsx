@@ -34,7 +34,6 @@ const CompanyForm = ({ data }: CompanyFormProps) => {
 
   const onSubmitHandler = async (values: CompanyFormType) => {
     let id: string | number = "";
-    console.log({ values });
 
     try {
       setIsPending(true);
