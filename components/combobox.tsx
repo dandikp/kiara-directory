@@ -42,8 +42,6 @@ function Combobox({
   const [open, setOpen] = React.useState(false);
   const selectedLabel = options.find((opt) => opt.value === value)?.label;
 
-  console.log({ value });
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
