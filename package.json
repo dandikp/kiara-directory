@@ -15,7 +15,8 @@
     "migrate:deploy": "prisma migrate deploy",
     "migrate:reset": "prisma migrate reset",
     "db:generate": "prisma generate",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "prestart:win": "powershell -ExecutionPolicy Bypass -File ./use-node.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
